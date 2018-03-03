@@ -31,15 +31,21 @@
     {{#if_eq transporter "NATS"}}
     "nats": "^0.8.2",
     {{/if_eq}}
+    {{#if_eq transporter "Redis"}}
+    "ioredis": "^3.2.2",
+    {{/if_eq}}
     {{#if_eq transporter "MQTT"}}
     "mqtt": "^2.16.0",
     {{/if_eq}}
     {{#if_eq transporter "AMQP"}}
     "amqplib": "^0.5.2",
     {{/if_eq}}    
-    {{#if_eq transporter "Redis"}}
-    "ioredis": "^3.2.2",
-    {{/if_eq}}
+    {{#if_eq transporter "STAN"}}
+    "node-nats-streaming": "0.0.28",
+    {{/if_eq}}    
+    {{#if_eq transporter "Kafka"}}
+    "kafka-node": "2.4.1",
+    {{/if_eq}}    
     {{#if_eq cacher "Redis"}}
     "ioredis": "^3.2.2",
     {{/if_eq}}

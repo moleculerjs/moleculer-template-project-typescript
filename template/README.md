@@ -27,3 +27,11 @@ npm run ci
 npm run lint
 {{/lint}}
 ```
+
+{{#docker}}
+## Run in Docker
+
+```bash
+$ docker-compose up -d --build
+```
+{{/docker}}

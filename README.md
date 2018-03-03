@@ -37,7 +37,7 @@ Create 'moleculer-demo' folder...
 - `npm run dev` - Start service.js with hot-reload and start REPL
 - `npm run lint` - Run ESLint
 - `npm run ci` - Start testing in watch mode
-- `npm start` - Start service.js in production mode
+- `npm start` - Start services in production mode
 - `npm test` - Run tests & coverage
 
 ## License

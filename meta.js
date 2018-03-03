@@ -50,6 +50,12 @@ module.exports = function(values) {
 			},
 			{
 				type: "confirm",
+				name: "docker",
+				message: "Add Docker files?",
+				default: true
+			},
+			{
+				type: "confirm",
 				name: "lint",
 				message: "Use ESLint to lint your code?",
 				default: true
@@ -67,6 +73,10 @@ module.exports = function(values) {
 			"public/**/*": "apiGW",
 			".eslintrc.js": "lint",
 			"test/**/*": "jest",
+
+			".dockerignore": "docker",
+			"docker-compose.*": "docker",
+			"Dockerfile": "docker"
 		},
 
 		completeMessage: `
