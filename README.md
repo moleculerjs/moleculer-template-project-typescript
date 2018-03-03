@@ -35,14 +35,14 @@ Create 'moleculer-demo2' folder...
 ```
 
 ## NPM scripts
-- `npm run dev` - Start service.js in hot-reload and start REPL
+- `npm run dev` - Start service.js with hot-reload and start REPL
 - `npm lint` - Run ESLint
 - `npm run ci` - Start testing in watch mode
 - `npm start` - Start service.js in production mode
 - `npm test` - Run tests & coverage
 
 ## License
-Moleculer-cli is available under the [MIT license](https://tldrlegal.com/license/mit-license).
+Moleculer-template-project is available under the [MIT license](https://tldrlegal.com/license/mit-license).
 
 ## Contact
 Copyright (c) 2018 MoleculerJS
