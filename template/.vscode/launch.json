@@ -9,7 +9,7 @@
 			"type": "node",
 			"request": "launch",
 			"name": "Debug",
-			"program": "${workspaceRoot}\\node_modules\\moleculer\\bin\\moleculer-runner.js",
+			"program": "${workspaceRoot}/node_modules/moleculer/bin/moleculer-runner.js",
 			"cwd": "${workspaceRoot}",
 			"args": [
 				"services"
@@ -19,7 +19,7 @@
 			"type": "node",
 			"request": "launch",
 			"name": "Jest",
-			"program": "${workspaceRoot}\\node_modules\\jest-cli\\bin\\jest.js",
+			"program": "${workspaceRoot}/node_modules/jest-cli/bin/jest.js",
 			"args": ["--runInBand"],
 			"cwd": "${workspaceRoot}",
 			"runtimeArgs": [
