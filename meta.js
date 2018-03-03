@@ -64,6 +64,7 @@ module.exports = function(values) {
 
 		"filters": {
 			"services/api.service.js": "apiGW",
+			"public/**/*": "apiGW",
 			".eslintrc.js": "lint",
 			"test/**/*": "jest",
 		},
