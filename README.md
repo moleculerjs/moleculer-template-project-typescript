@@ -20,23 +20,22 @@ $ moleculer init project my-project
 
 ## Prompts
 ```
-$ moleculer init project moleculer-demo2
+$ moleculer init project moleculer-demo
 
 Template repo: moleculerjs/moleculer-template-project
 ? Add API Gateway (moleculer-web) service Yes
-? Would you like communicate with other nodes? Yes
-? Select a transporter NATS (recommended)
-? Would you like use cache? Yes
-? Select a cacher solution Memory
+? Would you like to communicate with other nodes? Yes
+? Select a transporter TCP
+? Would you like to use cache? No
 ? Use ESLint to lint your code? Yes
 ? Setup unit tests with Jest? Yes
-Create 'moleculer-demo2' folder...
+Create 'moleculer-demo' folder...
 ? Would you like to run 'npm install'? Yes
 ```
 
 ## NPM scripts
 - `npm run dev` - Start service.js with hot-reload and start REPL
-- `npm lint` - Run ESLint
+- `npm run lint` - Run ESLint
 - `npm run ci` - Start testing in watch mode
 - `npm start` - Start service.js in production mode
 - `npm test` - Run tests & coverage
