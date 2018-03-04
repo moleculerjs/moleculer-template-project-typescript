@@ -14,9 +14,9 @@ services:
 {{#if_eq transporter "NATS"}}
       - nats
 {{/if_eq}}      
-{{#if_eq transporter "Redis"}}
+{{#redis}}
       - redis
-{{/if_eq}}      
+{{/redis}}
 {{#if_eq transporter "MQTT"}}
       - mqtt
 {{/if_eq}}      
@@ -33,9 +33,9 @@ services:
 {{#if_eq transporter "NATS"}}
       - nats
 {{/if_eq}}      
-{{#if_eq transporter "Redis"}}
+{{#redis}}
       - redis
-{{/if_eq}}      
+{{/redis}}
 {{#if_eq transporter "MQTT"}}
       - mqtt
 {{/if_eq}}      
@@ -66,9 +66,9 @@ services:
 {{#if_eq transporter "NATS"}}
       - nats
 {{/if_eq}}      
-{{#if_eq transporter "Redis"}}
+{{#redis}}
       - redis
-{{/if_eq}}      
+{{/redis}}
 {{#if_eq transporter "MQTT"}}
       - mqtt
 {{/if_eq}}      
@@ -85,9 +85,9 @@ services:
 {{#if_eq transporter "NATS"}}
       - nats
 {{/if_eq}}      
-{{#if_eq transporter "Redis"}}
+{{#redis}}
       - redis
-{{/if_eq}}      
+{{/redis}}
 {{#if_eq transporter "MQTT"}}
       - mqtt
 {{/if_eq}}      
@@ -106,11 +106,11 @@ services:
   nats:
     image: nats
 {{/if_eq}}      
-{{#if_eq transporter "Redis"}}
+{{#redis}}
 
   redis:
     image: redis:alpine
-{{/if_eq}}      
+{{/redis}}
 {{#if_eq transporter "MQTT"}}
     
   mqtt:

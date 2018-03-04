@@ -68,7 +68,16 @@ module.exports = function(values) {
 			}
 		],
 
-		"filters": {
+		metalsmith: {
+			before(metalsmith) {
+				const data = metalsmith.metadata();
+				data.redis = data.cacher == "Redis" || data.transporter == "Redis";
+			}
+		},
+
+		//skipInterpolation: [],
+
+		filters: {
 			"services/api.service.js": "apiGW",
 			"public/**/*": "apiGW",
 			".eslintrc.js": "lint",
