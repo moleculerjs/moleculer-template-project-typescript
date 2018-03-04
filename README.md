@@ -6,6 +6,7 @@
 - Common project with a demo `greeter` service
 - Optional API Gateway service
 - Optional Transporter & Cacher
+- Docker & Docker Compose files
 - Unit tests with [Jest](http://facebook.github.io/jest/)
 - Lint with [ESLint](http://eslint.org/)
 - Launch file for debugging in [VSCode](https://code.visualstudio.com/)
@@ -27,6 +28,7 @@ Template repo: moleculerjs/moleculer-template-project
 ? Would you like to communicate with other nodes? Yes
 ? Select a transporter TCP
 ? Would you like to use cache? No
+? Add Docker files? Yes
 ? Use ESLint to lint your code? Yes
 ? Setup unit tests with Jest? Yes
 Create 'moleculer-demo' folder...

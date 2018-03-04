@@ -1,4 +1,6 @@
-FROM node:8.9-alpine
+FROM node:8-alpine
+
+ENV NODE_ENV=production
 
 RUN mkdir /app
 WORKDIR /app
