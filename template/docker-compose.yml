@@ -10,7 +10,9 @@ services:
     environment:
       SERVICES: api
       PORT: 3000
+{{#hasDepends}}
     links:
+{{/hasDepends}}
 {{#if_eq transporter "NATS"}}
       - nats
 {{/if_eq}}      
@@ -28,8 +30,10 @@ services:
 {{/if_eq}}      
 {{#if_eq transporter "Kafka"}}
       - zookeeper
-{{/if_eq}}      
+{{/if_eq}}  
+{{#hasDepends}}
     depends_on:
+{{/hasDepends}}
 {{#if_eq transporter "NATS"}}
       - nats
 {{/if_eq}}      
@@ -62,7 +66,9 @@ services:
     env_file: docker-compose.env
     environment:
       SERVICES: greeter
+{{#hasDepends}}
     links:
+{{/hasDepends}}
 {{#if_eq transporter "NATS"}}
       - nats
 {{/if_eq}}      
@@ -81,7 +87,9 @@ services:
 {{#if_eq transporter "Kafka"}}
       - zookeeper
 {{/if_eq}}      
+{{#hasDepends}}
     depends_on:
+{{/hasDepends}}
 {{#if_eq transporter "NATS"}}
       - nats
 {{/if_eq}}      

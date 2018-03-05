@@ -20,16 +20,16 @@ module.exports = function(values) {
 				name: "transporter",
 				message: "Select a transporter",
 				choices: [
-					{ name: "TCP", value: "TCP" },
-					{ name: "NATS", value: "NATS" },
+					{ name: "NATS (recommended)", value: "NATS" },
+					{ name: "Redis", value: "Redis" },
 					{ name: "MQTT", value: "MQTT" },
 					{ name: "AMQP", value: "AMQP" },
-					{ name: "Redis", value: "Redis" },
-					{ name: "NATS Streaming", value: "STAN" },
-					{ name: "Kafka", value: "Kafka" }
+					{ name: "TCP (experimental)", value: "TCP" },
+					{ name: "NATS Streaming (experimental)", value: "STAN" },
+					{ name: "Kafka (experimental)", value: "Kafka" }
 				],
 				when(answers) { return answers.needTransporter; },
-				default: "TCP"
+				default: "NATS"
 			},
 			{
 				type: "confirm",
@@ -72,6 +72,7 @@ module.exports = function(values) {
 			before(metalsmith) {
 				const data = metalsmith.metadata();
 				data.redis = data.cacher == "Redis" || data.transporter == "Redis";
+				data.hasDepends = data.needCacher || data.needTransporter;
 			}
 		},
 
