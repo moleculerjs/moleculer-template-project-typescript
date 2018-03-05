@@ -72,7 +72,7 @@ module.exports = function(values) {
 			before(metalsmith) {
 				const data = metalsmith.metadata();
 				data.redis = data.cacher == "Redis" || data.transporter == "Redis";
-				data.hasDepends = data.needCacher || data.needTransporter;
+				data.hasDepends = data.needCacher || (data.needTransporter && data.transporter != "TCP");
 			}
 		},
 
