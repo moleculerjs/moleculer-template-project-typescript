@@ -23,7 +23,7 @@ services:
       - mqtt
 {{/if_eq}}      
 {{#if_eq transporter "AMQP"}}
-      - rabbit
+      - amqp
 {{/if_eq}}      
 {{#if_eq transporter "STAN"}}
       - stan
@@ -44,7 +44,7 @@ services:
       - mqtt
 {{/if_eq}}      
 {{#if_eq transporter "AMQP"}}
-      - rabbit
+      - amqp
 {{/if_eq}}      
 {{#if_eq transporter "STAN"}}
       - stan
@@ -79,7 +79,7 @@ services:
       - mqtt
 {{/if_eq}}      
 {{#if_eq transporter "AMQP"}}
-      - rabbit
+      - amqp
 {{/if_eq}}      
 {{#if_eq transporter "STAN"}}
       - stan
@@ -100,7 +100,7 @@ services:
       - mqtt
 {{/if_eq}}      
 {{#if_eq transporter "AMQP"}}
-      - rabbit
+      - amqp
 {{/if_eq}}      
 {{#if_eq transporter "STAN"}}
       - stan
@@ -126,7 +126,7 @@ services:
 {{/if_eq}}      
 {{#if_eq transporter "AMQP"}}
 
-  rabbit:
+  amqp:
     image: rabbitmq:3
 {{/if_eq}}      
 {{#if_eq transporter "STAN"}}
