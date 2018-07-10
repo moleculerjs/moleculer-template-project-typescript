@@ -11,16 +11,9 @@ module.exports = {
 	},
 
 	/**
-	 * Service metadata
-	 */
-	metadata: {
-
-	},
-
-	/**
 	 * Service dependencies
 	 */
-	//dependencies: [],	
+	dependencies: [],	
 
 	/**
 	 * Actions

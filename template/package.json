@@ -16,40 +16,40 @@
   "author": "",
   "devDependencies": {
     {{#lint}}
-    "eslint": "^4.18.2",
+    "eslint": "^5.0.1",
     {{/lint}}
     {{#jest}}
-    "jest": "^22.4.2",
-    "jest-cli": "^22.4.2",
+    "jest": "^23.3.0",
+    "jest-cli": "^23.3.0",
     {{/jest}}
-    "moleculer-repl": "^0.4.0"
+    "moleculer-repl": "^0.5.0"
   },
   "dependencies": {
     {{#apiGW}}
-    "moleculer-web": "^0.6.0",
+    "moleculer-web": "^0.8.0",
     {{/apiGW}}
     {{#if_eq transporter "NATS"}}
-    "nats": "^0.8.2",
+    "nats": "^1.0.0",
     {{/if_eq}}
     {{#if_eq transporter "MQTT"}}
-    "mqtt": "^2.16.0",
+    "mqtt": "^2.18.2",
     {{/if_eq}}
     {{#if_eq transporter "AMQP"}}
     "amqplib": "^0.5.2",
     {{/if_eq}}    
     {{#if_eq transporter "STAN"}}
-    "node-nats-streaming": "0.0.28",
+    "node-nats-streaming": "0.0.40",
     {{/if_eq}}    
     {{#if_eq transporter "Kafka"}}
-    "kafka-node": "2.4.1",
+    "kafka-node": "2.6.1",
     {{/if_eq}}    
     {{#redis}}
     "ioredis": "^3.2.2",
     {{/redis}}
-    "moleculer": "^0.12.0"
+    "moleculer": "^0.13.0"
   },
   "engines": {
-    "node": ">= 6.x.x"
+    "node": ">= 8.x.x"
   }{{#jest}},
   "jest": {
     "coverageDirectory": "../coverage",

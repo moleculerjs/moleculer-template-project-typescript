@@ -6,7 +6,7 @@ module.exports = function(values) {
 			{
 				type: "confirm",
 				name: "apiGW",
-				message: "Add API Gateway (moleculer-web) service",
+				message: "Add API Gateway (moleculer-web) service?",
 				default: true
 			},
 			{
