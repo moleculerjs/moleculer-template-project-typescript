@@ -1,8 +1,7 @@
 "use strict";
 
-const { ServiceBroker } = require("moleculer");
-const { ValidationError } = require("moleculer").Errors;
-const TestService = require("../../services/greeter.service");
+import { ServiceBroker, Errors } from "moleculer";
+import TestService from "../../services/greeter.service";
 
 describe("Test 'greeter' service", () => {
 	let broker = new ServiceBroker();
@@ -26,7 +25,7 @@ describe("Test 'greeter' service", () => {
 		});
 
 		it("should reject an ValidationError", () => {
-			expect(broker.call("greeter.welcome")).rejects.toBeInstanceOf(ValidationError);
+			expect(broker.call("greeter.welcome")).rejects.toBeInstanceOf(Errors.ValidationError);
 		});
 
 	});

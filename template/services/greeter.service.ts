@@ -1,6 +1,8 @@
 "use strict";
 
-module.exports = {
+import { Context } from "moleculer";
+
+export = {
 	name: "greeter",
 
 	/**
@@ -13,7 +15,7 @@ module.exports = {
 	/**
 	 * Service dependencies
 	 */
-	dependencies: [],	
+	dependencies: [],
 
 	/**
 	 * Actions
@@ -36,12 +38,12 @@ module.exports = {
 		 */
 		welcome: {
 			params: {
-				name: "string"
+				name: "string",
 			},
-			handler(ctx) {
+			handler(ctx: Context) {
 				return `Welcome, ${ctx.params.name}`;
-			}
-		}
+			},
+		},
 	},
 
 	/**
@@ -77,5 +79,5 @@ module.exports = {
 	 */
 	stopped() {
 
-	}
+	},
 };

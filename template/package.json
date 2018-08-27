@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "My Moleculer microservices project",
   "scripts": {
-    "dev": "moleculer-runner --repl --hot services",
-    "start": "moleculer-runner"{{#jest}},
+    "build": "tsc",
+    "dev": "ts-node ./node_modules/moleculer/bin/moleculer-runner.js --hot --repl -m '**/*.service.ts' services",
+    "start": "moleculer-runner dist-services"{{#jest}},
     "ci": "jest --watch",
     "test": "jest --coverage"{{/jest}}{{#lint}},
-    "lint": "eslint services"{{/lint}}
+    "lint": "tslint -p tsconfig.json"{{/lint}}
   },
   "keywords": [
     "microservices",
@@ -15,12 +16,16 @@
   ],
   "author": "",
   "devDependencies": {
+    "@types/bluebird": "^3.5.23",
+    "@types/node": "^10.9.2",
     {{#lint}}
-    "eslint": "^5.0.1",
+    "tslint": "^5.11.0",
     {{/lint}}
     {{#jest}}
+    "@types/jest": "^23.1.1",
     "jest": "^23.3.0",
     "jest-cli": "^23.3.0",
+    "ts-jest": "^23.1.4",
     {{/jest}}
     "moleculer-repl": "^0.5.0"
   },
@@ -46,7 +51,9 @@
     {{#redis}}
     "ioredis": "^3.2.2",
     {{/redis}}
-    "moleculer": "^0.13.0"
+    "moleculer": "^0.13.0",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.0.1"
   },
   "engines": {
     "node": ">= 8.x.x"
@@ -54,9 +61,21 @@
   "jest": {
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
-    "rootDir": "./services",
-    "roots": [
-      "../test"
-    ]
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "testMatch": [
+      "**/*.spec.(ts|js)"
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.json"
+      }
+    }
   }{{/jest}}
 }
