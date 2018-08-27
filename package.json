@@ -1,7 +1,7 @@
 {
-  "name": "moleculer-template-project",
+  "name": "moleculer-template-project-typescript",
   "version": "1.0.0",
-  "description": "Project template for Moleculer-based projects",
+  "description": "Project template for Moleculer-based projects with typescript",
   "main": "meta.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
