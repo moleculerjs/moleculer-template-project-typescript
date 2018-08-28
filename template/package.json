@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "ts-node ./node_modules/moleculer/bin/moleculer-runner.js --hot --repl -m '**/*.service.ts' services",
-    "start": "moleculer-runner dist-services"{{#jest}},
+    "start": "moleculer-runner services"{{#jest}},
     "ci": "jest --watch",
     "test": "jest --coverage"{{/jest}}{{#lint}},
     "lint": "tslint -p tsconfig.json"{{/lint}}
