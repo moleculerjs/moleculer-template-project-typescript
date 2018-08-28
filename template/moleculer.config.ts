@@ -1,7 +1,8 @@
 "use strict";
+import { BrokerOptions, Errors } from "moleculer";
 
 // More info about options: https://moleculer.services/docs/0.13/broker.html#Broker-options
-module.exports = {
+const brokerConfig: BrokerOptions = {
 	namespace: "",
 	nodeID: null,
 
@@ -9,14 +10,10 @@ module.exports = {
 	logLevel: "info",
 	logFormatter: "default",
 	logObjectPrinter: null,
-	{{#needTransporter}}
 
-	transporter: "{{transporter}}",
-	{{/needTransporter}}
-	{{#needCacher}}
+	transporter: "NATS",
 
-	cacher: "{{cacher}}",
-	{{/needCacher}}
+	cacher: "Memory",
 
 	serializer: "JSON",
 
@@ -27,7 +24,7 @@ module.exports = {
 		delay: 100,
 		maxDelay: 1000,
 		factor: 2,
-		check: err => err && !!err.retryable
+		check: (err: Errors.MoleculerRetryableError) => err && !!err.retryable,
 	},
 
 	maxCallLevel: 100,
@@ -43,7 +40,7 @@ module.exports = {
 
 	registry: {
 		strategy: "RoundRobin",
-		preferLocal: true
+		preferLocal: true,
 	},
 
 	circuitBreaker: {
@@ -52,7 +49,7 @@ module.exports = {
 		windowTime: 60,
 		minRequestCount: 20,
 		halfOpenTime: 10 * 1000,
-		check: err => err && err.code >= 500
+		check: (err: Errors.MoleculerRetryableError) => err && err.code >= 500,
 	},
 
 	bulkhead: {
@@ -77,7 +74,7 @@ module.exports = {
 
 	// Called after broker created.
 	created(broker) {
-		
+
 	},
 
 	// Called after broker starte.
@@ -90,5 +87,7 @@ module.exports = {
 
 	},
 
-	replCommands: null
+	replCommands: null,
 };
+
+export default brokerConfig;
