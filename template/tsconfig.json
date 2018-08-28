@@ -1,17 +1,19 @@
 {
-    "compilerOptions": {
-      "esModuleInterop": true,
-      "noImplicitAny": true,
-      "module": "commonjs",
-      "moduleResolution": "node",
-      "pretty": true,
-      "types": ["node"],
-      "sourceMap": true,
-      "target": "es6",
-      "outDir": "./dist-services",
-      "baseUrl": "./services"
-    },
-    "include": ["services/**/*.ts"],
-    "exclude": ["node_modules"]
-  }
-  
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "pretty": true,
+    "types": [
+      "node"
+    ],
+    "sourceMap": true,
+    "target": "es6",
+    "baseUrl": "./"
+  },
+  "exclude": [
+    "node_modules",
+    "test"
+  ]
+}
