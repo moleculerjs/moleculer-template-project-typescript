@@ -1,8 +1,7 @@
-"use strict";
-
+import { ServiceSchema } from "moleculer";
 import ApiGateway = require("moleculer-web");
 
-export = {
+const ApiService: ServiceSchema = {
 	name: "api",
 
 	mixins: [ApiGateway],
@@ -25,3 +24,5 @@ export = {
 		},
 	},
 };
+
+export = ApiService;

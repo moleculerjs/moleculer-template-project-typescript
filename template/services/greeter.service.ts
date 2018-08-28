@@ -1,8 +1,7 @@
 "use strict";
+import { ServiceSchema } from "moleculer";
 
-import { Context } from "moleculer";
-
-export = {
+const GreeterService: ServiceSchema = {
 	name: "greeter",
 
 	/**
@@ -40,7 +39,7 @@ export = {
 			params: {
 				name: "string",
 			},
-			handler(ctx: Context) {
+			handler(ctx) {
 				return `Welcome, ${ctx.params.name}`;
 			},
 		},
@@ -70,14 +69,16 @@ export = {
 	/**
 	 * Service started lifecycle event handler
 	 */
-	started() {
+	// started() {
 
-	},
+	// },
 
 	/**
 	 * Service stopped lifecycle event handler
 	 */
-	stopped() {
+	// stopped() {
 
-	},
+	// },
 };
+
+export = GreeterService;
