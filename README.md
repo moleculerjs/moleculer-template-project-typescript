@@ -1,6 +1,6 @@
-# Moleculer template: `project`
+# Moleculer template: `project-ts`
 
-:mortar_board: Moleculer based microservices project template
+:mortar_board: Moleculer based microservices project template for Typescript project.
 
 ## Features
 
@@ -24,9 +24,9 @@ $ moleculer init project-ts my-project
 ## Prompts
 
 ```
-$ moleculer init project moleculer-demo
+$ moleculer init project-ts moleculer-demo
 
-Template repo: moleculerjs/moleculer-template-project
+Template repo: moleculerjs/moleculer-template-project-ts
 ? Add API Gateway (moleculer-web) service Yes
 ? Would you like to communicate with other nodes? Yes
 ? Select a transporter TCP
@@ -49,7 +49,7 @@ Create 'moleculer-demo' folder...
 
 ## License
 
-Moleculer-template-project is available under the [MIT license](https://tldrlegal.com/license/mit-license).
+Moleculer-template-project-ts is available under the [MIT license](https://tldrlegal.com/license/mit-license).
 
 ## Contact
 
