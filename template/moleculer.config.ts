@@ -90,4 +90,4 @@ const brokerConfig: BrokerOptions = {
 	replCommands: null,
 };
 
-export default brokerConfig;
+export = brokerConfig;
