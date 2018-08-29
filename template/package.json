@@ -27,7 +27,9 @@
     "jest-cli": "^23.3.0",
     "ts-jest": "^23.1.4",
     {{/jest}}
-    "moleculer-repl": "^0.5.0"
+    "moleculer-repl": "^0.5.0",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.0.1"
   },
   "dependencies": {
     {{#apiGW}}
@@ -51,9 +53,7 @@
     {{#redis}}
     "ioredis": "^3.2.2",
     {{/redis}}
-    "moleculer": "^0.13.0",
-    "ts-node": "^7.0.1",
-    "typescript": "^3.0.1"
+    "moleculer": "^0.13.0"
   },
   "engines": {
     "node": ">= 8.x.x"
