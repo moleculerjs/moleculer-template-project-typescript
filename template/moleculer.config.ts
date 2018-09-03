@@ -10,11 +10,14 @@ const brokerConfig: BrokerOptions = {
 	logLevel: "info",
 	logFormatter: "default",
 	logObjectPrinter: null,
+ 	{{#needTransporter}}
 
-	transporter: "NATS",
+	transporter: "{{transporter}}",
+	{{/needTransporter}}
+	{{#needCacher}}
 
-	cacher: "Memory",
-
+	cacher: "{{cacher}}",
+	{{/needCacher}}
 	serializer: "JSON",
 
 	requestTimeout: 10 * 1000,
