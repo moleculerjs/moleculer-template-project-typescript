@@ -18,13 +18,13 @@
 To install use the [moleculer-cli](https://github.com/moleculerjs/moleculer-cli) tool.
 
 ```bash
-$ moleculer init project-ts my-project
+$ moleculer init faeron/moleculer-template-project-typescript my-project
 ```
 
 ## Prompts
 
 ```
-$ moleculer init project-ts moleculer-demo
+$ moleculer init faeron/moleculer-template-project-typescript moleculer-demo
 
 Template repo: moleculerjs/moleculer-template-project-ts
 ? Add API Gateway (moleculer-web) service Yes
