@@ -8,13 +8,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/faeron/moleculer-template-project-typescript.git"
+    "url": "git+https://github.com/moleculerjs/moleculer-template-project-typescript.git"
   },
   "keywords": [],
-  "author": "fearon",
+  "author": "MoleculerJS",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/faeron/moleculer-template-project-typescript/issues"
+    "url": "https://github.com/moleculerjs/moleculer-template-project-typescript/issues"
   },
-  "homepage": "https://github.com/faeron/moleculer-template-project-typescript#readme"
+  "homepage": "https://github.com/moleculerjs/moleculer-template-project-typescript#readme"
 }
