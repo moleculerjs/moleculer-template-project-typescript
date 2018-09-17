@@ -59,7 +59,7 @@
     "node": ">= 8.x.x"
   }{{#jest}},
   "jest": {
-    "coverageDirectory": "../coverage",
+    "coverageDirectory": "<rootDir>/coverage",
     "testEnvironment": "node",
     "moduleFileExtensions": [
       "ts",
