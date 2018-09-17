@@ -1,4 +1,4 @@
-# Moleculer template: `project-ts`
+# Moleculer template: `project-typescript`
 
 :mortar_board: Moleculer based microservices project template for Typescript project.
 
@@ -18,15 +18,15 @@
 To install use the [moleculer-cli](https://github.com/moleculerjs/moleculer-cli) tool.
 
 ```bash
-$ moleculer init faeron/moleculer-template-project-typescript my-project
+$ moleculer init project-typescript my-project
 ```
 
 ## Prompts
 
 ```
-$ moleculer init faeron/moleculer-template-project-typescript moleculer-demo
+$ moleculer init project-typescript moleculer-demo
 
-Template repo: moleculerjs/moleculer-template-project-ts
+Template repo: moleculerjs/moleculer-template-project-typescript
 ? Add API Gateway (moleculer-web) service Yes
 ? Would you like to communicate with other nodes? Yes
 ? Select a transporter TCP
@@ -49,7 +49,7 @@ Create 'moleculer-demo' folder...
 
 ## License
 
-Moleculer-template-project-ts is available under the [MIT license](https://tldrlegal.com/license/mit-license).
+moleculer-template-project-typescript is available under the [MIT license](https://tldrlegal.com/license/mit-license).
 
 ## Contact
 
