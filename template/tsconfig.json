@@ -6,6 +6,9 @@
     "moduleResolution": "node",
     "pretty": true,
     "types": [
+      {{#jest}}
+      "jest",
+      {{/jest}}
       "node"
     ],
     "sourceMap": true,
