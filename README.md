@@ -4,7 +4,7 @@
 
 ## Features
 
-- Moleculer v0.13.x with `moleculer.config.js`
+- Moleculer v0.13.x with `moleculer.config.ts`
 - Common project with a demo `greeter` service
 - Optional API Gateway service
 - Optional Transporter & Cacher
