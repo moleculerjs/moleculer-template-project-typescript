@@ -1,17 +1,17 @@
 # Moleculer template: `project-typescript`
 
-:mortar_board: Moleculer based microservices project template for Typescript project.
+:mortar_board: Moleculer-based microservices project template for Typescript project.
 
 ## Features
 
-- Moleculer v0.13.x with `moleculer.config.ts`
-- Common project with a demo `greeter` service
-- Optional API Gateway service
-- Optional Transporter & Cacher
-- Docker & Docker Compose files
-- Unit tests with [Jest](http://facebook.github.io/jest/)
-- Lint with [TSLint](https://palantir.github.io/tslint/)
-- Launch file for debugging in [VSCode](https://code.visualstudio.com/)
+- Moleculer v0.13.x with full-detailed `moleculer.config.ts` file.
+- Common project with a demo `greeter` service.
+- Optional API Gateway service.
+- Optional Transporter & Cacher.
+- Docker & Docker Compose files.
+- Unit tests with [Jest](http://facebook.github.io/jest/).
+- Lint with [TSLint](https://palantir.github.io/tslint/).
+- Launch file for debugging in [VSCode](https://code.visualstudio.com/).
 
 ## Install
 
@@ -40,12 +40,15 @@ Create 'moleculer-demo' folder...
 
 ## NPM scripts
 
+- `npm run dev` - Start development mode (load all services locally with hot-reload & REPL)
 - `npm run build`- Uses typescript to transpile service to javascript
-- `npm run dev` - Start service.js with hot-reload and start REPL
+- `npm start` - Start production mode (set `SERVICES` env variable to load certain services) (previous build needed)
+- `npm run cli`: Start a CLI and connect to production. Don't forget to set production namespace with `--ns` argument in script
 - `npm run lint` - Run TSLint
-- `npm run ci` - Start testing in watch mode
-- `npm start` - Start services in production mode (previous build needed)
-- `npm test` - Run tests & coverage
+- `npm run ci` - Run continuous test mode with watching
+- `npm test` - Run tests & generate coverage report
+- `npm run dc:up`: Start the stack with Docker Compose
+- `npm run dc:down`: Stop the stack with Docker Compose
 
 ## License
 
