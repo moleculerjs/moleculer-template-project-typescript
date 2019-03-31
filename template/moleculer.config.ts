@@ -9,7 +9,7 @@ import { BrokerOptions, Errors } from "moleculer";
  * Overwrite options in production:
  * ================================ 
  * 	You can overwrite any option with environment variables. 
- * 	For example to overwrite the "logLevel", use `LOGGER=warn` env var.
+ * 	For example to overwrite the "logLevel", use `LOGLEVEL=warn` env var.
  * 	To overwrite a nested parameter, e.g. retryPolicy.retries, use `RETRYPOLICY_RETRIES=10` env var.
  *  
  * 	To overwrite broker’s deeply nested default options, which are not presented in "moleculer.config.ts", 
