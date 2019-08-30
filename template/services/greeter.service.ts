@@ -69,14 +69,14 @@ const GreeterService: ServiceSchema = {
 	/**
 	 * Service started lifecycle event handler
 	 */
-	// started() {
+	// async started() {
 
 	// },
 
 	/**
 	 * Service stopped lifecycle event handler
 	 */
-	// stopped() {
+	// async stopped() {
 
 	// },
 };
