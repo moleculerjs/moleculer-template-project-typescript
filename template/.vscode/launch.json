@@ -18,6 +18,8 @@
 			"cwd": "${workspaceRoot}",
 			"args": [
 				"--mask **/*.service.ts",
+				"--config",
+				"moleculer.config.ts",
 				"services"
 			]
 		},
