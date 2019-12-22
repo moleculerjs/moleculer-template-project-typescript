@@ -58,7 +58,7 @@ module.exports = function(values) {
       {
         type: "confirm",
         name: "lint",
-        message: "Use eslint to lint your code?",
+        message: "Use ESLint to lint your code?",
         default: true
       },
       {

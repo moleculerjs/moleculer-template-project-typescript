@@ -7,7 +7,7 @@
 - `npm run build`- Uses typescript to transpile service to javascript
 - `npm start` - Start production mode (set `SERVICES` env variable to load certain services) (previous build needed)
 - `npm run cli`: Start a CLI and connect to production. Don't forget to set production namespace with `--ns` argument in script{{#lint}}
-- `npm run lint` - Run TSLint{{/lint}}{{#jest}}
+- `npm run lint` - Run ESLint{{/lint}}{{#jest}}
 - `npm run ci` - Run continuous test mode with watching
 - `npm test` - Run tests & generate coverage report{{/jest}}{{#docker}}
 - `npm run dc:up`: Start the stack with Docker Compose
