@@ -4,7 +4,7 @@ import { ServiceBroker, Errors } from "moleculer";
 import TestService from "../../services/greeter.service";
 
 describe("Test 'greeter' service", () => {
-	let broker = new ServiceBroker();
+	const broker = new ServiceBroker();
 	broker.createService(TestService);
 
 	beforeAll(() => broker.start());

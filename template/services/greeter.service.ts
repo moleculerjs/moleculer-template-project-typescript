@@ -26,9 +26,7 @@ const GreeterService: ServiceSchema = {
 		 *
 		 * @returns
 		 */
-		hello() {
-			return "Hello Moleculer";
-		},
+		hello: ()=> "Hello Moleculer",
 
 		/**
 		 * Welcome a username
@@ -39,9 +37,7 @@ const GreeterService: ServiceSchema = {
 			params: {
 				name: "string",
 			},
-			handler(ctx) {
-				return `Welcome, ${ctx.params.name}`;
-			},
+			handler: ctx => `Welcome, ${ctx.params.name}`,
 		},
 	},
 
@@ -58,27 +54,6 @@ const GreeterService: ServiceSchema = {
 	methods: {
 
 	},
-
-	/**
-	 * Service created lifecycle event handler
-	 */
-	created() {
-
-	},
-
-	/**
-	 * Service started lifecycle event handler
-	 */
-	// async started() {
-
-	// },
-
-	/**
-	 * Service stopped lifecycle event handler
-	 */
-	// async stopped() {
-
-	// },
 };
 
 export = GreeterService;
