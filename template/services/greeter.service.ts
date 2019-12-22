@@ -26,7 +26,7 @@ const GreeterService: ServiceSchema = {
 		 *
 		 * @returns
 		 */
-		hello: ()=> "Hello Moleculer",
+		hello: () => "Hello Moleculer",
 
 		/**
 		 * Welcome a username
