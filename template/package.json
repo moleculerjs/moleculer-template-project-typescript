@@ -9,7 +9,7 @@
     "start": "moleculer-runner services"{{#jest}},
     "ci": "jest --watch",
     "test": "jest --coverage"{{/jest}}{{#lint}},
-    "lint": "tslint -p tsconfig.json"{{/lint}}{{#docker}},
+    "lint": "eslint --ext .js,.ts ."{{/lint}}{{#docker}},
     "dc:up": "docker-compose up --build -d",
     "dc:down": "docker-compose down"{{/docker}}
   },
@@ -22,7 +22,11 @@
     "@types/bluebird": "^3.5.24",
     "@types/node": "^10.12.12",
     {{#lint}}
-    "tslint": "^5.11.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-prefer-arrow": "^1.1.7",
+    "@typescript-eslint/eslint-plugin": "^2.12.0",
+    "@typescript-eslint/parser": "^2.12.0",
     {{/lint}}
     {{#jest}}
     "@types/jest": "^23.1.1",

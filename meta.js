@@ -58,7 +58,7 @@ module.exports = function(values) {
       {
         type: "confirm",
         name: "lint",
-        message: "Use TSLint to lint your code?",
+        message: "Use ESLint to lint your code?",
         default: true
       },
       {
@@ -82,7 +82,7 @@ module.exports = function(values) {
     filters: {
       "services/api.service.ts": "apiGW",
       "public/**/*": "apiGW",
-      "tslint.json": "lint",
+      ".eslintrc.js": "lint",
       "test/**/*": "jest",
 
       ".dockerignore": "docker",

@@ -32,7 +32,7 @@ Template repo: moleculerjs/moleculer-template-project-typescript
 ? Select a transporter TCP
 ? Would you like to use cache? No
 ? Add Docker files? Yes
-? Use TSLint to lint your code? Yes
+? Use ESLint to lint your code? Yes
 ? Setup unit tests with Jest? Yes
 Create 'moleculer-demo' folder...
 ? Would you like to run 'npm install'? Yes
@@ -44,7 +44,7 @@ Create 'moleculer-demo' folder...
 - `npm run build`- Uses typescript to transpile service to javascript
 - `npm start` - Start production mode (set `SERVICES` env variable to load certain services) (previous build needed)
 - `npm run cli`: Start a CLI and connect to production. Don't forget to set production namespace with `--ns` argument in script
-- `npm run lint` - Run TSLint
+- `npm run lint` - Run ESLint
 - `npm run ci` - Run continuous test mode with watching
 - `npm test` - Run tests & generate coverage report
 - `npm run dc:up`: Start the stack with Docker Compose
