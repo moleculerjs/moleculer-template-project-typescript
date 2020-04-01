@@ -1,7 +1,7 @@
 "use strict";
-import { ServiceSchema, Context } from "moleculer";
+import { Context, ServiceSchema } from "moleculer";
 
-import DbMixin from "../mixins/db.mixin"
+import DbMixin from "../mixins/db.mixin";
 
 const ProductSchema: ServiceSchema = {
 	name: "products",
@@ -22,14 +22,14 @@ const ProductSchema: ServiceSchema = {
 			"_id",
 			"name",
 			"quantity",
-			"price"
+			"price",
 		],
 
 		// Validator for the `create` & `insert` actions.
 		entityValidator: {
 			name: "string|min:3",
-			price: "number|positive"
-		}
+			price: "number|positive",
+		},
 	},
 
 	/**
@@ -43,10 +43,10 @@ const ProductSchema: ServiceSchema = {
 			 *
 			 * @param {Context} ctx
 			 */
-			create(ctx: Context<{quantity: number}>) {
+			create(ctx: Context<{ quantity: number }>) {
 				ctx.params.quantity = 0;
-			}
-		}
+			},
+		},
 	},
 
 	/**
@@ -74,15 +74,15 @@ const ProductSchema: ServiceSchema = {
 			params: {
 				id: "string",
 				// @ts-ignore
-				value: "number|integer|positive"
+				value: "number|integer|positive",
 			},
-			async handler(ctx: Context<{id: string, value: number}>) {
+			async handler(ctx: Context<{ id: string, value: number }>) {
 				const doc = await this.adapter.updateById(ctx.params.id, { $inc: { quantity: ctx.params.value } });
 				const json = await this.transformDocuments(ctx, ctx.params, doc);
 				await this.entityChanged("updated", json, ctx);
 
 				return json;
-			}
+			},
 		},
 
 		/**
@@ -93,17 +93,17 @@ const ProductSchema: ServiceSchema = {
 			params: {
 				id: "string",
 				// @ts-ignore
-				value: "number|integer|positive"
+				value: "number|integer|positive",
 			},
 			/** @param {Context} ctx  */
-			async handler(ctx: Context<{id: string, value: number}>) {
+			async handler(ctx: Context<{ id: string, value: number }>) {
 				const doc = await this.adapter.updateById(ctx.params.id, { $inc: { quantity: -ctx.params.value } });
 				const json = await this.transformDocuments(ctx, ctx.params, doc);
 				await this.entityChanged("updated", json, ctx);
 
 				return json;
-			}
-		}
+			},
+		},
 	},
 
 	/**
@@ -121,7 +121,7 @@ const ProductSchema: ServiceSchema = {
 				{ name: "iPhone 11 Pro", quantity: 25, price: 999 },
 				{ name: "Huawei P30 Pro", quantity: 15, price: 679 },
 			]);
-		}
+		},
 	},
 
 	/**
@@ -129,7 +129,7 @@ const ProductSchema: ServiceSchema = {
 	 */
 	async afterConnected() {
 		// await this.adapter.collection.createIndex({ name: 1 });
-	}
+	},
 };
 
 export = ProductSchema;

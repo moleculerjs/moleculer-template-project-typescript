@@ -1,9 +1,9 @@
 "use strict";
 
-process.env.TEST="true";
+process.env.TEST = "true";
 
-import { ServiceBroker, Context, Errors } from "moleculer"
-import TestService from "../../../services/products.service"
+import { Context, Errors, ServiceBroker } from "moleculer";
+import TestService from "../../../services/products.service";
 
 describe("Test 'products' service", () => {
 
@@ -23,7 +23,7 @@ describe("Test 'products' service", () => {
 			name: "Awesome thing",
 			price: 999,
 			quantity: 25,
-			createdAt: Date.now()
+			createdAt: Date.now(),
 		};
 
 		describe("Test 'products.increaseQuantity'", () => {
@@ -35,7 +35,7 @@ describe("Test 'products' service", () => {
 
 				const res = await broker.call("products.increaseQuantity", {
 					id: "123",
-					value: 10
+					value: 10,
 				});
 				expect(res).toEqual({
 					_id: "123",
@@ -65,7 +65,7 @@ describe("Test 'products' service", () => {
 
 				const res = await broker.call("products.decreaseQuantity", {
 					id: "123",
-					value: 10
+					value: 10,
 				});
 				expect(res).toEqual({
 					_id: "123",
@@ -93,9 +93,9 @@ describe("Test 'products' service", () => {
 				try {
 					await broker.call("products.decreaseQuantity", {
 						id: "123",
-						value: -5
+						value: -5,
 					});
-				} catch(err) {
+				} catch (err) {
 					expect(err).toBeInstanceOf(Errors.ValidationError);
 					expect(err.data).toEqual([{
 						action: "products.decreaseQuantity",
@@ -103,7 +103,7 @@ describe("Test 'products' service", () => {
 						field: "value",
 						message: "The 'value' field must be a positive number.",
 						nodeID: broker.nodeID,
-						type: "numberPositive"
+						type: "numberPositive",
 					}]);
 				}
 			});
@@ -149,9 +149,9 @@ describe("Test 'products' service", () => {
 		broker.createService(TestService, {
 			actions: {
 				create: {
-					handler: createActionFn
-				}
-			}
+					handler: createActionFn,
+				},
+			},
 		});
 
 		beforeAll(() => broker.start());
@@ -163,7 +163,7 @@ describe("Test 'products' service", () => {
 				await broker.call("products.create", {
 					id: "111",
 					name: "Test product",
-					price: 100
+					price: 100,
 				});
 
 				expect(createActionFn).toBeCalledTimes(1);
@@ -171,7 +171,7 @@ describe("Test 'products' service", () => {
 					id: "111",
 					name: "Test product",
 					price: 100,
-					quantity: 0
+					quantity: 0,
 				});
 			});
 
@@ -180,4 +180,3 @@ describe("Test 'products' service", () => {
 	});
 
 });
-

@@ -1,10 +1,10 @@
 "use strict";
 
-process.env.TEST="true";
+process.env.TEST = "true";
 
-import { ServiceBroker } from "moleculer"
-import DbService from "moleculer-db"
-import DbMixin from "../../../mixins/db.mixin"
+import { ServiceBroker } from "moleculer";
+import DbService from "moleculer-db";
+import DbMixin from "../../../mixins/db.mixin";
 
 describe("Test DB mixin", () => {
 
@@ -62,7 +62,7 @@ describe("Test DB mixin", () => {
 
 				schema.adapter.count = jest.fn(async () => 0);
 				const seedDBFn = jest.fn();
-				
+
 				// @ts-ignore
 				await schema.started.call({ broker, logger: broker.logger, adapter: schema.adapter, seedDB: seedDBFn });
 
@@ -79,7 +79,7 @@ describe("Test DB mixin", () => {
 			const schema = DbMixin("my-collection");
 
 			const ctx = {
-				broadcast: jest.fn()
+				broadcast: jest.fn(),
 			};
 
 			await schema.methods.entityChanged(null, null, ctx);
@@ -90,4 +90,3 @@ describe("Test DB mixin", () => {
 	});
 
 });
-

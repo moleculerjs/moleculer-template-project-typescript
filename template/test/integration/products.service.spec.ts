@@ -1,9 +1,9 @@
 "use strict";
 
-process.env.TEST="true";
+process.env.TEST = "true";
 
-import { ServiceBroker } from "moleculer"
-import TestService from "../../services/products.service"
+import { ServiceBroker } from "moleculer";
+import TestService from "../../services/products.service";
 
 describe("Test 'products' service", () => {
 
@@ -17,7 +17,7 @@ describe("Test 'products' service", () => {
 
 		const record = {
 			name: "Awesome item",
-			price: 999
+			price: 999,
 		};
 		let newID: string;
 
@@ -32,7 +32,7 @@ describe("Test 'products' service", () => {
 				_id: expect.any(String),
 				name: "Awesome item",
 				price: 999,
-				quantity: 0
+				quantity: 0,
 			});
 			newID = res._id;
 
@@ -46,7 +46,7 @@ describe("Test 'products' service", () => {
 				_id: expect.any(String),
 				name: "Awesome item",
 				price: 999,
-				quantity: 0
+				quantity: 0,
 			});
 
 			const res2 = await broker.call("products.list");
@@ -55,7 +55,7 @@ describe("Test 'products' service", () => {
 				pageSize: 10,
 				rows: [{ _id: newID, name: "Awesome item", price: 999, quantity: 0 }],
 				total: 1,
-				totalPages: 1
+				totalPages: 1,
 			});
 		});
 
@@ -65,7 +65,7 @@ describe("Test 'products' service", () => {
 				_id: expect.any(String),
 				name: "Awesome item",
 				price: 499,
-				quantity: 0
+				quantity: 0,
 			});
 		});
 
@@ -75,7 +75,7 @@ describe("Test 'products' service", () => {
 				_id: expect.any(String),
 				name: "Awesome item",
 				price: 499,
-				quantity: 0
+				quantity: 0,
 			});
 		});
 
@@ -85,7 +85,7 @@ describe("Test 'products' service", () => {
 				_id: expect.any(String),
 				name: "Awesome item",
 				price: 499,
-				quantity: 5
+				quantity: 5,
 			});
 		});
 
@@ -95,7 +95,7 @@ describe("Test 'products' service", () => {
 				_id: expect.any(String),
 				name: "Awesome item",
 				price: 499,
-				quantity: 3
+				quantity: 3,
 			});
 		});
 
@@ -113,4 +113,3 @@ describe("Test 'products' service", () => {
 	});
 
 });
-

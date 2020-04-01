@@ -1,9 +1,9 @@
 "use strict";
 
-import { ServiceSchema, Context } from "moleculer";
+import { Context, ServiceSchema } from "moleculer";
 import ApiGateway = require("moleculer-web");
 
-import {IncomingMessage, ServerResponse} from 'http'
+import {IncomingMessage, ServerResponse} from 'http';
 
 const ApiService: ServiceSchema = {
 	name: "api",
@@ -25,7 +25,7 @@ const ApiService: ServiceSchema = {
 				path: "/api",
 
 				whitelist: [
-					"**"
+					"**",
 				],
 
 				// Route-level Express middlewares. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Middlewares
@@ -48,15 +48,15 @@ const ApiService: ServiceSchema = {
 
 				},
 
-				/** 
+				/**
 				 * Before call hook. You can check the request.
-				 * @param {Context} ctx 
-				 * @param {Object} route 
-				 * @param {IncomingMessage} req 
-				 * @param {ServerResponse} res 
+				 * @param {Context} ctx
+				 * @param {Object} route
+				 * @param {IncomingMessage} req
+				 * @param {ServerResponse} res
 				 * @param {Object} data
 				 *
-				 * 
+				 *
 				onBeforeCall(ctx: Context<any,{userAgent: string}>, route: object, req: IncomingMessage, res: ServerResponse) {
 					// Set request headers to context meta
 					ctx.meta.userAgent = req.headers["user-agent"];
@@ -65,10 +65,10 @@ const ApiService: ServiceSchema = {
 
 				/**
 				 * After call hook. You can modify the data.
-				 * @param {Context} ctx 
-				 * @param {Object} route 
-				 * @param {IncomingMessage} req 
-				 * @param {ServerResponse} res 
+				 * @param {Context} ctx
+				 * @param {Object} route
+				 * @param {IncomingMessage} req
+				 * @param {ServerResponse} res
 				 * @param {Object} data
 				 *
 				onAfterCall(ctx: Context, route: object, req: IncomingMessage, res: ServerResponse, data: object) {
@@ -83,20 +83,20 @@ const ApiService: ServiceSchema = {
 				bodyParsers: {
 					json: {
 						strict: false,
-						limit: "1MB"
+						limit: "1MB",
 					},
 					urlencoded: {
 						extended: true,
-						limit: "1MB"
-					}
+						limit: "1MB",
+					},
 				},
 
 				// Mapping policy setting. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Mapping-policy
 				mappingPolicy: "all", // Available values: "all", "restrict"
 
 				// Enable/disable logging
-				logging: true
-			}
+				logging: true,
+			},
 		],
 
 		// Do not log client side errors (does not log an error response when the error.code is 400<=X<500)
@@ -106,14 +106,13 @@ const ApiService: ServiceSchema = {
 		// Logging the response data. Set to any log level to enable it. E.g. "info"
 		logResponseData: null,
 
-
 		// Serve assets from "public" folder. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Serve-static-files
 		assets: {
 			folder: "public",
 
 			// Options to `server-static` module
-			options: {}
-		}
+			options: {},
+		},
 	},
 
 	methods: {
@@ -138,13 +137,13 @@ const ApiService: ServiceSchema = {
 				const token = auth.slice(7);
 
 				// Check the token. Tip: call a service which verify the token. E.g. `accounts.resolveToken`
-				if (token == "123456") {
+				if (token === "123456") {
 					// Returns the resolved user. It will be set to the `ctx.meta.user`
 					return { id: 1, name: "John Doe" };
 
 				} else {
 					// Invalid token
-					throw new ApiGateway.Errors.UnAuthorizedError(ApiGateway.Errors.ERR_INVALID_TOKEN, {error: 'Invalid Token'});
+					throw new ApiGateway.Errors.UnAuthorizedError(ApiGateway.Errors.ERR_INVALID_TOKEN, {error: "Invalid Token"});
 				}
 
 			} else {
@@ -170,13 +169,11 @@ const ApiService: ServiceSchema = {
 
 			// It check the `auth` property in action schema.
 			// @ts-ignore
-			if (req.$action.auth == "required" && !user) {
-				// @ts-ignore
-				throw new ApiGateway.Errors.UnAuthorizedError("NO_RIGHTS");
+			if (req.$action.auth === "required" && !user) {
+				throw new ApiGateway.Errors.UnAuthorizedError("NO_RIGHTS", {error: "Unauthorized"});
 			}
-		}
-
-	}
+		},
+	},
 };
 
 export = ApiService;

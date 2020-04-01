@@ -1,10 +1,10 @@
 "use strict";
 
-import { ServiceBroker, Errors} from "moleculer"
-import TestService from "../../../services/greeter.service"
+import { Errors, ServiceBroker} from "moleculer";
+import TestService from "../../../services/greeter.service";
 
 describe("Test 'greeter' service", () => {
-	let broker = new ServiceBroker({ logger: false });
+	const broker = new ServiceBroker({ logger: false });
 	broker.createService(TestService);
 
 	beforeAll(() => broker.start());
@@ -30,7 +30,7 @@ describe("Test 'greeter' service", () => {
 			expect.assertions(1);
 			try {
 				await broker.call("greeter.welcome");
-			} catch(err) {
+			} catch (err) {
 				expect(err).toBeInstanceOf(Errors.ValidationError);
 			}
 		});
@@ -38,4 +38,3 @@ describe("Test 'greeter' service", () => {
 	});
 
 });
-
