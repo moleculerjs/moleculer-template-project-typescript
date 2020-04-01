@@ -1,9 +1,9 @@
 "use strict";
 
-import { ServiceSchema, Context, Service } from "moleculer";
-import DbService from 'moleculer-db'
-import mkdir from "mkdirp"
-import fs from 'fs'
+import { Context, Service, ServiceSchema } from "moleculer";
+import DbService from 'moleculer-db';
+import { sync } from "mkdirp";
+import { existsSync } from 'fs';
 
 export default function(collection: string): Partial<ServiceSchema> & ThisType<Service> {
 	const cacheCleanEventName = `cache.clean.${collection}`;
@@ -22,7 +22,7 @@ export default function(collection: string): Partial<ServiceSchema> & ThisType<S
 				if (this.broker.cacher) {
 					await this.broker.cacher.clean(`${this.fullName}.*`);
 				}
-			}
+			},
 		},
 
 		methods: {
@@ -35,7 +35,7 @@ export default function(collection: string): Partial<ServiceSchema> & ThisType<S
 			 */
 			async entityChanged(type: string, json: any, ctx: Context) {
 				ctx.broadcast(cacheCleanEventName);
-			}
+			},
 		},
 
 		async started() {
@@ -43,7 +43,7 @@ export default function(collection: string): Partial<ServiceSchema> & ThisType<S
 			// call the `seedDB` method of the service.
 			if (this.seedDB) {
 				const count = await this.adapter.count();
-				if (count == 0) {
+				if (count === 0) {
 					this.logger.info(`The '${collection}' collection is empty. Seeding the collection...`);
 					await this.seedDB();
 					this.logger.info("Seeding is done. Number of records:", await this.adapter.count());
@@ -66,8 +66,8 @@ export default function(collection: string): Partial<ServiceSchema> & ThisType<S
 		// NeDB file DB adapter
 
 		// Create data folder
-		if (!fs.existsSync("./data")) {
-			mkdir.sync("./data");
+		if (!existsSync("./data")) {
+			sync("./data");
 		}
 
 		// @ts-ignore
@@ -75,4 +75,4 @@ export default function(collection: string): Partial<ServiceSchema> & ThisType<S
 	}
 
 	return schema;
-};
+}
