@@ -1,9 +1,9 @@
 "use strict";
 
+import { IncomingMessage, ServerResponse } from "http";
+
 import { Context, ServiceSchema } from "moleculer";
 import ApiGateway = require("moleculer-web");
-
-import {IncomingMessage, ServerResponse} from 'http';
 
 const ApiService: ServiceSchema = {
 	name: "api",

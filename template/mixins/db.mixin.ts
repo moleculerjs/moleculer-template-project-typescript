@@ -69,7 +69,6 @@ export default function(collection: string): Partial<ServiceSchema> & ThisType<S
 		if (!existsSync("./data")) {
 			sync("./data");
 		}
-
 		// @ts-ignore
 		schema.adapter = new DbService.MemoryAdapter({ filename: `./data/${collection}.db` });
 	}

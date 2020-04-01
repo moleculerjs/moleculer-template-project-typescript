@@ -9,7 +9,7 @@
     "cli": "moleculer connect {{transporter}}",
     "ci": "jest --watch",
     "test": "jest --coverage"{{#lint}},
-    "lint": "eslint services"{{/lint}}{{#docker}},
+    "lint": "eslint --ext .js,.ts ."{{/lint}}{{#docker}},
     "dc:up": "npm run build & docker-compose up --build -d",
     "dc:logs": "docker-compose logs -f",
     "dc:down": "docker-compose down"{{/docker}}
@@ -22,6 +22,9 @@
   "devDependencies": {
     {{#lint}}
     "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.20.2",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
     {{/lint}}
     "jest": "^25.1.0",
     "jest-cli": "^25.1.0",
