@@ -4,4 +4,3 @@ Dockerfile
 node_modules
 test
 .vscode
-tslint.json

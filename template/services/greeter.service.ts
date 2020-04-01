@@ -1,18 +1,18 @@
 "use strict";
-import { ServiceSchema } from "moleculer";
+import { ServiceSchema, Context } from "moleculer";
 
 const GreeterService: ServiceSchema = {
 	name: "greeter",
 
 	/**
-	 * Service settings
+	 * Settings
 	 */
 	settings: {
 
 	},
 
 	/**
-	 * Service dependencies
+	 * Dependencies
 	 */
 	dependencies: [],
 
@@ -22,27 +22,31 @@ const GreeterService: ServiceSchema = {
 	actions: {
 
 		/**
-		 * Say a 'Hello'
+		 * Say a 'Hello' action.
 		 *
-		 * @returns
 		 */
-		hello() {
-			return "Hello Moleculer";
+		hello: {
+			rest: {
+				method: "GET",
+				path: "/hello"
+			},
+			async handler(): Promise<string> {
+				return "Hello Moleculer";
+			}
 		},
 
 		/**
-		 * Welcome a username
-		 *
-		 * @param {String} name - User name
+		 * Welcome, a username
 		 */
 		welcome: {
+			rest: "/welcome",
 			params: {
-				name: "string",
+				name: "string"
 			},
-			handler(ctx) {
+			async handler(ctx: Context<{name: string}>): Promise<string> {
 				return `Welcome, ${ctx.params.name}`;
-			},
-		},
+			}
+		}
 	},
 
 	/**
@@ -62,23 +66,24 @@ const GreeterService: ServiceSchema = {
 	/**
 	 * Service created lifecycle event handler
 	 */
-	created() {
+	created(): void {
 
 	},
 
 	/**
 	 * Service started lifecycle event handler
 	 */
-	// started() {
+	async started(): Promise<void> {
 
-	// },
+	},
 
 	/**
 	 * Service stopped lifecycle event handler
 	 */
-	// stopped() {
+	async stopped(): Promise<void> {
 
-	// },
+	}
 };
+
 
 export = GreeterService;
