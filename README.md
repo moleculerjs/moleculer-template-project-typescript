@@ -1,5 +1,5 @@
-# Moleculer template: `project`
-:mortar_board: Moleculer-based microservices project template. [Live demo on now.sh](https://moleculer-demo-project.now.sh/)
+# Moleculer template: `project-typescript`
+:mortar_board: Moleculer-based microservices project template for Typescript project.
 
 ## Features
 - Moleculer v0.14 with full-detailed `moleculer.config.ts` file.
