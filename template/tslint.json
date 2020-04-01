@@ -2,9 +2,9 @@
     "extends":"tslint:recommended",
     "rules": {
         "indent": [
-            "warn",
-            "tab",
-            { "SwitchCase": 1 }
+            true,
+            "tabs",
+            2
         ],
         "quotes": [
             "warn",
@@ -17,9 +17,7 @@
         "no-var": [
             "error"
         ],
-        "no-console": [
-            "off"
-        ],
+        "no-console": true,
         "no-unused-vars": [
             "warn"
         ],
