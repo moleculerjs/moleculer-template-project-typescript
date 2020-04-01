@@ -1,9 +1,9 @@
 "use strict";
 
-import { Context, Service, ServiceSchema } from "moleculer";
-import DbService from 'moleculer-db';
+import { existsSync } from "fs";
 import { sync } from "mkdirp";
-import { existsSync } from 'fs';
+import { Context, Service, ServiceSchema } from "moleculer";
+import DbService from "moleculer-db";
 
 export default function(collection: string): Partial<ServiceSchema> & ThisType<Service> {
 	const cacheCleanEventName = `cache.clean.${collection}`;
@@ -49,7 +49,7 @@ export default function(collection: string): Partial<ServiceSchema> & ThisType<S
 					this.logger.info("Seeding is done. Number of records:", await this.adapter.count());
 				}
 			}
-		}
+		},
 	};
 
 	if (process.env.MONGO_URI) {
