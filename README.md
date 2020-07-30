@@ -4,7 +4,7 @@
 
 ## Features
 
-- Moleculer v0.13.x with full-detailed `moleculer.config.ts` file.
+- Moleculer v0.14.x with full-detailed `moleculer.config.ts` file.
 - Common project with a demo `greeter` service.
 - Optional API Gateway service.
 - Optional Transporter & Cacher.
@@ -27,15 +27,18 @@ $ moleculer init project-typescript my-project
 $ moleculer init project-typescript moleculer-demo
 
 Template repo: moleculerjs/moleculer-template-project-typescript
-? Add API Gateway (moleculer-web) service Yes
+? Add API Gateway (moleculer-web) service? Yes
 ? Would you like to communicate with other nodes? Yes
-? Select a transporter TCP
-? Would you like to use cache? No
-? Add Docker files? Yes
+? Select a transporter NATS (recommended)
+? Would you like to use cache? Yes
+? Select a cacher solution Memory
+? Add DB sample service? Yes
+? Would you like to enable metrics? Yes
+? Select a reporter solution Prometheus
+? Would you like to enable tracing? Yes
+? Select a exporter solution Console
+? Add Docker & Kubernetes sample files? Yes
 ? Use ESLint to lint your code? Yes
-? Setup unit tests with Jest? Yes
-Create 'moleculer-demo' folder...
-? Would you like to run 'npm install'? Yes
 ```
 
 ## NPM scripts
