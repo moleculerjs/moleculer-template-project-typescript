@@ -1,158 +1,205 @@
-version: "3.0"
+version: "3.3"
 
 services:
 
-  api:
-    build:
-      context: .
-    image: {{projectName}}
-    env_file: docker-compose.env
-    environment:
-      SERVICES: api
-      PORT: 3000
-{{#hasDepends}}
-    links:
-{{/hasDepends}}
-{{#if_eq transporter "NATS"}}
-      - nats
-{{/if_eq}}      
-{{#redis}}
-      - redis
-{{/redis}}
-{{#if_eq transporter "MQTT"}}
-      - mqtt
-{{/if_eq}}      
-{{#if_eq transporter "AMQP"}}
-      - amqp
-{{/if_eq}}      
-{{#if_eq transporter "STAN"}}
-      - stan
-{{/if_eq}}      
-{{#if_eq transporter "Kafka"}}
-      - zookeeper
-{{/if_eq}}  
-{{#hasDepends}}
+  {{#apiGW}}
+    api:
+      build:
+        context: .
+      image: {{projectName}}
+env_file: docker-compose.env
+environment:
+  SERVICES: api
+  PORT: 3000
+  {{#hasDepends}}
     depends_on:
-{{/hasDepends}}
-{{#if_eq transporter "NATS"}}
-      - nats
-{{/if_eq}}      
-{{#redis}}
-      - redis
-{{/redis}}
-{{#if_eq transporter "MQTT"}}
-      - mqtt
-{{/if_eq}}      
-{{#if_eq transporter "AMQP"}}
-      - amqp
-{{/if_eq}}      
-{{#if_eq transporter "STAN"}}
-      - stan
-{{/if_eq}}      
-{{#if_eq transporter "Kafka"}}
-      - zookeeper
-{{/if_eq}}      
-    labels:
-      - "traefik.enable=true"   
-      - "traefik.backend=api"
-      - "traefik.port=3000"
-      - "traefik.frontend.entryPoints=http"
-      - "traefik.frontend.rule=PathPrefix:/"
+     {{/hasDepends}}
+  {{#if_eq transporter "NATS"}}
+     - nats
+     {{/if_eq}}
+  {{#redis}}
+     - redis
+     {{/redis}}
+  {{#if_eq transporter "MQTT"}}
+     - mqtt
+     {{/if_eq}}
+  {{#if_eq transporter "AMQP"}}
+     - rabbitmq
+     {{/if_eq}}
+  {{#if_eq transporter "AMQP10"}}
+     - activemq
+     {{/if_eq}}
+  {{#if_eq transporter "STAN"}}
+     - stan
+     {{/if_eq}}
+  {{#if_eq transporter "Kafka"}}
+     - zookeeper
+     {{/if_eq}}
+labels:
+  - "traefik.enable=true"
+  - "traefik.http.routers.api-gw.rule=PathPrefix(`/`)"
+  - "traefik.http.services.api-gw.loadbalancer.server.port=3000"
+networks:
+  - internal
+  {{/apiGW}}
 
-  greeter:
-    build:
-      context: .
-    image: {{projectName}}
-    env_file: docker-compose.env
-    environment:
-      SERVICES: greeter
-{{#hasDepends}}
-    links:
-{{/hasDepends}}
-{{#if_eq transporter "NATS"}}
-      - nats
-{{/if_eq}}      
-{{#redis}}
-      - redis
-{{/redis}}
-{{#if_eq transporter "MQTT"}}
-      - mqtt
-{{/if_eq}}      
-{{#if_eq transporter "AMQP"}}
-      - amqp
-{{/if_eq}}      
-{{#if_eq transporter "STAN"}}
-      - stan
-{{/if_eq}}      
-{{#if_eq transporter "Kafka"}}
-      - zookeeper
-{{/if_eq}}      
-{{#hasDepends}}
+greeter:
+  build:
+    context: .
+  image: {{projectName}}
+  env_file: docker-compose.env
+  environment:
+    SERVICES: greeter
+  {{#hasDepends}}
     depends_on:
-{{/hasDepends}}
-{{#if_eq transporter "NATS"}}
-      - nats
-{{/if_eq}}      
-{{#redis}}
-      - redis
-{{/redis}}
-{{#if_eq transporter "MQTT"}}
-      - mqtt
-{{/if_eq}}      
-{{#if_eq transporter "AMQP"}}
-      - amqp
-{{/if_eq}}      
-{{#if_eq transporter "STAN"}}
-      - stan
-{{/if_eq}}      
-{{#if_eq transporter "Kafka"}}
-      - zookeeper
-{{/if_eq}}      
+     {{/hasDepends}}
+  {{#if_eq transporter "NATS"}}
+     - nats
+     {{/if_eq}}
+  {{#redis}}
+     - redis
+     {{/redis}}
+  {{#if_eq transporter "MQTT"}}
+     - mqtt
+     {{/if_eq}}
+  {{#if_eq transporter "AMQP"}}
+     - rabbitmq
+     {{/if_eq}}
+  {{#if_eq transporter "AMQP10"}}
+     - activemq
+     {{/if_eq}}
+  {{#if_eq transporter "STAN"}}
+     - stan
+     {{/if_eq}}
+  {{#if_eq transporter "Kafka"}}
+     - zookeeper
+     {{/if_eq}}
+networks:
+  - internal
+  {{#dbService}}
 
-{{#if_eq transporter "NATS"}}
+    products:
+      build:
+        context: .
+      image: {{projectName}}
+env_file: docker-compose.env
+environment:
+  SERVICES: products
+depends_on:
+  - mongo
+  {{#if_eq transporter "NATS"}}
+     - nats
+     {{/if_eq}}
+  {{#redis}}
+     - redis
+     {{/redis}}
+  {{#if_eq transporter "MQTT"}}
+     - mqtt
+     {{/if_eq}}
+  {{#if_eq transporter "AMQP"}}
+     - rabbitmq
+     {{/if_eq}}
+  {{#if_eq transporter "AMQP10"}}
+     - activemq
+     {{/if_eq}}
+  {{#if_eq transporter "STAN"}}
+     - stan
+     {{/if_eq}}
+  {{#if_eq transporter "Kafka"}}
+     - zookeeper
+     {{/if_eq}}
+networks:
+  - internal
 
-  nats:
-    image: nats
-{{/if_eq}}      
-{{#redis}}
+mongo:
+  image: mongo:4
+  volumes:
+    - data:/data/db
+  networks:
+    - internal
+  {{/dbService}}
+  {{#if_eq transporter "NATS"}}
 
-  redis:
-    image: redis:alpine
-{{/redis}}
-{{#if_eq transporter "MQTT"}}
-    
-  mqtt:
-    image: ncarlier/mqtt
-{{/if_eq}}      
-{{#if_eq transporter "AMQP"}}
+    nats:
+      image: nats:2
+      networks:
+        - internal
+     {{/if_eq}}
+  {{#redis}}
 
-  amqp:
-    image: rabbitmq:3
-{{/if_eq}}      
-{{#if_eq transporter "STAN"}}
+    redis:
+      image: redis:alpine
+      networks:
+        - internal
+     {{/redis}}
+  {{#if_eq transporter "MQTT"}}
 
-  stan:
-    image: nats-streaming
-{{/if_eq}}      
-{{#if_eq transporter "Kafka"}}
+    mqtt:
+      image: ncarlier/mqtt
+      networks:
+        - internal
+     {{/if_eq}}
+  {{#if_eq transporter "AMQP"}}
 
-  zookeeper:
-    image: bitnami/zookeeper
-    environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
-  kafka:
-    image: bitnami/kafka
-    environment:
-      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-      - ALLOW_PLAINTEXT_LISTENER=yes
-{{/if_eq}}      
+    rabbitmq:
+      image: rabbitmq:3
+      networks:
+        - internal
+     {{/if_eq}}
+  {{#if_eq transporter "AMQP10"}}
 
-  traefik:
-    image: traefik
-    command: --web --docker --docker.domain=docker.localhost --logLevel=INFO --docker.exposedbydefault=false
-    ports:
-      - "3000:80"
-      - "3001:8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /dev/null:/traefik.toml
+    activemq:
+      image: rmohr/activemq
+      networks:
+        - internal
+     {{/if_eq}}
+  {{#if_eq transporter "STAN"}}
+
+    stan:
+      image: nats-streaming
+      networks:
+        - internal
+     {{/if_eq}}
+  {{#if_eq transporter "Kafka"}}
+
+    zookeeper:
+      image: bitnami/zookeeper
+      environment:
+        - ALLOW_ANONYMOUS_LOGIN=yes
+      networks:
+        - internal
+
+      kafka:
+        image: bitnami/kafka
+        environment:
+          - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+          - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+          - ALLOW_PLAINTEXT_LISTENER=yes
+        depends_on:
+          - zookeeper
+        networks:
+          - internal
+     {{/if_eq}}
+
+  {{#apiGW}}
+    traefik:
+      image: traefik:v2.1
+      command:
+        - "--api.insecure=true" # Don't do that in production!
+        - "--providers.docker=true"
+        - "--providers.docker.exposedbydefault=false"
+      ports:
+        - 3000:80
+        - 3001:8080
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+      networks:
+        - internal
+        - default
+     {{/apiGW}}
+
+networks:
+  internal:
+
+volumes:
+  data:
