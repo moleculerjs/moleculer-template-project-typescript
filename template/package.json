@@ -1,88 +1,88 @@
 {
   "name": "{{projectName}}",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "My Moleculer microservices project",
   "scripts": {
     "build": "tsc",
     "dev": "ts-node ./node_modules/moleculer/bin/moleculer-runner.js --hot --repl --config moleculer.config.ts services/**/*.service.ts",
     "cli":"moleculer connect {{transporter}}",
     "start": "moleculer-runner services"{{#jest}},
-    "ci": "jest --watch",
-    "test": "jest --coverage"{{/jest}}{{#lint}},
-    "lint": "eslint --ext .js,.ts ."{{/lint}}{{#docker}},
-    "dc:up": "docker-compose up --build -d",
-    "dc:down": "docker-compose down"{{/docker}}
-  },
-  "keywords": [
-    "microservices",
-    "moleculer"
-  ],
-  "author": "",
-  "devDependencies": {
-    "@types/bluebird": "^3.5.24",
-    "@types/node": "^10.12.12",
-    {{#lint}}
-    "eslint": "^6.8.0",
-    "eslint-plugin-import": "^2.19.1",
-    "eslint-plugin-prefer-arrow": "^1.1.7",
-    "@typescript-eslint/eslint-plugin": "^2.12.0",
-    "@typescript-eslint/parser": "^2.12.0",
-    {{/lint}}
-    {{#jest}}
-    "@types/jest": "^23.1.1",
-    "jest": "^23.6.0",
-    "jest-cli": "^23.6.0",
-    "ts-jest": "^23.10.5",
-    {{/jest}}
-    "moleculer-repl": "^0.5.3",
-    "ts-node": "^7.0.1",
-    "typescript": "^3.2.2"
-  },
-  "dependencies": {
-    {{#apiGW}}
-    "moleculer-web": "^0.8.0",
-    {{/apiGW}}
-    {{#if_eq transporter "NATS"}}
-    "nats": "^1.0.1",
-    {{/if_eq}}
-    {{#if_eq transporter "MQTT"}}
-    "mqtt": "^2.18.8",
-    {{/if_eq}}
-    {{#if_eq transporter "AMQP"}}
-    "amqplib": "^0.5.3",
-    {{/if_eq}}    
-    {{#if_eq transporter "STAN"}}
-    "node-nats-streaming": "0.0.51",
-    {{/if_eq}}    
-    {{#if_eq transporter "Kafka"}}
-    "kafka-node": "3.0.1",
-    {{/if_eq}}    
-    {{#redis}}
-    "ioredis": "^4.2.0",
-    {{/redis}}
-    "moleculer": "^0.13.0"
-  },
-  "engines": {
-    "node": ">= 8.x.x"
-  }{{#jest}},
-  "jest": {
-    "coverageDirectory": "<rootDir>/coverage",
-    "testEnvironment": "node",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
-    "transform": {
-      "^.+\\.(ts|tsx)$": "ts-jest"
-    },
-    "testMatch": [
-      "**/*.spec.(ts|js)"
-    ],
-    "globals": {
-      "ts-jest": {
-        "tsConfig": "tsconfig.json"
-      }
-    }
-  }{{/jest}}
+"ci": "jest --watch",
+"test": "jest --coverage"{{/jest}}{{#lint}},
+"lint": "eslint --ext .js,.ts ."{{/lint}}{{#docker}},
+"dc:up": "docker-compose up --build -d",
+"dc:down": "docker-compose down"{{/docker}}
+},
+"keywords": [
+"microservices",
+"moleculer"
+],
+"author": "",
+"devDependencies": {
+"@types/bluebird": "^3.5.24",
+"@types/node": "^10.12.12",
+{{#lint}}
+"eslint": "^6.8.0",
+"eslint-plugin-import": "^2.19.1",
+"eslint-plugin-prefer-arrow": "^1.1.7",
+"@typescript-eslint/eslint-plugin": "^2.12.0",
+"@typescript-eslint/parser": "^2.12.0",
+{{/lint}}
+{{#jest}}
+"@types/jest": "^23.1.1",
+"jest": "^23.6.0",
+"jest-cli": "^23.6.0",
+"ts-jest": "^23.10.5",
+{{/jest}}
+"moleculer-repl": "^0.5.3",
+"ts-node": "^7.0.1",
+"typescript": "^3.2.2"
+},
+"dependencies": {
+{{#apiGW}}
+"moleculer-web": "^0.9.0",
+{{/apiGW}}
+{{#if_eq transporter "NATS"}}
+"nats": "^1.0.1",
+{{/if_eq}}
+{{#if_eq transporter "MQTT"}}
+"mqtt": "^2.18.8",
+{{/if_eq}}
+{{#if_eq transporter "AMQP"}}
+"amqplib": "^0.5.3",
+{{/if_eq}}
+{{#if_eq transporter "STAN"}}
+"node-nats-streaming": "0.0.51",
+{{/if_eq}}
+{{#if_eq transporter "Kafka"}}
+"kafka-node": "3.0.1",
+{{/if_eq}}
+{{#redis}}
+"ioredis": "^4.2.0",
+{{/redis}}
+"moleculer": "^0.14.0"
+},
+"engines": {
+"node": ">= 8.x.x"
+}{{#jest}},
+"jest": {
+"coverageDirectory": "<rootDir>/coverage",
+"testEnvironment": "node",
+"moduleFileExtensions": [
+"ts",
+"tsx",
+"js"
+],
+"transform": {
+"^.+\\.(ts|tsx)$": "ts-jest"
+},
+"testMatch": [
+"**/*.spec.(ts|js)"
+],
+"globals": {
+"ts-jest": {
+"tsConfig": "tsconfig.json"
+}
+}
+}{{/jest}}
 }
