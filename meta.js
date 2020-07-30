@@ -62,10 +62,41 @@ module.exports = function(values) {
         default: true
       },
       {
+        type: "list",
+        name: "reporter",
+        message: "Select a reporter solution",
+        choices: [
+          { name: "Console", value: "Console" },
+          { name: "CSV", value: "Redis" },
+          { name: "Event", value: "CSV" },
+          { name: "Prometheus", value: "Prometheus" },
+          { name: "Datadog", value: "Datadog" },
+          { name: "StatsD", value: "StatsD" }
+        ],
+        when(answers) { return answers.metrics; },
+        default: "Prometheus"
+      },
+      {
         type: "confirm",
         name: "tracing",
         message: "Would you like to enable tracing?",
         default: true
+      },
+      {
+        type: "list",
+        name: "exporter",
+        message: "Select a exporter solution",
+        choices: [
+          { name: "Console", value: "Console" },
+          { name: "EventLegacy", value: "EventLegacy" },
+          { name: "Event", value: "CSV" },
+          { name: "Jaeger", value: "Jaeger" },
+          { name: "Datadog", value: "Datadog" },
+          { name: "Zipkin", value: "Zipkin" },
+          { name: "NewRelic", value: "NewRelic" }
+        ],
+        when(answers) { return answers.metrics; },
+        default: "Console"
       },
       {
         type: "confirm",
