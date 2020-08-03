@@ -230,7 +230,7 @@ const brokerConfig: BrokerOptions = {
 
 	// Enable built-in tracing function. More info: https://moleculer.services/docs/0.14/tracing.html
 	tracing: {
-		enabled: "{{tracing}}",
+		enabled: {{#if tracing}}true{{/if}}{{#unless tracing}}false{{/unless}},
 {{#if_eq exporter "NewRelic"}}events: true{{/if_eq}}
 // Available built-in exporters: "Console", "Datadog", "Event", "EventLegacy", "Jaeger", "Zipkin"
 		exporter: {
