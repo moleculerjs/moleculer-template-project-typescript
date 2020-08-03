@@ -5,7 +5,7 @@ import { sync } from "mkdirp";
 import { Context, Service, ServiceSchema } from "moleculer";
 import DbService from "moleculer-db";
 
-class Conection implements Partial<ServiceSchema>, ThisType<Service>{
+class Conection extends Partial<ServiceSchema>, ThisType<Service>{
     private cacheCleanEventName: string;
     private collection:string;
 
