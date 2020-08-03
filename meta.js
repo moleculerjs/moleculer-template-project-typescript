@@ -127,15 +127,9 @@ module.exports = function(values) {
     filters: {
       "services/api.service.js": "apiGW",
       "public/**/*": "apiGW",
-
-      "services/products.service.js": "dbService",
-      "mixins/db.mixin.js": "dbService",
-      "test/mixins/db.mixin.spec.js": "dbService",
-      "test/integration/products.service.spec.js": "dbService",
-      "test/unit/services/products.spec.js": "dbService",
-
+      "services/products.service.ts": "dbService",
+      "mixins/db.mixin.ts": "dbService",
       ".eslintrc.js": "lint",
-
       ".dockerignore": "docker",
       "docker-compose.*": "docker",
       "Dockerfile": "docker",
@@ -143,7 +137,7 @@ module.exports = function(values) {
     },
 
     completeMessage: `
-To get started:
+    To get started:
 
 	cd {{projectName}}
 	npm run dev
