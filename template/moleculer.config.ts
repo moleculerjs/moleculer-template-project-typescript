@@ -1,5 +1,5 @@
 "use strict";
-import { BrokerOptions, Errors } from "moleculer";
+import { BrokerOptions, Errors, MetricRegistry } from "moleculer";
 
 /**
  * Moleculer ServiceBroker configuration file
@@ -136,7 +136,7 @@ const brokerConfig: BrokerOptions = {
 				path: "/metrics",
 				// Default labels which are appended to all metrics labels
 				// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
-				defaultLabels(registry: { broker: { namespace: any; nodeID: any } }) {
+				defaultLabels(registry: MetricRegistry) {
 					return {
 						namespace: registry.broker.namespace,
 						nodeID: registry.broker.nodeID,

@@ -1,28 +1,32 @@
-import { ServiceSchema } from "moleculer";
+import {Service, ServiceBroker} from "moleculer";
 import ApiGateway = require("moleculer-web");
 
-const ApiService: ServiceSchema = {
-	name: "api",
+class ApiService extends Service {
+	constructor(broker:ServiceBroker) {
+		super(broker);
+		this.parseServiceSchema({
+			name: "api",
+			mixins: [ApiGateway],
+			// More info about settings: https://moleculer.services/docs/0.14/moleculer-web.html
+			settings: {
+				port: process.env.PORT || 3000,
 
-	mixins: [ApiGateway],
+				routes: [{
+					path: "/api",
+					whitelist: [
+						// Access to any actions in all services under "/api" URL
+						"**",
+					],
+				}],
 
-	// More info about settings: https://moleculer.services/docs/0.13/moleculer-web.html
-	settings: {
-		port: process.env.PORT || 3000,
+				// Serve assets from "public" folder
+				assets: {
+					folder: "public",
+				},
+			},
+		})
+	}
+}
 
-		routes: [{
-			path: "/api",
-			whitelist: [
-				// Access to any actions in all services under "/api" URL
-				"**",
-			],
-		}],
-
-		// Serve assets from "public" folder
-		assets: {
-			folder: "public",
-		},
-	},
-};
 
 export = ApiService;

@@ -1,59 +1,24 @@
 "use strict";
-import { ServiceSchema } from "moleculer";
 
-const GreeterService: ServiceSchema = {
-	name: "greeter",
+import {Service, ServiceBroker} from "moleculer";
 
-	/**
-	 * Service settings
-	 */
-	settings: {
+export default class GreeterService extends Service {
 
-	},
+	constructor(broker: ServiceBroker) {
+		super(broker);
+		this.parseServiceSchema({
+			name:"greeter",
+			actions:{
+				hello: this.hello
+			}
+		})
 
-	/**
-	 * Service dependencies
-	 */
-	dependencies: [],
+	}
 
-	/**
-	 * Actions
-	 */
-	actions: {
+	// action
+	hello() {
+		return "Hello Moleculer";
+	}
 
-		/**
-		 * Say a 'Hello'
-		 *
-		 * @returns
-		 */
-		hello: () => "Hello Moleculer",
+}
 
-		/**
-		 * Welcome a username
-		 *
-		 * @param {String} name - User name
-		 */
-		welcome: {
-			params: {
-				name: "string",
-			},
-			handler: ctx => `Welcome, ${ctx.params.name}`,
-		},
-	},
-
-	/**
-	 * Events
-	 */
-	events: {
-
-	},
-
-	/**
-	 * Methods
-	 */
-	methods: {
-
-	},
-};
-
-export = GreeterService;
