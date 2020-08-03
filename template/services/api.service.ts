@@ -16,7 +16,11 @@ class ApiService extends Service {
 					whitelist: [
 						// Access to any actions in all services under "/api" URL
 						"**",
-					],
+					]{{#dbService}},
+					aliases: {
+						"REST products": "products"
+					}
+					{{/#dbService}}
 				}],
 
 				// Serve assets from "public" folder
