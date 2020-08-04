@@ -2,7 +2,9 @@
 logs
 *.log
 npm-debug.log*
-
+.DS_Store
+.idea
+template/.DS_Store
 # Runtime data
 pids
 *.pid
