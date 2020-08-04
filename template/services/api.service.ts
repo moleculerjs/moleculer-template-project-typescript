@@ -1,10 +1,11 @@
+import {IncomingMessage} from "http";
 import {Service, ServiceBroker, Context} from "moleculer";
 import ApiGateway from "moleculer-web";
-import {IncomingMessage} from "http";
 
 class ApiService extends Service {
-	constructor(broker: ServiceBroker) {
+	public constructor(broker: ServiceBroker) {
 		super(broker);
+		// @ts-ignore
 		this.parseServiceSchema({
 			name: "api",
 			mixins: [ApiGateway],
@@ -41,12 +42,11 @@ class ApiService extends Service {
 					 * @param {IncomingMessage} req
 					 * @param {ServerResponse} res
 					 * @param {Object} data
-					 *
-					 *
-					 onBeforeCall(ctx: Context<any,{userAgent: string}>, route: object, req: IncomingMessage, res: ServerResponse) {
-					// Set request headers to context meta
-					ctx.meta.userAgent = req.headers["user-agent"];
-				},
+					onBeforeCall(ctx: Context<any,{userAgent: string}>,
+					 route: object, req: IncomingMessage, res: ServerResponse) {
+					  Set request headers to context meta
+					  ctx.meta.userAgent = req.headers["user-agent"];
+					},
 					 */
 
 					/**
@@ -110,10 +110,10 @@ class ApiService extends Service {
 				 * @param {any} route
 				 * @param {IncomingMessage} req
 				 * @returns {Promise}
-				 */
-				async authenticate(ctx: Context, route: any, req: IncomingMessage): Promise < any > {
+
+				async authenticate = (ctx: Context, route: any, req: IncomingMessage): Promise < any >  => {
 					// Read the token from header
-					const auth = req.headers["authorization"];
+					const auth = req.headers.authorization;
 
 					if (auth && auth.startsWith("Bearer")) {
 						const token = auth.slice(7);
@@ -123,22 +123,23 @@ class ApiService extends Service {
 							// Returns the resolved user. It will be set to the `ctx.meta.user`
 							return {
 								id: 1,
-								name: "John Doe"
+								name: "John Doe",
 							};
 
 						} else {
 							// Invalid token
 							throw new ApiGateway.Errors.UnAuthorizedError(ApiGateway.Errors.ERR_INVALID_TOKEN, {
-								error: "Invalid Token"
+								error: "Invalid Token",
 							});
 						}
 
 					} else {
 						// No token. Throw an error or do nothing if anonymous access is allowed.
-						// throw new E.UnAuthorizedError(E.ERR_NO_TOKEN);
+						// Throw new E.UnAuthorizedError(E.ERR_NO_TOKEN);
 						return null;
 					}
 				},
+				 */
 
 				/**
 				 * Authorize the request. Check that the authenticated user has right to access the resource.
@@ -149,10 +150,10 @@ class ApiService extends Service {
 				 * @param {Object} route
 				 * @param {IncomingMessage} req
 				 * @returns {Promise}
-				 */
-				async authorize(ctx: Context < any, {
-					user: string
-				} > , route: object, req: IncomingMessage): Promise < any > {
+
+				async authorize = (ctx: Context < any, {
+					user: string;
+				} > , route: Record<string, undefined>, req: IncomingMessage): Promise < any > => {
 					// Get the authenticated user.
 					const user = ctx.meta.user;
 
@@ -160,13 +161,14 @@ class ApiService extends Service {
 					// @ts-ignore
 					if (req.$action.auth === "required" && !user) {
 						throw new ApiGateway.Errors.UnAuthorizedError("NO_RIGHTS", {
-							error: "Unauthorized"
+							error: "Unauthorized",
 						});
 					}
 				},
+				 */
 			},
 
-		})
+		});
 	}
 }
 
