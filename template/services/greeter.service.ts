@@ -1,82 +1,52 @@
 "use strict";
-import { Context, ServiceSchema } from "moleculer";
 
-const GreeterService: ServiceSchema = {
-	name: "greeter",
+import {Service, ServiceBroker,Context} from "moleculer";
 
-	/**
-	 * Settings
-	 */
-	settings: {
+export default class GreeterService extends Service {
 
-	},
+	constructor(broker: ServiceBroker) {
+		super(broker);
+		this.parseServiceSchema({
+			name:"greeter",
+			actions:{
+				/**
+				 * Say a 'Hello' action.
+				 *
+				 */
+				hello: {
+					rest: {
+						method: "GET",
+						path: "/hello",
+					},
+					async handler(): Promise<string> {
+						return this._hello();
+					},
+				},
 
-	/**
-	 * Dependencies
-	 */
-	dependencies: [],
+				/**
+				 * Welcome, a username
+				 */
+				welcome: {
+					rest: "/welcome",
+					params: {
+						name: "string",
+					},
+					async handler(ctx: Context<{name: string}>): Promise<string> {
+						return this._welcome(ctx.params.name);
+					},
+				},
+			}
+		})
 
-	/**
-	 * Actions
-	 */
-	actions: {
+	}
 
-		/**
-		 * Say a 'Hello' action.
-		 *
-		 */
-		hello: {
-			rest: {
-				method: "GET",
-				path: "/hello",
-			},
-			async handler(): Promise<string> {
-				return "Hello Moleculer";
-			},
-		},
+	// action
+	_hello():string {
+		return "Hello Moleculer";
+	}
+	_welcome(name:string):string {
+		return `Welcome, ${name}`;
+	}
 
-		/**
-		 * Welcome, a username
-		 */
-		welcome: {
-			rest: "/welcome",
-			params: {
-				name: "string",
-			},
-			async handler(ctx: Context<{name: string}>): Promise<string> {
-				return `Welcome, ${ctx.params.name}`;
-			},
-		},
-	},
+}
 
-	/**
-	 * Events
-	 */
-	events: {
-
-	},
-
-	/**
-	 * Methods
-	 */
-	methods: {
-
-	},
-
-	/**
-	 * Service created lifecycle event handler
-	 */
-	created(): void {},
-
-	/**
-	 * Service started lifecycle event handler
-	 */
-	async started(): Promise<void> {},
-
-	/**
-	 * Service stopped lifecycle event handler
-	 */
-	async stopped(): Promise<void> {},
-};
-
-export = GreeterService;

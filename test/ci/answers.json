@@ -6,7 +6,9 @@
     "cacher": "Redis",
     "dbService": true,
     "metrics": false,
+    "reporter": "Prometheus",
     "tracing": false,
+    "exporter": "Console",
     "docker": true,
     "lint": true
 }

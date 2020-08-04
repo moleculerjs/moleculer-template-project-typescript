@@ -43,6 +43,7 @@
     {{#dbService}}
     "moleculer-db": "^0.8.4",
     "moleculer-db-adapter-mongo": "^0.4.7",
+    "@types/mkdirp": "^1.0.1",
     {{/dbService}}
     {{#if_eq transporter "NATS"}}
     "nats": "^1.3.2",

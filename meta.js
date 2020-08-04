@@ -60,13 +60,44 @@ module.exports = function(values) {
 				name: "metrics",
 				message: "Would you like to enable metrics?",
 				default: true
-			},			
+			},
+			{
+				type: "list",
+				name: "reporter",
+				message: "Select a reporter solution",
+				choices: [
+					{ name: "Console", value: "Console" },
+					{ name: "CSV", value: "Redis" },
+					{ name: "Event", value: "CSV" },
+					{ name: "Prometheus", value: "Prometheus" },
+					{ name: "Datadog", value: "Datadog" },
+					{ name: "StatsD", value: "StatsD" }
+				],
+				when(answers) { return answers.metrics; },
+				default: "Prometheus"
+			},
 			{
 				type: "confirm",
 				name: "tracing",
 				message: "Would you like to enable tracing?",
 				default: true
-			},			
+			},
+			{
+				type: "list",
+				name: "exporter",
+				message: "Select a exporter solution",
+				choices: [
+					{ name: "Console", value: "Console" },
+					{ name: "EventLegacy", value: "EventLegacy" },
+					{ name: "Event", value: "CSV" },
+					{ name: "Jaeger", value: "Jaeger" },
+					{ name: "Datadog", value: "Datadog" },
+					{ name: "Zipkin", value: "Zipkin" },
+					{ name: "NewRelic", value: "NewRelic" }
+				],
+				when(answers) { return answers.metrics; },
+				default: "Console"
+			},
 			{
 				type: "confirm",
 				name: "docker",
@@ -96,13 +127,13 @@ module.exports = function(values) {
 		filters: {
 			"services/api.service.ts": "apiGW",
 			"public/**/*": "apiGW",
-			
+
 			"services/products.service.ts": "dbService",
 			"mixins/db.mixin.ts": "dbService",
 			"test/mixins/db.mixin.spec.ts": "dbService",
 			"test/integration/products.service.spec.ts": "dbService",
 			"test/unit/services/products.spec.ts": "dbService",
-			
+
 			".eslintrc.js": "lint",
 
 			".dockerignore": "docker",
@@ -112,7 +143,7 @@ module.exports = function(values) {
 		},
 
 		completeMessage: `
-To get started:
+    To get started:
 
 	cd {{projectName}}
 	npm run dev
