@@ -370,18 +370,14 @@ const brokerConfig: BrokerOptions = {
 
 	// Register custom REPL commands.
 	replCommands: null,
-
+	/*
 	// Called after broker created.
-	created(broker: ServiceBroker): void {
-	},
-
+	created : (broker: ServiceBroker): void => {},
 	// Called after broker started.
-	async started(broker: ServiceBroker): Promise<void> {
-	},
+	started: async (broker: ServiceBroker): Promise<void> => {},
+	stopped: async (broker: ServiceBroker): Promise<void> => {},
+	 */
 
-	// Called after broker stopped.
-	async stopped(broker: ServiceBroker): Promise<void> {
-	},
 };
 
 export = brokerConfig;
