@@ -4,7 +4,7 @@ import {Service, ServiceBroker ,Context} from "moleculer";
 
 export default class GreeterService extends Service {
 
-	constructor(broker: ServiceBroker) {
+	public constructor(public broker: ServiceBroker) {
 		super(broker);
 		this.parseServiceSchema({
 			name:"greeter",
@@ -19,7 +19,7 @@ export default class GreeterService extends Service {
 						path: "/hello",
 					},
 					async handler(): Promise<string> {
-						return this._hello();
+						return this.ActionHello();
 					},
 				},
 
@@ -32,19 +32,19 @@ export default class GreeterService extends Service {
 						name: "string",
 					},
 					async handler(ctx: Context<{name: string}>): Promise<string> {
-						return this._welcome(ctx.params.name);
+						return this.ActionWelcome(ctx.params.name);
 					},
 				},
-			}
-		})
+			},
+		});
 
 	}
 
-	// action
-	_hello():string {
+	// Action
+	public ActionHello(): string {
 		return "Hello Moleculer";
 	}
-	_welcome(name:string):string {
+	public ActionWelcome(name: string): string {
 		return `Welcome, ${name}`;
 	}
 

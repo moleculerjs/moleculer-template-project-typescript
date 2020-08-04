@@ -4,8 +4,8 @@ import {Context, Service, ServiceBroker} from "moleculer";
 import DbConnection from "../mixins/db.mixin";
 
 export default class ProductsService extends Service{
-    private DbMixin = new DbConnection("products").start()
-    constructor(broker:ServiceBroker) {
+    private DbMixin = new DbConnection("products").start();
+	public  constructor(public broker: ServiceBroker) {
         super(broker);
         this.parseServiceSchema({
             name: "products",
@@ -33,7 +33,7 @@ export default class ProductsService extends Service{
                      *
                      * @param {Context} ctx
                      */
-                    create(ctx: Context<{ quantity: number }>) {
+                    create: (ctx: Context<{ quantity: number }>) => {
                         ctx.params.quantity = 0;
                     },
                 },
@@ -62,7 +62,7 @@ export default class ProductsService extends Service{
                         // @ts-ignore
                         value: "number|integer|positive",
                     },
-                    async handler(ctx: Context<{ id: string, value: number }>) {
+                    async handler(ctx: Context<{ id: string; value: number }>) {
                         const doc = await this.adapter.updateById(ctx.params.id, { $inc: { quantity: ctx.params.value } });
                         const json = await this.transformDocuments(ctx, ctx.params, doc);
                         await this.entityChanged("updated", json, ctx);
@@ -82,7 +82,7 @@ export default class ProductsService extends Service{
                         value: "number|integer|positive",
                     },
                     /** @param {Context} ctx  */
-                    async handler(ctx: Context<{ id: string, value: number }>) {
+                    async handler(ctx: Context<{ id: string; value: number }>) {
                         const doc = await this.adapter.updateById(ctx.params.id, { $inc: { quantity: -ctx.params.value } });
                         const json = await this.transformDocuments(ctx, ctx.params, doc);
                         await this.entityChanged("updated", json, ctx);
@@ -105,9 +105,12 @@ export default class ProductsService extends Service{
                     ]);
                 },
             },
+			/**
+			 * Loading sample data to the collection.
             async afterConnected() {
-                // await this.adapter.collection.createIndex({ name: 1 });
+             await this.adapter.collection.createIndex({ name: 1 });
             },
-        })
+			 */
+        });
     }
 }
