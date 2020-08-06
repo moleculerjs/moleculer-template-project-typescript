@@ -59,11 +59,11 @@ const brokerConfig: BrokerOptions = {
 	// More info: https://moleculer.services/docs/0.14/networking.html
 	// Note: During the development, you don't need to define it because all services will be loaded locally.
 	// In production you can set it via `TRANSPORTER=nats://localhost:4222` environment variable.
-	transporter: "{{transporter}}",
+	transporter: null,{{#if needTransporter}} //"{{transporter}}"{{/if}}
 
 	// Define a cacher.
 	// More info: https://moleculer.services/docs/0.14/caching.html
-	cacher: "{{cacher}}",
+    {{#if needCacher}}cacher: "{{cacher}}"{{/if}}{{#unless needCacher}}cacher: null{{/unless}},
 
 	// Define a serializer.
 	// Available values: "JSON", "Avro", "ProtoBuf", "MsgPack", "Notepack", "Thrift".
@@ -166,9 +166,9 @@ const brokerConfig: BrokerOptions = {
 				// Default labels which are appended to all metrics labels
 				defaultLabels: (registry: MetricRegistry) => ({
 					namespace: registry.broker.namespace,
-					nodeID: registry.broker.nodeID
-				})
-			}
+					nodeID: registry.broker.nodeID,
+				}),
+			},
 			{{/if_eq}}
 			{{#if_eq reporter "CSV"}}
 			options: {
@@ -190,7 +190,7 @@ const brokerConfig: BrokerOptions = {
 						filenameFormatter: null,
 						// Custom CSV row formatter.
 						rowFormatter: null,
-				}
+				},
 			{{/if_eq}}
 			{{#if_eq reporter "Event"}}
 			options: {
@@ -204,7 +204,7 @@ const brokerConfig: BrokerOptions = {
 						onlyChanges: false,
 						// Sending interval in seconds
 						interval: 5,
-				}
+				},
 			{{/if_eq}}
 			{{#if_eq reporter "Datadog"}}
 			options: {
@@ -219,13 +219,13 @@ const brokerConfig: BrokerOptions = {
 						// Datadog API Key
 						apiKey: process.env.DATADOG_API_KEY,
 						// Default labels which are appended to all metrics labels
-						defaultLabels: (registry:MetricRegistry) => ({
+						defaultLabels: (registry: MetricRegistry) => ({
 						namespace: registry.broker.namespace,
-						nodeID: registry.broker.nodeID
+						nodeID: registry.broker.nodeID,
 					}),
 						// Sending interval in seconds
 						interval: 10
-				}
+				},
 			{{/if_eq}}
 			{{#if_eq reporter "Prometheus"}}
 			options: {
@@ -234,11 +234,11 @@ const brokerConfig: BrokerOptions = {
 						// HTTP URL path
 						path: "/metrics",
 						// Default labels which are appended to all metrics labels
-						defaultLabels: (registry:MetricRegistry) => ({
+						defaultLabels: (registry: MetricRegistry) => ({
 						namespace: registry.broker.namespace,
-						nodeID: registry.broker.nodeID
-					})
-				}
+						nodeID: registry.broker.nodeID,
+					}),
+				},
 			{{/if_eq}}
 			{{#if_eq reporter "StatsD"}}
 			options: {
@@ -248,7 +248,7 @@ const brokerConfig: BrokerOptions = {
 						port: 8125,
 						// Maximum payload size.
 						maxPayloadSize: 1300
-				}
+				},
 			{{/if_eq}}
 		},
 	},
@@ -268,8 +268,8 @@ const brokerConfig: BrokerOptions = {
 					// Width of row
 					width: 100,
 					// Gauge width in the row
-					gaugeWidth: 40
-			}
+					gaugeWidth: 40,
+			},
 			{{/if_eq}}
 			{{#if_eq exporter "Datadog"}}
 			options: {
@@ -283,7 +283,7 @@ const brokerConfig: BrokerOptions = {
 						defaultTags: null,
 						// Custom Datadog Tracer options. More info: https://datadog.github.io/dd-trace-js/#tracer-settings
 						tracerOptions: null,
-				}
+				},
 			{{/if_eq}}
 			{{#if_eq exporter "Event"}}
 			options: {
@@ -303,7 +303,7 @@ const brokerConfig: BrokerOptions = {
 					spanConverter: null,
 					// Default tags. They will be added into all span tags.
 					defaultTags: null
-				}
+				},
 			{{/if_eq}}
 			{{#if_eq exporter "Jaeger"}}
 			options: {
@@ -324,7 +324,7 @@ const brokerConfig: BrokerOptions = {
 					tracerOptions: {},
 					// Default tags. They will be added into all span tags.
 					defaultTags: null
-				}
+				},
 			{{/if_eq}}
 			{{#if_eq exporter "Zipkin"}}
 			options: {
@@ -337,11 +337,11 @@ const brokerConfig: BrokerOptions = {
 						// Set `debug` property in payload.
 						debug: false,
 							// Set `shared` property in payload.
-							shared: false
+						 shared: false,
 					},
 					// Default tags. They will be added into all span tags.
 					defaultTags: null
-				}
+				},
 			{{/if_eq}}
 			{{#if_eq exporter "NewRelic"}}
 			options: {

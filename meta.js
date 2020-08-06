@@ -51,23 +51,6 @@ module.exports = function(values) {
       },
       {
         type: "confirm",
-        name: "dbService",
-        message: "Add DB sample service?",
-        default: true
-      },
-      {
-        type: "list",
-        name: "database",
-        message: "Select a database solution",
-        choices: [
-          { name: "MongoDB", value: "MongoDB" },
-          { name: "SQLite", value: "SQLite" }
-        ],
-        when(answers) { return answers.dbService; },
-        default: "SQLite"
-      },
-      {
-        type: "confirm",
         name: "metrics",
         message: "Would you like to enable metrics?",
         default: true

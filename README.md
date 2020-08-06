@@ -19,7 +19,7 @@
 To install use the [moleculer-cli](https://github.com/moleculerjs/moleculer-cli) tool.
 
 ```bash
-$ moleculer init project my-project
+$ moleculer init project-typescript my-project
 ```
 
 ## Prompts
@@ -32,7 +32,6 @@ Template repo: moleculerjs/moleculer-template-project-typescript
 ? Select a transporter NATS (recommended)
 ? Would you like to use cache? Yes
 ? Select a cacher solution Memory
-? Add DB sample service? Yes
 ? Would you like to enable metrics? Yes
 ? Select a reporter solution Prometheus
 ? Would you like to enable tracing? Yes

@@ -4,7 +4,6 @@ import { existsSync } from "fs";
 import { sync } from "mkdirp";
 import { Context, Service, ServiceSchema } from "moleculer";
 import DbService from "moleculer-db";
-{{#if_ep database "MongoDB" }}import MongoAdapter from "moleculer-db-adapter-mongo"; {{/if_eq}}
 
 class Connection implements Partial<ServiceSchema>, ThisType<Service>{
 
@@ -55,20 +54,25 @@ class Connection implements Partial<ServiceSchema>, ThisType<Service>{
 		this.cacheCleanEventName = `cache.clean.${this.collection}`;
 	}
 	public start(){
-		{{#if_ep database "MongoDB" }}
-			// Mongo adapter
-			this.schema.adapter = new MongoAdapter(process.env.MONGO_URI);
-			this.schema.collection = this.collection;
-		{{/if_ep}}
-		{{#if_ep database "SQLite" }}
+			if (process.env.MONGO_URI) {
+				// Mongo adapter
+				const MongoAdapter = require("moleculer-db-adapter-mongo");
 
-			// Create data folder
-			if (!existsSync("./data")) {
-				sync("./data");
+				this.schema.adapter = new MongoAdapter(process.env.MONGO_URI);
+				this.schema.collection = this.collection;
+			} else if (process.env.TEST) {
+				// NeDB memory adapter for testing
+				// @ts-ignore
+				this.schema.adapter = new DbService.MemoryAdapter();
+			} else {
+				// NeDB file DB adapter
+
+				// Create data folder
+				if (!existsSync("./data")) {
+					sync("./data");
+				}
+				this.schema.adapter = new DbService.MemoryAdapter({ filename: `./data/${this.collection}.db` });
 			}
-			// @ts-ignore
-			this.schema.adapter = new DbService.MemoryAdapter({ filename: `./data/${this.collection}.db` });
-		{{/if_ep}}
 
 		return this.schema;
 	}

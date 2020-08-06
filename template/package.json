@@ -3,14 +3,13 @@
   "version": "1.0.0",
   "description": "My Moleculer-based microservices project",
   "scripts": {
-    "build": "tsc --build tsconfig.json",
     "dev": "ts-node ./node_modules/moleculer/bin/moleculer-runner.js --hot --repl --config moleculer.config.ts services/**/*.service.ts",
     "start": "moleculer-runner",
     "cli": "moleculer connect {{transporter}}",
     "ci": "jest --watch",
     "test": "jest --coverage"{{#lint}},
     "lint": "eslint --ext .js,.ts ."{{/lint}}{{#docker}},
-    "dc:up": "npm run build & docker-compose up --build -d",
+    "dc:up": "docker-compose up --build -d",
     "dc:logs": "docker-compose logs -f",
     "dc:down": "docker-compose down"{{/docker}}
   },
