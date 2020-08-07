@@ -71,6 +71,7 @@ class Connection implements Partial<ServiceSchema>, ThisType<Service>{
 				if (!existsSync("./data")) {
 					sync("./data");
 				}
+				// @ts-ignore
 				this.schema.adapter = new DbService.MemoryAdapter({ filename: `./data/${this.collection}.db` });
 			}
 

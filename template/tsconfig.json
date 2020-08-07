@@ -7,13 +7,12 @@
 		"preserveConstEnums": true,
 		"sourceMap": true,
 		"pretty": true,
-		"sourceMap": true,
 		"target": "es6",
 		"outDir": "dist"
 	},
 	"include": ["./**/*"],
 	"exclude": [
-		"node_modules",
+		"node_modules/**/*",
 		"test"
 	]
 }
