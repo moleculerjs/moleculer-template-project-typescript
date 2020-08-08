@@ -56,7 +56,7 @@ class Connection implements Partial<ServiceSchema>, ThisType<Service>{
 	public start(){
 			if (process.env.MONGO_URI) {
 				// Mongo adapter
-				const MongoAdapter = require("moleculer-db-adapter-mongo");
+				import  MongoAdapter from "moleculer-db-adapter-mongo";
 
 				this.schema.adapter = new MongoAdapter(process.env.MONGO_URI);
 				this.schema.collection = this.collection;
