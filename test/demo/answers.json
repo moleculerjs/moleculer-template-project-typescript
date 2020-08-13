@@ -1,0 +1,11 @@
+{
+    "apiGW": true,
+    "needTransporter": true,
+    "transporter": "NATS",
+    "needCacher": false,
+    "dbService": true,
+    "metrics": true,
+    "tracing": true,
+    "docker": true,
+    "lint": true
+}

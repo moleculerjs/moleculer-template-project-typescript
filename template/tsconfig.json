@@ -1,21 +1,18 @@
 {
-  "compilerOptions": {
-    "esModuleInterop": true,
-    "noImplicitAny": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "pretty": true,
-    "types": [
-      {{#jest}}
-      "jest",
-      {{/jest}}
-      "node"
-    ],
-    "sourceMap": true,
-    "target": "es6",
-    "baseUrl": "./"
-  },
-  "exclude": [
-    "node_modules",
-  ]
+	"compilerOptions": {
+		"module": "commonjs",
+		"esModuleInterop": true,
+		"noImplicitAny": true,
+		"removeComments": true,
+		"preserveConstEnums": true,
+		"sourceMap": true,
+		"pretty": true,
+		"target": "es6",
+		"outDir": "dist"
+	},
+	"include": ["./**/*"],
+	"exclude": [
+		"node_modules/**/*",
+		"test"
+	]
 }

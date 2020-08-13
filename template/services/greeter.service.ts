@@ -1,59 +1,52 @@
 "use strict";
-import { ServiceSchema } from "moleculer";
 
-const GreeterService: ServiceSchema = {
-	name: "greeter",
+import {Service, ServiceBroker ,Context} from "moleculer";
 
-	/**
-	 * Service settings
-	 */
-	settings: {
+export default class GreeterService extends Service {
 
-	},
+	public constructor(public broker: ServiceBroker) {
+		super(broker);
+		this.parseServiceSchema({
+			name:"greeter",
+			actions:{
+				/**
+				 * Say a 'Hello' action.
+				 *
+				 */
+				hello: {
+					rest: {
+						method: "GET",
+						path: "/hello",
+					},
+					async handler(): Promise<string> {
+						return this.ActionHello();
+					},
+				},
 
-	/**
-	 * Service dependencies
-	 */
-	dependencies: [],
-
-	/**
-	 * Actions
-	 */
-	actions: {
-
-		/**
-		 * Say a 'Hello'
-		 *
-		 * @returns
-		 */
-		hello: () => "Hello Moleculer",
-
-		/**
-		 * Welcome a username
-		 *
-		 * @param {String} name - User name
-		 */
-		welcome: {
-			params: {
-				name: "string",
+				/**
+				 * Welcome, a username
+				 */
+				welcome: {
+					rest: "/welcome",
+					params: {
+						name: "string",
+					},
+					async handler(ctx: Context<{name: string}>): Promise<string> {
+						return this.ActionWelcome(ctx.params.name);
+					},
+				},
 			},
-			handler: ctx => `Welcome, ${ctx.params.name}`,
-		},
-	},
+		});
 
-	/**
-	 * Events
-	 */
-	events: {
+	}
 
-	},
+	// Action
+	public ActionHello(): string {
+		return "Hello Moleculer";
+	}
+	public ActionWelcome(name: string): string {
+		return `Welcome, ${name}`;
+	}
 
-	/**
-	 * Methods
-	 */
-	methods: {
+}
 
-	},
-};
-
-export = GreeterService;

@@ -1,16 +1,17 @@
 {
   "name": "{{projectName}}",
   "version": "1.0.0",
-  "description": "My Moleculer microservices project",
+  "description": "My Moleculer-based microservices project",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --build tsconfig.json",
     "dev": "ts-node ./node_modules/moleculer/bin/moleculer-runner.js --hot --repl --config moleculer.config.ts services/**/*.service.ts",
-    "cli":"moleculer connect {{transporter}}",
-    "start": "moleculer-runner services"{{#jest}},
+    "start": "moleculer-runner",
+    "cli": "moleculer connect {{transporter}}",
     "ci": "jest --watch",
-    "test": "jest --coverage"{{/jest}}{{#lint}},
+    "test": "jest --coverage"{{#lint}},
     "lint": "eslint --ext .js,.ts ."{{/lint}}{{#docker}},
     "dc:up": "docker-compose up --build -d",
+    "dc:logs": "docker-compose logs -f",
     "dc:down": "docker-compose down"{{/docker}}
   },
   "keywords": [
@@ -19,52 +20,57 @@
   ],
   "author": "",
   "devDependencies": {
-    "@types/bluebird": "^3.5.24",
-    "@types/node": "^10.12.12",
     {{#lint}}
     "eslint": "^6.8.0",
-    "eslint-plugin-import": "^2.19.1",
-    "eslint-plugin-prefer-arrow": "^1.1.7",
-    "@typescript-eslint/eslint-plugin": "^2.12.0",
-    "@typescript-eslint/parser": "^2.12.0",
+    "eslint-plugin-import": "^2.20.2",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
+    "eslint-plugin-prefer-arrow": "^1.2.2",
     {{/lint}}
-    {{#jest}}
-    "@types/jest": "^23.1.1",
-    "jest": "^23.6.0",
-    "jest-cli": "^23.6.0",
-    "ts-jest": "^23.10.5",
-    {{/jest}}
-    "moleculer-repl": "^0.5.3",
-    "ts-node": "^7.0.1",
-    "typescript": "^3.2.2"
+    "jest": "^25.1.0",
+    "jest-cli": "^25.1.0",
+    "moleculer-repl": "^0.6.2",
+    "ts-jest": "^25.3.0",
+    "ts-node": "^8.8.1"
   },
   "dependencies": {
     {{#apiGW}}
-    "moleculer-web": "^0.8.0",
+    "moleculer-web": "^0.9.0",
     {{/apiGW}}
+    {{#dbService}}
+    "moleculer-db": "^0.8.4",
+    "moleculer-db-adapter-mongo": "^0.4.7",
+    {{/dbService}}
     {{#if_eq transporter "NATS"}}
-    "nats": "^1.0.1",
+    "nats": "^1.3.2",
     {{/if_eq}}
     {{#if_eq transporter "MQTT"}}
-    "mqtt": "^2.18.8",
+    "mqtt": "^3.0.0",
     {{/if_eq}}
     {{#if_eq transporter "AMQP"}}
-    "amqplib": "^0.5.3",
-    {{/if_eq}}    
+    "amqplib": "^0.5.5",
+    {{/if_eq}}
+    {{#if_eq transporter "AMQP10"}}
+    "rhea-promise": "^1.0.0",
+    {{/if_eq}}
     {{#if_eq transporter "STAN"}}
-    "node-nats-streaming": "0.0.51",
-    {{/if_eq}}    
+    "node-nats-streaming": "^0.2.6",
+    {{/if_eq}}
     {{#if_eq transporter "Kafka"}}
-    "kafka-node": "3.0.1",
-    {{/if_eq}}    
+    "kafka-node": "^5.0.0",
+    {{/if_eq}}
     {{#redis}}
-    "ioredis": "^4.2.0",
+    "ioredis": "^4.14.1",
     {{/redis}}
-    "moleculer": "^0.13.0"
-  },
+    "moleculer": "^0.14.0",
+    "typescript": "^3.8.3",
+    "@types/jest": "^25.1.4",
+    "@types/mkdirp": "^1.0.0",
+    "@types/node": "^13.9.8"
+},
   "engines": {
-    "node": ">= 8.x.x"
-  }{{#jest}},
+    "node": ">= 10.x.x"
+  },
   "jest": {
     "coverageDirectory": "<rootDir>/coverage",
     "testEnvironment": "node",
@@ -84,5 +90,5 @@
         "tsConfig": "tsconfig.json"
       }
     }
-  }{{/jest}}
+  }
 }
