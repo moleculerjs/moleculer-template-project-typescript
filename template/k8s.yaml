@@ -8,7 +8,7 @@ metadata:
 data:
   NAMESPACE: ""
   LOGLEVEL: info
-  SERVICEDIR: services
+  SERVICEDIR: dist/services
   {{#if_eq transporter "NATS"}}TRANSPORTER: nats://nats:4222{{/if_eq}}
   {{#if_eq transporter "Redis"}}TRANSPORTER: redis://redis:6379{{/if_eq}}
   {{#if_eq transporter "MQTT"}}TRANSPORTER: mqtt://mqtt:1883{{/if_eq}}
@@ -81,6 +81,10 @@ spec:
         env:
           - name: SERVICES
             value: api
+          - name: PORT
+            value: "3000"
+        ports:
+          - containerPort: 3000
 {{/apiGW}}
 
 ---
