@@ -5,6 +5,7 @@ on:
     branches:
       - 'master'
       - 'develop'
+      - 'feature/*'
       - 'releases/*'
     tags:
       - '*'
@@ -19,6 +20,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-cache-node-modules
 
       - name: Install dependencies
         run: npm install
