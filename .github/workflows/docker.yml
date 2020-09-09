@@ -1,0 +1,72 @@
+name: Test with Docker
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 14.x]
+        transporter: [NATS, Redis, MQTT, AMQP, AMQP10, STAN, Kafka, TCP]
+      fail-fast: false
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }} with ${{ matrix.transporter }} transporter
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: cache-node-modules-${{ matrix.node-version }}
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Create answers file
+      run: node update-answers.js
+      working-directory: ./test/ci
+      env:
+        TRANSPORTER: ${{ matrix.transporter }}
+
+    - name: Generate project with '${{ matrix.transporter }}' transporter
+      run: npm test
+
+    - name: Run lint in the generated project
+      run: npm run lint
+      working-directory: ./ci-test
+
+    - name: Run tests in the generated project
+      run: npm test
+      working-directory: ./ci-test
+
+    - run: cat ./ci-test/docker-compose.env
+    - run: cat ./ci-test/docker-compose.yml
+
+    - name: Start containers
+      run: npm run dc:up
+      working-directory: ./ci-test
+
+    - name: Sleeping 60 secs
+      run: sleep 60s
+
+    - name: Check containers
+      run: docker-compose ps
+      working-directory: ./ci-test
+
+    - name: Check logs
+      run: docker-compose logs
+      working-directory: ./ci-test
+
+    - run: curl --silent --show-error --fail http://localhost:3000/api/greeter/hello
+    - run: curl --silent --show-error --fail http://localhost:3000/api/products
+
+    - name: Stop containers
+      run: npm run dc:down
+      working-directory: ./ci-test

@@ -1,0 +1,95 @@
+
+name: Test with Kubernetes
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        transporter: [NATS, Redis, MQTT, AMQP, AMQP10, STAN, Kafka]
+      fail-fast: false
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Use Node.js with ${{ matrix.transporter }} transporter
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: Cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: cache-node-modules-12.x
+
+    - name: Install dependencies
+      run: npm i
+
+    - name: Create answers file
+      run: node update-answers.js
+      working-directory: ./test/ci
+      env:
+        TRANSPORTER: ${{ matrix.transporter }}
+
+    - name: Generate project with '${{ matrix.transporter }}' transporter
+      run: npm test
+
+    - name: Run tests in the generated project
+      run: npm test
+      working-directory: ./ci-test
+
+    - name: Start a local Docker Registry
+      run: docker run -d --restart=always -p 5000:5000 --name registry registry:2
+
+    - name: Set Registry IP for KinD
+      run: |
+        REGISTRY_IP=$(docker inspect -f '{{.NetworkSettings.IPAddress}}' registry)
+        echo $REGISTRY_IP
+        sed -i "s/registry:5000/$REGISTRY_IP:5000/g" test/ci/kind-config.yaml
+        cat test/ci/kind-config.yaml
+    
+    - name: Build Docker image
+      run: docker build -t ci-test .
+      working-directory: ./ci-test
+
+    - name: Tagging
+      run: docker tag ci-test localhost:5000/ci-test
+
+    - name: Push Docker image
+      run: docker push localhost:5000/ci-test
+
+    - uses: engineerd/setup-kind@v0.3.0
+      with:
+        config: ./test/ci/kind-config.yaml
+
+    - run: kubectl cluster-info
+    - run: kubectl get nodes
+    - run: kubectl get pods -n kube-system
+
+    - name: Install NGINX Ingress
+      run: |
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.27.0/deploy/static/mandatory.yaml
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.27.0/deploy/static/provider/baremetal/service-nodeport.yaml
+        kubectl patch deployments -n ingress-nginx nginx-ingress-controller -p '{"spec":{"template":{"spec":{"containers":[{"name":"nginx-ingress-controller","ports":[{"containerPort":80,"hostPort":80},{"containerPort":443,"hostPort":443}]}],"nodeSelector":{"ingress-ready":"true"},"tolerations":[{"key":"node-role.kubernetes.io/master","operator":"Equal","effect":"NoSchedule"}]}}}}' 
+    
+    - name: Kubectl apply
+      working-directory: ./ci-test
+      run: |
+        sed 's/image: ci-test/image: localhost:5000\/ci-test/g' k8s.yaml
+        sed 's/image: ci-test/image: localhost:5000\/ci-test/g' k8s.yaml | kubectl apply -f -
+    
+    - name: Sleeping 90 secs
+      run: sleep 90
+
+    - name: Check pods
+      run: kubectl get all
+
+    - run: curl --silent --show-error --fail http://ci-test.127.0.0.1.nip.io/api/greeter/hello
+    - run: curl --silent --show-error --fail http://ci-test.127.0.0.1.nip.io/api/products
+
+    - name: Check logs
+      run: kubectl logs deployment/products
