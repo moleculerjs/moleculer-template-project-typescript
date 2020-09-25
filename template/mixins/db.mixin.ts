@@ -57,6 +57,7 @@ class Connection implements Partial<ServiceSchema>, ThisType<Service>{
 	public start(){
 			if (process.env.MONGO_URI) {
 				// Mongo adapter
+				// eslint-disable-next-line @typescript-eslint/no-var-requires
 				const   MongoAdapter = require("moleculer-db-adapter-mongo");
 
 				this.schema.adapter = new MongoAdapter(process.env.MONGO_URI);
