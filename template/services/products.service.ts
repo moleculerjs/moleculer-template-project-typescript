@@ -1,5 +1,5 @@
 "use strict";
-import {Context, Service, ServiceBroker} from "moleculer";
+import {Context, Service, ServiceBroker, ServiceSchema} from "moleculer";
 
 import DbConnection from "../mixins/db.mixin";
 
@@ -7,9 +7,10 @@ export default class ProductsService extends Service{
 
 	private DbMixin = new DbConnection("products").start();
 
-	public  constructor(public broker: ServiceBroker) {
+	// @ts-ignore
+	public  constructor(public broker: ServiceBroker, schema: ServiceSchema<{}> = {}) {
 		super(broker);
-		this.parseServiceSchema({
+		this.parseServiceSchema(Service.mergeSchemas({
 			name: "products",
 			mixins: [this.DbMixin],
 			settings: {
@@ -113,6 +114,6 @@ export default class ProductsService extends Service{
 			 await this.adapter.collection.createIndex({ name: 1 });
 			},
 			 */
-		});
+		}, schema));
 	}
 }
