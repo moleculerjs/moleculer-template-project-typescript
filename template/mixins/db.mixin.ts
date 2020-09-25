@@ -60,7 +60,6 @@ export default class Connection implements Partial<ServiceSchema>, ThisType<Serv
 			// Mongo adapter
 			// eslint-disable-next-line @typescript-eslint/no-var-requires
 			const   MongoAdapter = require("moleculer-db-adapter-mongo");
-
 			this.schema.adapter = new MongoAdapter(process.env.MONGO_URI);
 			this.schema.collection = this.collection;
 		} else if (process.env.TEST) {
