@@ -59,7 +59,7 @@ const brokerConfig: BrokerOptions = {
 	// More info: https://moleculer.services/docs/0.14/networking.html
 	// Note: During the development, you don't need to define it because all services will be loaded locally.
 	// In production you can set it via `TRANSPORTER=nats://localhost:4222` environment variable.
-	transporter: null,{{#if needTransporter}} //"{{transporter}}"{{/if}}
+	transporter: null,{{#if needTransporter}} // "{{transporter}}"{{/if}}
 
 	// Define a cacher.
 	// More info: https://moleculer.services/docs/0.14/caching.html
