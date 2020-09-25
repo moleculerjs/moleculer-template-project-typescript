@@ -9,7 +9,12 @@ class Connection implements Partial<ServiceSchema>, ThisType<Service>{
 
 	private cacheCleanEventName: string;
 	private collection: string;
-	private schema: Partial<ServiceSchema> & ThisType<Service> = {
+	private schema: Partial<ServiceSchema> & ThisType<Service> ;
+
+	public constructor(public collectionName: string) {
+		this.collection = collectionName;
+		this.cacheCleanEventName = `cache.clean.${this.collection}`;
+		this.schema = {
 		mixins: [DbService],
 		events: {
 			/**
@@ -48,10 +53,6 @@ class Connection implements Partial<ServiceSchema>, ThisType<Service>{
 			}
 		},
 	};
-
-	public constructor(public collectionName: string) {
-		this.collection = collectionName;
-		this.cacheCleanEventName = `cache.clean.${this.collection}`;
 	}
 	public start(){
 			if (process.env.MONGO_URI) {
