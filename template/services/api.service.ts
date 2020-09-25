@@ -2,7 +2,8 @@ import {IncomingMessage} from "http";
 import {Service, ServiceBroker, Context} from "moleculer";
 import ApiGateway from "moleculer-web";
 
-class ApiService extends Service {
+export default class ApiService extends Service {
+
 	public constructor(broker: ServiceBroker) {
 		super(broker);
 		// @ts-ignore
@@ -171,6 +172,3 @@ class ApiService extends Service {
 		});
 	}
 }
-
-
-export = ApiService;

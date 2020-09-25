@@ -15,8 +15,7 @@ describe("Test DB mixin", () => {
 		afterAll(() => broker.stop());
 
 		it("check schema properties", async () => {
-			// @ts-ignore
-			const schema = DbMixin("my-collection");
+			const schema = new DbMixin("my-collection").start();
 
 			expect(schema.mixins).toEqual([DbService]);
 			// @ts-ignore
@@ -28,8 +27,7 @@ describe("Test DB mixin", () => {
 		it("check cache event handler", async () => {
 			jest.spyOn(broker.cacher, "clean");
 
-			// @ts-ignore
-			const schema = DbMixin("my-collection");
+			const schema = new DbMixin("my-collection").start();
 
 			// @ts-ignore
 			await schema.events["cache.clean.my-collection"].call({ broker, fullName: "my-service" });
@@ -41,8 +39,7 @@ describe("Test DB mixin", () => {
 		describe("Check service started handler", () => {
 
 			it("should not call seedDB method", async () => {
-				// @ts-ignore
-				const schema = DbMixin("my-collection");
+				const schema = new DbMixin("my-collection").start();
 
 				schema.adapter.count = jest.fn(async () => 10);
 				const seedDBFn = jest.fn();
@@ -57,8 +54,7 @@ describe("Test DB mixin", () => {
 			});
 
 			it("should call seedDB method", async () => {
-				// @ts-ignore
-				const schema = DbMixin("my-collection");
+				const schema = new DbMixin("my-collection").start();
 
 				schema.adapter.count = jest.fn(async () => 0);
 				const seedDBFn = jest.fn();
@@ -75,8 +71,7 @@ describe("Test DB mixin", () => {
 		});
 
 		it("should broadcast a cache clear event", async () => {
-			// @ts-ignore
-			const schema = DbMixin("my-collection");
+			const schema = new DbMixin("my-collection").start();
 
 			const ctx = {
 				broadcast: jest.fn(),

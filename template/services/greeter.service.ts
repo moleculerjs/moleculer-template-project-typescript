@@ -37,16 +37,14 @@ export default class GreeterService extends Service {
 				},
 			},
 		});
-
 	}
 
 	// Action
 	public ActionHello(): string {
 		return "Hello Moleculer";
 	}
+
 	public ActionWelcome(name: string): string {
 		return `Welcome, ${name}`;
 	}
-
 }
-
