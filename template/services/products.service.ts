@@ -4,7 +4,9 @@ import {Context, Service, ServiceBroker} from "moleculer";
 import DbConnection from "../mixins/db.mixin";
 
 export default class ProductsService extends Service{
+
 	private DbMixin = new DbConnection("products").start();
+
 	public  constructor(public broker: ServiceBroker) {
 		super(broker);
 		this.parseServiceSchema({

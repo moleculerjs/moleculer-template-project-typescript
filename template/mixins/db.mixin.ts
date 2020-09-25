@@ -5,7 +5,7 @@ import { sync } from "mkdirp";
 import { Context, Service, ServiceSchema } from "moleculer";
 import DbService from "moleculer-db";
 
-class Connection implements Partial<ServiceSchema>, ThisType<Service>{
+export default class Connection implements Partial<ServiceSchema>, ThisType<Service>{
 
 	private cacheCleanEventName: string;
 	private collection: string;
@@ -88,7 +88,4 @@ class Connection implements Partial<ServiceSchema>, ThisType<Service>{
 	public set _collection(value: string) {
 		this.collection = value;
 	}
-
-
 }
-export default Connection;
