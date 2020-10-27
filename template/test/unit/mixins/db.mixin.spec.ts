@@ -1,7 +1,5 @@
 "use strict";
 
-process.env.TEST = "true";
-
 import { ServiceBroker } from "moleculer";
 import DbService from "moleculer-db";
 import DbMixin from "../../../mixins/db.mixin";

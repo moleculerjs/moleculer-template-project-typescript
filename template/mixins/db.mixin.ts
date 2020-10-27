@@ -62,7 +62,7 @@ export default class Connection implements Partial<ServiceSchema>, ThisType<Serv
 			const   MongoAdapter = require("moleculer-db-adapter-mongo");
 			this.schema.adapter = new MongoAdapter(process.env.MONGO_URI);
 			this.schema.collection = this.collection;
-		} else if (process.env.TEST) {
+		} else if (process.env.NODE_ENV === 'test') {
 			// NeDB memory adapter for testing
 			// @ts-ignore
 			this.schema.adapter = new DbService.MemoryAdapter();

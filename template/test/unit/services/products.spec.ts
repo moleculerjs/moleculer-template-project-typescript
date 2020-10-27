@@ -1,7 +1,5 @@
 "use strict";
 
-process.env.TEST = "true";
-
 import { Context, Errors, ServiceBroker } from "moleculer";
 import TestService from "../../../services/products.service";
 
