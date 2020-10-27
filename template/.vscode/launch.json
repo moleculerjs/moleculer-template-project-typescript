@@ -17,7 +17,7 @@
 			],
 			"cwd": "${workspaceRoot}",
 			"args": [
-				"--mask **/*.service.ts",
+				"**/*.service.ts",
 				"services"
 			]
 		},
