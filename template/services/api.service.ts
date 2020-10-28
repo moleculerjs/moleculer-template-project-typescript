@@ -101,7 +101,7 @@ export default class ApiService extends Service {
 			methods: {
 
 				/**
-				 * Authenticate the request. It check the `Authorization` token value in the request header.
+				 * Authenticate the request. It checks the `Authorization` token value in the request header.
 				 * Check the token value & resolve the user by the token.
 				 * The resolved user will be available in `ctx.meta.user`
 				 *
