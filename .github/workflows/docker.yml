@@ -56,6 +56,10 @@ jobs:
     - name: Sleeping 60 secs
       run: sleep 60s
 
+    - name: Sleeping more in case of AMQP transporter
+      run: sleep 180
+      if: contains(matrix.transporter, 'AMQP')
+      
     - name: Check containers
       run: docker-compose ps
       working-directory: ./ci-test
