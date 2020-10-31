@@ -85,6 +85,10 @@ jobs:
     - name: Sleeping 90 secs
       run: sleep 90
 
+    - name: Sleeping more in case of AMQP transporter
+      run: sleep 180
+      if: contains(matrix.transporter, 'AMQP')
+      
     - name: Check pods
       run: kubectl get all
 
