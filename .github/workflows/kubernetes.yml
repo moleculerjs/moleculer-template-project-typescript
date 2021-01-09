@@ -9,7 +9,8 @@ jobs:
 
     strategy:
       matrix:
-        transporter: [NATS, Redis, MQTT, AMQP, AMQP10, STAN, Kafka]
+        # transporter: [NATS, Redis, MQTT, AMQP, AMQP10, STAN, Kafka]
+        transporter: [NATS, Redis, MQTT, AMQP, STAN, Kafka]
       fail-fast: false
 
     steps:
