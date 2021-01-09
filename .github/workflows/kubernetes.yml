@@ -62,7 +62,7 @@ jobs:
     - name: Push Docker image
       run: docker push localhost:5000/ci-test
 
-    - uses: engineerd/setup-kind@v0.3.0
+    - uses: engineerd/setup-kind@v0.5.0
       with:
         config: ./test/ci/kind-config.yaml
 
