@@ -112,7 +112,7 @@ export default class ApiService extends Service {
 				 * @param {IncomingMessage} req
 				 * @returns {Promise}
 
-				async authenticate = (ctx: Context, route: any, req: IncomingMessage): Promise < any >  => {
+				async authenticate (ctx: Context, route: any, req: IncomingMessage): Promise < any >  => {
 					// Read the token from header
 					const auth = req.headers.authorization;
 
@@ -152,7 +152,7 @@ export default class ApiService extends Service {
 				 * @param {IncomingMessage} req
 				 * @returns {Promise}
 
-				async authorize = (ctx: Context < any, {
+				async authorize (ctx: Context < any, {
 					user: string;
 				} > , route: Record<string, undefined>, req: IncomingMessage): Promise < any > => {
 					// Get the authenticated user.
