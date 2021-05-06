@@ -16,4 +16,4 @@ RUN npm run build \
  && npm prune
 
 # Start server
-CMD ["node", "./node_modules/moleculer/bin/moleculer-runner.js"]
+CMD ["npm", "start"]
