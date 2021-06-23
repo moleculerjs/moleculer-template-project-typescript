@@ -4,7 +4,7 @@
   "description": "My Moleculer-based microservices project",
   "scripts": {
     "build": "tsc --build tsconfig.json",
-    "dev": "ts-node ./node_modules/moleculer/bin/moleculer-runner.js --hot --repl --config moleculer.config.ts services/**/*.service.ts",
+    "dev": "ts-node ./node_modules/moleculer/bin/moleculer-runner.js --hot --repl --config moleculer.config.ts 'services/**/*.service.ts'",
     "start": "moleculer-runner --config dist/moleculer.config.js",
     "cli": "moleculer connect {{transporter}}",
     "ci": "jest --watch",
