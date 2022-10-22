@@ -8,7 +8,12 @@ export default class ProductsService extends Service{
 	private DbMixin = new DbConnection("products").start();
 
 	// @ts-ignore
-	public  constructor(public broker: ServiceBroker, schema: ServiceSchema<{}> = {}) {
+		public constructor(
+		public broker: ServiceBroker,
+		schema: ServiceSchema<{}> = {
+			name: ""
+		}
+	) {
 		super(broker);
 		this.parseServiceSchema(Service.mergeSchemas({
 			name: "products",
