@@ -9,8 +9,8 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x, 18.x]
-        transporter: [NATS, Redis, MQTT, AMQP, AMQP10, STAN, Kafka, TCP]
-        # transporter: [NATS, Redis, MQTT, AMQP, STAN, Kafka, TCP]
+        # transporter: [NATS, Redis, MQTT, AMQP, AMQP10, STAN, Kafka, TCP]
+        transporter: [NATS, Redis, MQTT, AMQP, STAN, Kafka, TCP]
       fail-fast: false
     steps:
     - uses: actions/checkout@v3

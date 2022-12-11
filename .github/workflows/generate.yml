@@ -1,7 +1,6 @@
 name: Generate a demo project
 
-# on: [push, pull_request]
-on: []
+on: [push, pull_request]
 
 jobs:
   generate:
@@ -25,7 +24,7 @@ jobs:
       working-directory: ./project-demo
 
     - name: Set remote
-      run: git remote add origin https://${{ secrets.GH_TOKEN }}@github.com/moleculerjs/typescript-project-demo.git
+      run: git remote add origin https://${{ secrets.GH_TOKEN }}@github.com/moleculerjs/project-typescript-demo.git
       working-directory: ./project-demo
 
     - name: Add files
