@@ -9,8 +9,7 @@
 	<link href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="shortcut icon" type="image/png" href="https://moleculer.services/icon/favicon-16x16.png"/>
 	<script src="https://unpkg.com/vue@3.2.34/dist/vue.global.js"></script>
-	<link rel="stylesheet" href="./main.css">
-</style>
+	<link rel="stylesheet" href="./main.css" />
 </head>
 <body>
 	{{{{projectName}}}}
@@ -126,8 +125,8 @@
 											<div v-if="item.fields" class="parameters">
 												<div :class="{field:true,required:field.optional===false}" v-for="field,ix in item.fields" :key="field.name">
 													<label :for="field.name+'--'+ix">{{ field.label }}: </label>
-													<input v-if="field.dataType==='number'"  :min="field.min" :max="field.max"  :type="field.type" :id="field.name+'--'+ix" :name="field.name" v-model.number="field.value" :required="field.required === true || field.optional===false"></input>
-													<input v-else :type="field.type"  :maxlength="field.maxLength" :minlength="field.minLength"  :id="field.name+'--'+ix" :name="field.name" v-model="field.value" :required="field.required === true || field.optional===false"></input>
+													<input v-if="field.dataType==='number'"  :min="field.min" :max="field.max"  :type="field.type" :id="field.name+'--'+ix" :name="field.name" v-model.number="field.value" :required="field.required === true || field.optional===false" />
+													<input v-else :type="field.type"  :maxlength="field.maxLength" :minlength="field.minLength"  :id="field.name+'--'+ix" :name="field.name" v-model="field.value" :required="field.required === true || field.optional===false" />
 												</div>
 											</div>
 										</div>

@@ -42,7 +42,7 @@ const GreeterService: ServiceSchema<GreeterSettings> = {
 				method: "GET",
 				path: "/hello",
 			},
-			async handler(this: GreeterThis, ctx: Context): Promise<string> {
+			handler(this: GreeterThis/* , ctx: Context */): string {
 				return `Hello ${this.settings.defaultName}`;
 			},
 		},

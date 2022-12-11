@@ -57,7 +57,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 				): void {
 					// Set request headers to context meta
 					ctx.meta.userAgent = req.headers["user-agent"];
-				},*/
+				}, */
 
 				/**
 				 * After call hook. You can modify the data.
@@ -72,7 +72,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 					// Async function which return with Promise
 					// return this.doSomething(ctx, res, data);
 					return data;
-				},*/
+				}, */
 
 				// Calling options. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Calling-options
 				callingOptions: {},
