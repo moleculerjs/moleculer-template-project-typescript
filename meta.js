@@ -85,7 +85,7 @@ module.exports = function(values) {
       {
         type: "list",
         name: "exporter",
-        message: "Select a exporter solution",
+        message: "Select an exporter solution",
         choices: [
           { name: "Console", value: "Console" },
           { name: "EventLegacy", value: "EventLegacy" },
@@ -95,7 +95,7 @@ module.exports = function(values) {
           { name: "Zipkin", value: "Zipkin" },
           { name: "NewRelic", value: "NewRelic" }
         ],
-        when(answers) { return answers.metrics; },
+        when(answers) { return answers.tracing; },
         default: "Console"
       },
       {
@@ -135,6 +135,9 @@ module.exports = function(values) {
       "test/unit/services/products.spec.ts": "dbService",
 
       ".eslintrc.js": "lint",
+      "tsconfig.eslint.json": "lint",
+      ".prettierignore": "lint",
+      ".prettierrc.json": "lint",
 
       ".dockerignore": "docker",
       "docker-compose.*": "docker",
@@ -143,7 +146,7 @@ module.exports = function(values) {
     },
 
     completeMessage: `
-    To get started:
+To get started:
 
 	cd {{projectName}}
 	npm run dev

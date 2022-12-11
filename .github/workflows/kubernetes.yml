@@ -1,4 +1,3 @@
-
 name: Test with Kubernetes
 
 on: [push, pull_request]
@@ -9,23 +8,16 @@ jobs:
 
     strategy:
       matrix:
-        # transporter: [NATS, Redis, MQTT, AMQP, AMQP10, STAN, Kafka]
-        transporter: [NATS, Redis, MQTT, AMQP, STAN, Kafka]
+        transporter: [NATS, Redis, MQTT, AMQP, AMQP10, STAN, Kafka]
       fail-fast: false
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Use Node.js with ${{ matrix.transporter }} transporter
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
-        node-version: 12.x
-    - name: Cache
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: cache-node-modules-12.x
+        node-version: 18.x
 
     - name: Install dependencies
       run: npm i
@@ -46,50 +38,35 @@ jobs:
     - name: Start a local Docker Registry
       run: docker run -d --restart=always -p 5000:5000 --name registry registry:2
 
-    - name: Set Registry IP for KinD
-      run: |
-        REGISTRY_IP=$(docker inspect -f '{{.NetworkSettings.IPAddress}}' registry)
-        echo $REGISTRY_IP
-        sed -i "s/registry:5000/$REGISTRY_IP:5000/g" test/ci/kind-config.yaml
-        cat test/ci/kind-config.yaml
-    
     - name: Build Docker image
-      run: docker build -t ci-test .
+      run: docker build -t ci-test:demo .
       working-directory: ./ci-test
-
-    - name: Tagging
-      run: docker tag ci-test localhost:5000/ci-test
-
-    - name: Push Docker image
-      run: docker push localhost:5000/ci-test
 
     - uses: engineerd/setup-kind@v0.5.0
       with:
+        version: "v0.17.0"
         config: ./test/ci/kind-config.yaml
 
     - run: kubectl cluster-info
     - run: kubectl get nodes
     - run: kubectl get pods -n kube-system
 
+    - name: Load Docker image
+      run: kind load docker-image ci-test:demo ci-test:demo
+
     - name: Install NGINX Ingress
-      run: |
-        kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.27.0/deploy/static/mandatory.yaml
-        kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.27.0/deploy/static/provider/baremetal/service-nodeport.yaml
-        kubectl patch deployments -n ingress-nginx nginx-ingress-controller -p '{"spec":{"template":{"spec":{"containers":[{"name":"nginx-ingress-controller","ports":[{"containerPort":80,"hostPort":80},{"containerPort":443,"hostPort":443}]}],"nodeSelector":{"ingress-ready":"true"},"tolerations":[{"key":"node-role.kubernetes.io/master","operator":"Equal","effect":"NoSchedule"}]}}}}' 
-    
+      run: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+
     - name: Kubectl apply
       working-directory: ./ci-test
       run: |
-        sed 's/image: ci-test/image: localhost:5000\/ci-test/g' k8s.yaml
-        sed 's/image: ci-test/image: localhost:5000\/ci-test/g' k8s.yaml | kubectl apply -f -
-    
-    - name: Sleeping 90 secs
-      run: sleep 90
+        # Fix nginx ingress issue: https://github.com/kubernetes/ingress-nginx/issues/5401#issuecomment-662424306
+        kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
+        sed 's/image: ci-test/image: ci-test:demo/g' k8s.yaml | kubectl apply -f -
 
-    - name: Sleeping more in case of AMQP transporter
-      run: sleep 180
-      if: contains(matrix.transporter, 'AMQP')
-      
+    - name: Sleeping 120 secs
+      run: sleep 120
+
     - name: Check pods
       run: kubectl get all
 

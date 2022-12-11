@@ -1,50 +1,87 @@
-"use strict";
+import type { Context, Service, ServiceSchema } from "moleculer";
 
-import {Service, ServiceBroker, Context} from "moleculer";
-
-export default class GreeterService extends Service {
-
-	public constructor(public broker: ServiceBroker) {
-		super(broker);
-		this.parseServiceSchema({
-			name: "greeter",
-			actions:{
-				/**
-				 * Say a 'Hello' action.
-				 *
-				 */
-				hello: {
-					rest: {
-						method: "GET",
-						path: "/hello",
-					},
-					async handler(): Promise<string> {
-						return this.ActionHello();
-					},
-				},
-
-				/**
-				 * Welcome, a username
-				 */
-				welcome: {
-					rest: "/welcome",
-					params: {
-						name: "string",
-					},
-					async handler(ctx: Context<{name: string}>): Promise<string> {
-						return this.ActionWelcome(ctx.params.name);
-					},
-				},
-			},
-		});
-	}
-
-	// Action
-	public ActionHello(): string {
-		return "Hello Moleculer";
-	}
-
-	public ActionWelcome(name: string): string {
-		return `Welcome, ${name}`;
-	}
+export interface ActionHelloParams {
+	name: string;
 }
+
+interface GreeterSettings {
+	defaultName: string;
+}
+
+interface GreeterMethods {
+	uppercase(str: string): string;
+}
+
+interface GreeterLocalVars {
+	myVar: string;
+}
+
+type GreeterThis = Service<GreeterSettings> & GreeterMethods & GreeterLocalVars;
+
+const GreeterService: ServiceSchema<GreeterSettings> = {
+	name: "greeter",
+
+	/**
+	 * Settings
+	 */
+	settings: {
+		defaultName: "Moleculer",
+	},
+
+	/**
+	 * Dependencies
+	 */
+	dependencies: [],
+
+	/**
+	 * Actions
+	 */
+	actions: {
+		hello: {
+			rest: {
+				method: "GET",
+				path: "/hello",
+			},
+			handler(this: GreeterThis/* , ctx: Context */): string {
+				return `Hello ${this.settings.defaultName}`;
+			},
+		},
+
+		welcome: {
+			rest: "GET /welcome/:name",
+			params: {
+				name: "string",
+			},
+			handler(this: GreeterThis, ctx: Context<ActionHelloParams>): string {
+				return `Welcome, ${ctx.params.name}`;
+			},
+		},
+	},
+
+	/**
+	 * Events
+	 */
+	events: {},
+
+	/**
+	 * Methods
+	 */
+	methods: {},
+
+	/**
+	 * Service created lifecycle event handler
+	 */
+	created(this: GreeterThis) {},
+
+	/**
+	 * Service started lifecycle event handler
+	 */
+	async started(this: GreeterThis) {},
+
+	/**
+	 * Service stopped lifecycle event handler
+	 */
+	async stopped(this: GreeterThis) {},
+};
+
+export default GreeterService;

@@ -8,323 +8,15 @@
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
 	<link href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="shortcut icon" type="image/png" href="https://moleculer.services/icon/favicon-16x16.png"/>
-	<script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
-	<style type="text/css">
-	html {
-		font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
-		font-size: 18px;
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
-	}
-
-	body {
-		padding: 0;
-		margin: 0;
-		color: black;
-		text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-		padding-bottom: 60px; /* footer */
-	}
-
-	.cursor-pointer {
-		cursor: pointer;
-		user-select: none;
-	}
-
-	header, footer {
-		text-align: center;
-		color: white;
-		text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
-	}
-
-	header a, header a.router-link-exact-active,
-	footer a, footer a.router-link-exact-active
-	{
-		color: #63dcfd;
-	}
-
-	header {
-		background-image: linear-gradient(45deg, #e37682 0%, #5f4d93 100%);
-		padding: 1em;
-		box-shadow: 0 3px 10px rgba(0,0,0,0.6);
-		margin-bottom: 1em;
-	}
-
-	footer {
-		background-image: linear-gradient(135deg, #e37682 0%, #5f4d93 100%);
-		padding: 0.75em;
-		font-size: 0.8em;
-		box-shadow: 0 -3px 10px rgba(0,0,0,0.6);
-		position: fixed;
-		left: 0; right: 0; bottom: 0;
-		margin-top: 1em;
-	}
-
-	footer .footer-links {
-		margin-top: 0.5em;
-	}
-
-	footer .footer-links a {
-		margin: 0 0.5em;
-	}
-
-	a, a.router-link-exact-active {
-		color: #3CAFCE;
-		text-decoration: none;
-	}
-
-	nav ul {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-	}
-
-	nav ul li {
-		display: inline-block;
-		padding: 0.25em 0.75em;
-		cursor: pointer;
-		font-weight: 300;
-		font-size: 1.25em;
-		border-bottom: 2px solid transparent;
-		transition: color .1s linear, border-bottom .1s linear;
-	}
-
-	nav ul li.active {
-		border-bottom: 2px solid #63dcfd;
-	}
-
-	nav ul li:hover {
-		color: #63dcfd;
-	}
-
-	button, .button {
-		background-color: #3CAFCE;
-		border: 0;
-		border-radius: 8px;
-		color: white;
-		font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
-		font-size: 16px;
-		font-weight: 400;
-		padding: 0.5em 1em;
-		box-shadow: 0 4px 6px -1px rgba(0,0,0,.2);
-		cursor: pointer;
-		user-select: none;
-	}
-
-	button i, .button i {
-		margin-right: 0.5em;
-	}
-
-	button:hover, .button:hover {
-		background-color: #4ba3bb;
-	}
-
-	code {
-		font-family: "Consolas", 'Courier New', Courier, monospace;
-		color: #555;
-	}
-
-	main {
-		max-width: 1260px;
-		margin: 0 auto;
-		padding: 1em 1em;
-	}
-
-	main section#home > .content {
-		text-align: center;
-	}
-
-	main section#home h1 {
-		font-size: 2em;
-		font-weight: 400;
-		margin-top: 0;
-	}
-
-	main section#home h3 {
-		font-size: 1.25em;
-		font-weight: 600;
-	}
-
-	pre.broker-options {
-		display: inline-block;
-		text-align: left;
-		font-size: 0.9em;
-	}
-
-	.boxes {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-	}
-
-	.boxes .box {
-		width: 200px;
-		padding: 0.25em 1em;
-		margin: 0.5em;
-		background: rgba(60, 175, 206, 0.1);
-
-		border: 1px solid grey;
-		border-radius: 0.25em;
-	}
-
-	.boxes .box .caption {
-		font-weight: 300;
-		font-size: 0.9em;
-		margin-bottom: 0.5em;
-	}
-
-	.boxes .box .value {
-		font-weight: 600;
-		font-size: 1.1em;
-	}
-
-	main input {
-		border: 1px solid #3CAFCE;
-		border-radius: 4px;
-		padding: 2px 6px;
-		font-family: "Source Sans Pro";
-	}
-
-	main fieldset {
-		border: 1px solid lightgrey;
-		border-radius: 8px;
-		box-shadow: 2px 2px 10px rgba(0,0,0,0.4);
-		background-color: aliceblue;
-		margin-bottom: 2em;
-	}
-
-	main fieldset legend {
-		background-color: #cce7ff;
-		border: 1px solid lightgrey;
-		padding: 4px 10px;
-		border-radius: 8px;
-	}
-
-	main fieldset .content {
-		padding-left: 2em;
-	}
-
-	main fieldset .request {
-		margin-bottom: 0.5em;
-	}
-
-	main fieldset .parameters .field {
-		margin-bottom: 0.25em;
-	}
-
-	main fieldset .parameters .field label {
-		min-width: 80px;
-		display: inline-block;
-		text-align: right;
-		margin-right: 0.5em;
-	}
-
-	main fieldset .response {
-		margin-top: 1em;
-	}
-
-	main fieldset .response pre {
-		margin: 0.5em 0;
-		font-size: 0.9em;
-	}
-
-	pre.json .string { color: #885800; }
-	pre.json .number { color: blue; }
-	pre.json .boolean { color: magenta; }
-	pre.json .null { color: red; }
-	pre.json .key { color: green; }
-
-	main h4 {
-		font-weight: 600;
-		margin: 0.25em -1.0em;
-	}
-
-	.badge {
-		display: inline-block;
-		background-color: dimgray;
-		color: white;
-    	padding: 2px 6px;
-	    border-radius: 7px;
-	    font-size: 0.7em;
-		font-weight: 600;
-	}
-
-	.badge.green {
-		background-color: limegreen;
-	}
-
-	.badge.red {
-		background-color: firebrick;
-	}
-
-	.badge.orange {
-		background-color: #fab000;
-		color: black;
-	}
-
-	table {
-		width: 100%;
-		/*max-width: 1000px;*/
-		border: 1px solid lightgrey;
-		border-radius: 8px;
-		background-color: aliceblue;
-    }
-
-    table th {
-		padding: 2px 4px;
-		background-color: #cce7ff;
-		border-radius: 4px;
-    }
-
-    table tr.offline td {
-		font-style: italic;
-		color: #777;
-    }
-
-    table tr.local td {
-    	/*color: blue;*/
-    }
-
-    table tr:not(:last-child) td {
-		border-bottom: 1px solid #ddd;
-    }
-
-    table td {
-		text-align: center;
-		position: relative;
-		padding: 2px 4px;
-    }
-
-    table th:nth-child(1), table td:nth-child(1) {
-		text-align: left
-    }
-
-	table tr.service td:nth-child(1) {
-		font-weight: bold;
-	}
-
-	table tr.action td:nth-child(1) {
-		padding-left: 2em;
-	}
-
-	table tr td:nth-child(2) {
-		font-family: monospace;
-		font-size: 0.8em;
-	}
-
-	.bar {
-		position: absolute;
-		left: 0; right: 0; top: 0; bottom: 0;
-		width: 0;
-		height: 100%;
-		background-color: rgba(0,0,0,0.3);
-	}
-</style>
+	<script src="https://unpkg.com/vue@3.2.34/dist/vue.global.js"></script>
+	<link rel="stylesheet" href="./main.css" />
 </head>
 <body>
 	{{{{projectName}}}}
 	<div id="app">
 		<header>
-			<a href="https://moleculer.services/docs/0.14/" target="_blank"><img class="logo" src="https://moleculer.services/images/logo/logo_with_text_horizontal_100h_shadow.png" /></a>
+			<a href="https://moleculer.services/docs/0.14/" target="_blank">
+				<img class="logo" src="https://moleculer.services/images/logo/logo_with_text_horizontal_100h_shadow.png" /></a>
 			<nav>
 				<ul>
 					<li v-for="item in menu" :class="{ active: page == item.id}" @click="changePage(item.id)">{{ item.caption }}</li>
@@ -387,41 +79,86 @@
 					</template>
 				</div>
 			</section>
-
-			<template v-for="(section, name) in requests">
-				<section :id="name" v-if="page == name">
-					<fieldset v-for="item in section">
+			<section id="apis" v-if="page == 'apis'">
+				<div class="flex row no-wrap m-y-sm ">
+					<input type="text" class="input-size-md flex-grow" placeholder="Search in actions, methods, paths..." v-model="apiSearchText" />
+					<button class="m-x-xs button outlined positive" @click="refreshApiPage">
+						<i class="fa fa-refresh"></i>
+						Refresh
+					</button>
+					<button :class="`button  ${globalAuth?.token ? 'positive' : 'outlined negative'}`" @click="showAuthorizeDialog">
+						<i :class="`fa fa-${globalAuth?.token ? 'lock' : 'unlock'}`"></i>
+						Authorize
+					</button>
+				</div>
+				<hr/>
+			<template v-for="(section, name) in filteredApis" :key="name">
+				<section v-if="section && section.length>0" :id="name">
+					<fieldset>
 						<legend>
-							Action '<code>{{ item.action }}</code>'
+							{{ getService(name).fullName }}<span v-if="getService(name).version" class="badge light  m-x-xs">{{ getService(name).version }}</span>
 						</legend>
 						<div class="content">
-							<div class="request">
-								<h4>Request:</h4>
-								<code>{{ item.method || 'GET' }} <a target="_blank" :href="item.rest">{{ item.rest }}   </a></code>
-								<a class="button" @click="callAction(item)">
-									<i class="fa fa-rocket"></i>
-									Execute
-								</a>
-							</div>
-							<div v-if="item.fields" class="parameters">
-								<h4>Parameters:</h4>
-								<div class="field" v-for="field in item.fields">
-									<label for="">{{ field.label }}: </label>
-									<input :type="field.type" :value="getFieldValue(field)" @input="setFieldValue(field, $event.target.value)"></input>
+							<div :class="`action-card action-method-${item.rest.method.toLocaleLowerCase()} `" v-for="item,ix in section" :key="ix" >
+								<div class="action-card-header" @click="item.expand=!item.expand">
+									<span :class="`badge lg fixed text-center text-code bg-method-${item.rest.method.toLocaleLowerCase()} `"> {{ item.rest.method }}</span>
+									<span class="text-subtitle2 m-x-xs">{{ item.rest.path }}</span>
+									<div class="flex-spacer"></div>
+									<span class="text-caption m-x-xs">{{ item.action }}</span>
+									<span class="badge m-x-xs">{{ item.fields.length }}</span>
 								</div>
-							</div>
-							<div class="response" v-if="item.status">
-								<h4>Response:
-									<div class="badge" :class="{ green: item.status < 400, red: item.status >= 400 || item.status == 'ERR' }">{{ item.status }}</div>
-									<div class="badge time">{{ humanize(item.duration) }}</div>
-								</h4>
-								<pre><code>{{ item.response }}</code></pre>
+								<form @submit.prevent.stop="callAction(item,name)">
+									<div :class="{'action-card-section':true,expand:item.expand}">
+										<div class="action-card-section-parameters">
+											<div class="action-card-section-parameters-header">
+
+												<div class="text-p">Parameters</div>
+												<div class="flex-spacer"></div>
+												<div class="">
+													<button :disabled="item.loading" class="button" type="submit">
+														<i :class="`fa fa-${item.loading ? 'spinner':'rocket'}`"></i>
+														{{item.loading ? 'Trying...' : 'Try'}}
+													</button>
+												</div>
+										</div>
+										<div class="action-card-section-parameters-body">
+											<div v-if="item.fields" class="parameters">
+												<div :class="{field:true,required:field.optional===false}" v-for="field,ix in item.fields" :key="field.name">
+													<label :for="field.name+'--'+ix">{{ field.label }}: </label>
+													<input v-if="field.dataType==='number'"  :min="field.min" :max="field.max"  :type="field.type" :id="field.name+'--'+ix" :name="field.name" v-model.number="field.value" :required="field.required === true || field.optional===false" />
+													<input v-else :type="field.type"  :maxlength="field.maxLength" :minlength="field.minLength"  :id="field.name+'--'+ix" :name="field.name" v-model="field.value" :required="field.required === true || field.optional===false" />
+												</div>
+											</div>
+										</div>
+										</div>
+										<div class="action-card-section-response" v-if="item.status">
+											<div class="action-card-section-response-header">
+												<div class="text-p">Response</div>
+												<span text>
+													<div class="badge m-x-xs" :class="{ green: item.status < 400, red: item.status >= 400 || item.status == 'ERR' }">{{ item.status }}</div>
+													<div class="badge time m-r-xs">{{ humanize(item.duration) }}</div>
+												</span>
+												<div class="flex-spacer"></div>
+												<div>
+													<button v-if="item.response" class="button outlined negative" @click="clearResponse(item)">
+														<i :class="`fa fa-remove`"></i>
+														Clear
+													</button>
+												</div>
+											</div>
+											<div class="action-card-section-response-body">
+												<pre><code>{{ item.response }}</code></pre>
+											</div>
+
+										</div>
+									</div>
+							    </form>
 							</div>
 						</div>
 					</fieldset>
 				</section>
 			</template>
-
+			</section>
 			<section id="nodes" v-if="page == 'nodes'">
 				<table>
 					<thead>
@@ -501,7 +238,7 @@
 
 		<footer>
 			<div class="footer-copyright">
-				Copyright &copy; 2016-2020 - Moleculer
+				Copyright &copy; 2016-2022 - Moleculer
 			</div>
 			<div class="footer-links">
 				<a href="https://github.com/moleculerjs/moleculer" class="footer-link" target="_blank">Github</a>
@@ -510,72 +247,82 @@
 				<a href="https://stackoverflow.com/questions/tagged/moleculer" class="footer-link" target="_blank">Stack Overflow</a>
 			</div>
 		</footer>
+		<div v-if="openAuthorizeDialog" >
+			<div class="modal-overlay"></div>
+			<div class="modal">
+				<div class="modal-header">
+					<span class="text-title text-bold">Authorization</span>
+					<span class="modal-close" @click="openAuthorizeDialog = false"></span>
+				</div>
+				<div class="modal-content">
+					<fieldset>
+						<legend>Authorize by username and password</legend>
+						<div class="flex column">
+							<div class="form-group">
+								<label>Username</label>
+								<input type="text" v-model="auth.username" class="form-control" placeholder="Username">
+							</div>
+							<div class="form-group">
+								<label>Password</label>
+								<input type="password"  v-model="auth.password" class="form-control" placeholder="Password">
+							</div>
+							<div class="form-group">
+								<label>Tenant</label>
+								<input type="text" v-model="auth.tenant" class="form-control" placeholder="Tenant">
+							</div>
+							<button class="self-end button outlined positive" @click="authorize">Authorize</button>
+						</div>
+					</fieldset>
+
+					<div class="form-group">
+						<label>Token</label>
+						<textarea style="height:100px;width: 100%;" v-model="auth.token" class="form-control" placeholder="Token" ></textarea>
+					</div>
+
+				</div>
+				<div class="modal-actions">
+
+					<button class="button flat" @click="openAuthorizeDialog = false">Cancel</button>
+					<button class="button flat m-x-xs" @click="resetAuthorization">Reset</button>
+					<button class="button" @click="saveAuthorize">Save</button>
+				</div>
+			</div>
+		</div>
 	</div>
 	{{{{/projectName}}}}
 	<script type="text/javascript">
-		var app = new Vue({
-			el: "#app",
+		const { createApp } = Vue
+		const app = createApp({
 
 			data() {
 				return {
+					apiSearchText: "",
 					menu: [
 						{ id: "home", caption: "Home" },
-						{ id: "greeter", caption: "Greeter service" },{{#dbService}}
-						{ id: "products", caption: "Products service" },{{/dbService}}
+						{ id: "apis", caption: "REST API" },
 						{ id: "nodes", caption: "Nodes" },
 						{ id: "services", caption: "Services" }
 					],
 					page: "home",
 
 					requests: {
-						greeter: [
-							{ id: "hello", action: "greeter.hello", rest: "/api/greeter/hello", response: null, status: null, duration: null },
 
-							{ id: "welcome", action: "greeter.welcome", rest: "/api/greeter/welcome", fields: [
-								{ field: "name", label: "Name", type: "text", paramType: "param", model: "welcomeName" }
-							], response: null, status: null, duration: null }
-						]{{#dbService}},
-						products: [
-							{ id: "list", action: "products.list", rest: "/api/products/", response: null, status: null, duration: null, afterResponse: response => !this.fields.productID && (this.fields.productID = response.rows[0]._id) },
-
-							{ id: "create", action: "products.create", rest: "/api/products/", method: "POST", fields: [
-								{ field: "name", label: "Name", type: "text", paramType: "body", model: "productName" },
-								{ field: "price", label: "Price", type: "number", paramType: "body", model: "productPrice" },
-							], response: null, status: null, duration: null, afterResponse: response => this.fields.productID = response._id  },
-
-							{ id: "get", action: "products.get", rest: "/api/products/:id", method: "GET", fields: [
-								{ field: "id", label: "ID", type: "text", paramType: "url", model: "productID" }
-							], response: null, status: null, duration: null },
-
-							{ id: "update", action: "products.update", rest: "/api/products/:id", method: "PUT", fields: [
-								{ field: "id", label: "ID", type: "text", paramType: "url", model: "productID" },
-								{ field: "name", label: "Name", type: "text", paramType: "body", model: "productName" },
-								{ field: "price", label: "Price", type: "number", paramType: "body", model: "productPrice" },
-							], response: null, status: null, duration: null },
-
-							{ id: "increase", action: "products.increaseQuantity", rest: "/api/products/:id/quantity/increase", method: "PUT", fields: [
-								{ field: "id", label: "ID", type: "text", paramType: "url", model: "productID" },
-								{ field: "value", label: "Value", type: "number", paramType: "body", model: "productValue" },
-							], response: null, status: null, duration: null },
-
-							{ id: "decrease", action: "products.decreaseQuantity", rest: "/api/products/:id/quantity/decrease", method: "PUT", fields: [
-								{ field: "id", label: "ID", type: "text", paramType: "url", model: "productID" },
-								{ field: "value", label: "Value", type: "number", paramType: "body", model: "productValue" },
-							], response: null, status: null, duration: null },
-
-							{ id: "delete", action: "products.delete", rest: "/api/products/:id", method: "DELETE", fields: [
-								{ field: "id", label: "ID", type: "text", paramType: "url", model: "productID" }
-							], response: null, status: null, duration: null },
-
-						]{{/dbService}}
 					},
-
+					openAuthorizeDialog: false,
+					auth: {
+						    tenant:"",
+							username: "",
+							password: "",
+							token: ""
+						},
+						globalAuth:{
+							tenant:"",
+							username: "",
+							password: "",
+							token: ""
+						},
 					fields: {
-						welcomeName: "John"{{#dbService}},
-						productID: null,
-						productName: "Xiamoi Mi 9T",
-						productPrice: 299,
-						productValue: 1{{/dbService}}
+
 					},
 
 					broker: null,
@@ -590,28 +337,93 @@
 			computed: {
 				filteredServices() {
 					return this.services.filter(svc => !svc.name.startsWith("$"));
-				}
+				},
+
+				filteredApis() {
+					const s = this.apiSearchText.toLocaleLowerCase();
+					if (!this.apiSearchText)
+						return this.requests;
+					else {
+						const reqs = {};
+						for (const key in this.requests) {
+							reqs[key] = this.requests[key]
+											.filter(r => r?.action?.toLocaleLowerCase().includes(s) ||
+											 r?.rest?.method?.toLocaleLowerCase().includes(s) ||
+											  r?.rest?.path?.toLocaleLowerCase().includes(s) ||
+											   r?.rest?.url?.toLocaleLowerCase().includes(s));
+						}
+						return reqs;
+					}
+				},
 			},
 
 			methods: {
+				resetAuthorization() {
+					this.auth = {
+						    tenant:"",
+							username: "",
+							password: "",
+							token: ""
+						};
+						this.saveAuthorize();
+				},
+
+				authorize() {
+					fetch("/api/v1/identity/auth/signin",{
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify(this.auth)
+
+					}).then(res => {
+						if (res.status == 401) {
+							this.openAuthorizeDialog = true;
+							alert("Invalid username or password");
+						} else if (res.status == 200) {
+							res.json().then(data => {
+								this.auth.token = res.headers.get("Authorization") || data.token;
+								this.auth.tenant = res.headers.get("x-tenant-id") || data.tenant;
+								// this.saveAuthorize();
+							});
+						}
+						else {
+							alert("Not authorized");
+						}
+					});
+				},
+
+				saveAuthorize() {
+					this.globalAuth = {...this.auth};
+					localStorage.setItem("globalAuth", JSON.stringify(this.globalAuth));
+					this.openAuthorizeDialog = false;
+				},
+
+                refreshApiPage(){
+					return this.updateServiceList();
+				},
+
+				showAuthorizeDialog() {
+					this.openAuthorizeDialog = true;
+				},
+
+				closeAuthorizeDialog(){
+					this.openAuthorizeDialog = false;
+				},
+
 				changePage(page) {
 					this.page = page;
-					this.updatePageResources();
+					localStorage.setItem("lastPage", this.page);
+					if (this.page == 'apis') {
+						return this.updateServiceList();
+					}
+					else {
+						this.updatePageResources();
+					}
 				},
 
 				humanize(ms) {
 					return ms > 1500 ? (ms / 1500).toFixed(2) + " s" : ms + " ms";
-				},
-
-				getFieldValue(field) {
-					return this.fields[field.model];
-				},
-
-				setFieldValue(field, newValue) {
-					if (field.type == "number")
-						this.fields[field.model] = Number(newValue);
-					else
-						this.fields[field.model] = newValue;
 				},
 
 				getServiceActions(svc) {
@@ -648,45 +460,148 @@
 					return "";
 				},
 
-				callAction: function (item) {
+				getRest(item) {
+					if(!item.rest) return item.rest;
+					if (typeof item.rest === "object") return item.rest; // REST object
+					if (item.rest.indexOf(" ") !== -1) {
+						const p = item.rest.split(" ");
+						return { method: p[0], path: p[1] };
+					} else {
+						return { method: "*", path: item.rest };
+					}
+				},
+
+				getFields(item,method,url) {
+					if(!item.params) return [];
+					const r = [];
+					for (const key in item.params) {
+						if(key.startsWith('$')) continue;
+						if(item.params[key].readonly===true) continue;
+						if(item.params[key].hidden===true) continue;
+						const dataType =  item.params[key].type || item.params[key];
+						const hidden = item.params[key].hidden || false;
+						const required = item.params[key].required || false;
+						const optional = Array.isArray(item.params[key]) ? item.params[key].every(xx=>xx.optional===true) : item.params[key].optional || false;
+						const maxLength = item.params[key].max || undefined;
+						const minLength = item.params[key].min || undefined;
+						const pattern = item.params[key].pattern || undefined;
+						let type = "text";
+						let value =  item.params[key].default || undefined;
+						if (dataType.includes("number")) {type = "number";  };
+						if (dataType === "boolean") {type = "checkbox"; value = value || false;};
+						if (dataType === "string") type = "text";
+						if (dataType === "object") type = "textarea";
+						if (dataType === "array") type = "textarea";
+						if (dataType === "file") type = "file";
+						if (dataType === "date") type = "date";
+						if (dataType === "datetime") type = "datetime";
+						if (dataType === "time") type = "time";
+						if (dataType === "password") type = "password";
+						if (dataType === "enum") type = "select";
+						if (dataType === "enum-multi") type = "select-multi";
+
+						r.push({ name: key,
+							  label: key,optional,
+							  hidden,required,
+							  [type==='number'?'min':'minLength'] :minLength,
+							  [type==='number'?'max':'maxLength'] :maxLength,
+							  pattern,
+							  paramType: method==='GET' ? 'param' : 'body',
+							  value,
+							  type,dataType, value:undefined });
+					}
+					return r;
+				},
+
+				getService(fullName){
+					const svc = this.services.find(svc => svc.fullName == fullName);
+					return svc || {};
+				},
+
+				clearResponse(item){
+					item.response = undefined;
+					item.duration = undefined;
+					item.loading = false;
+					item.status = undefined;
+				},
+
+				callAction: function (item,fullName) {
+					if(!item.rest) return;
+					item.loading = true;
+					const service = this.services.find(svc => svc.name == fullName);
 					var startTime = Date.now();
 
-					let url = item.rest;
-					const method = item.method || "GET";
+					const method = item.rest.method || "GET";
+					let url = item.rest.url;
+					let fields = item.fields;
 					let body = null;
 					let params = null;
-					if (item.fields) {
+					if (fields) {
 						body = {};
 						params = {};
-						item.fields.forEach(field => {
-							const value = this.getFieldValue(field);
-							if (field.paramType == "body")
-								body[field.field] = value;
-							else if (field.paramType == "param")
-								params[field.field] = value;
-							else if (field.paramType == "url")
-								url = url.replace(":" + field.field, value);
+						fields.forEach(field => {
+							const value = field.value;
+							if (field.paramType == "body"){
+								body[field.name] = value;
+								if(value===undefined && field.optional===true){
+									delete body[field.name];
+								}
+							}
+							else if (field.paramType == "param"){
+
+								params[field.name] = value;
+								if(value===undefined && field.optional===true){
+									delete params[field.name];
+								}
+							}
+
+							else if (field.paramType == "url"){
+								if(value===undefined && field.optional===true){
+									url = url.replace(`:${field.name}`,'');
+								}
+								else{
+									url = url.replace(`:${field.name}`,value);
+								}
+							}
+							url = url.replace(`:${field.name}`,value);
 						});
 
 						if (body && method == "GET") {
 							body = null;
 						}
-						if (params) {
-							url += "?" + new URLSearchParams(params).toString();
+						if (params && Object.keys(params).length > 0) {
+							const qparams = {};
+							for (const key in params) {
+								if(params[key]!==undefined){
+									qparams[key] = params[key];
+								}
+							}
+							url += "?" + new URLSearchParams(qparams).toString();
 						}
-					}
 
+					}
+					const authtoken = this.globalAuth.token;
+					const tenant = this.globalAuth.tenant;
+					const authHeader = {};
+					if(authtoken){
+						authHeader['Authorization'] = `Bearer ${authtoken}`;
+					}
+					if(tenant){
+						authHeader["x-tenant"] = tenant;
+					}
 					return fetch(url, {
 						method,
 						body: body ? JSON.stringify(body) : null,
 					    headers: {
-							'Content-Type': 'application/json'
+							'Content-Type': 'application/json',
+							...authHeader
 						}
 						}).then(function(res) {
 							item.status = res.status;
 							item.duration = Date.now() - startTime;
 							return res.json().then(json => {
 								item.response = json;
+								item.loading = false;
 								if (item.afterResponse)
 									return item.afterResponse(json);
 							});
@@ -694,6 +609,7 @@
 							item.status = "ERR";
 							item.duration = Date.now() - startTime;
 							item.response = err.message;
+							item.loading = false;
 							console.log(err);
 						});
 
@@ -702,6 +618,7 @@
 				updateBrokerOptions: function (name) {
 					this.req("/api/~node/options", null).then(res => this.broker = res);
 				},
+
 
 				updateNodeList: function (name) {
 					this.req("/api/~node/list", null).then(res => {
@@ -724,8 +641,51 @@
 								a[b.name] = b;
 								return a;
 							}, {});
+							this.actions = actions;
+							if(this.page==='apis'){
+								this.requests = {};
+								for (const service of this.services) {
+									this.requests[service.fullName] = [];
+									const version = service.version ? "v"+service.version+"/" : "";
+									for (const key in service.actions) {
+										const action = service.actions[key];
+										if(!action.rest) continue;
+										const req = {
+											expand:false,
+											loading:false,
+											id: action.name,
+											action: action.name,
+											rest: this.getRest(action),
+											fields: action.fields,
+											response: null,
+											status: null,
+											duration: null,
+											afterResponse: action.afterResponse
+										};
+										const baseUrl = service.settings.rest;
+										if(req.rest.method==='*'){
+											['GET','POST','PUT','PATCH','DELETE'].forEach(method => {
+												const req2 = Object.assign({}, req);
+												req2.id = req2.id+'.'+method.toLocaleLowerCase();
+												req2.rest = Object.assign({}, req.rest);
+												req2.rest.method = method;
+												const url = baseUrl ? `/api${baseUrl}${req2.rest.path}` : `/api/${version}${service.name}${req2.rest.path}`;
+												req2.rest.url = url;
+												req2.fields = this.getFields(action,req2.rest.method,req2.rest.url);
+												this.requests[service.fullName].push(req2);
+											});
+										} else {
+											let version = service.version ? "v"+service.version+"/" : "";
+											let url = baseUrl ? `/api${baseUrl}${req.rest.path}`: `/api/${version}${service.name}${req.rest.path}`;
+											req.rest.url = url;
+											req.fields = this.getFields(action,req.rest.method,req.rest.url);
+											this.requests[service.fullName].push(req);
+										}
 
-							Vue.set(this, "actions", actions);
+									}
+									if(this.requests[service.fullName].length===0) delete this.requests[service.fullName];
+								}
+							}
 						});
 				},
 
@@ -739,18 +699,30 @@
 				updatePageResources() {
 					if (this.page == 'nodes') return this.updateNodeList();
 					if (this.page == 'services') return this.updateServiceList();
+
 				}
 			},
 
 			mounted() {
 				var self = this;
+
+				const page = localStorage.getItem("lastPage");
+				this.page = page ? page : 'home';
+				if(this.page==='apis'){
+					this.refreshApiPage();
+				}
+				const globalAuth = localStorage.getItem("globalAuth");
+				this.globalAuth = globalAuth ? JSON.parse(globalAuth) : {};
+
 				setInterval(function () {
 					self.updatePageResources();
 				}, 2000);
 
 				this.updateBrokerOptions();
 			}
+
 		});
+		app.mount('#app');
 	</script>
 </body>
 </html>

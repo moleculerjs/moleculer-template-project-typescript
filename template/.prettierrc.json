@@ -1,0 +1,25 @@
+{
+  "printWidth": 100,
+  "tabWidth": 4,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": false,
+  "trailingComma": "all",
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "arrowParens": "always",
+  "overrides": [
+    {
+      "files": ["*.html"],
+      "options": { "parser": "vue" }
+    },
+    {
+      "files": ["*.{cjs,mjs,js,jsx,ts,tsx,d.ts,css,html,graphql}"],
+      "options": { "useTabs": true }
+    },
+    {
+      "files": ["*.{json,yml,yaml}"],
+      "options": { "tabWidth": 2 }
+    }
+  ]
+}

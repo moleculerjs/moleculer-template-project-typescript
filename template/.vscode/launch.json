@@ -11,7 +11,6 @@
 			"program": "${workspaceRoot}/node_modules/moleculer/bin/moleculer-runner.js",
 			"sourceMaps": true,
 			"runtimeArgs": [
-				"--nolazy",
 				"-r",
 				"ts-node/register"
 			],
@@ -30,7 +29,6 @@
 			],
 			"cwd": "${workspaceRoot}",
 			"runtimeArgs": [
-				"--inspect-brk",
 				"--nolazy"
 			]
 		}

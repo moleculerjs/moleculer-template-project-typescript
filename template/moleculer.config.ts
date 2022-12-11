@@ -1,5 +1,5 @@
-"use strict";
-import {BrokerOptions, Errors, MetricRegistry, ServiceBroker} from "moleculer";
+import type { BrokerOptions, MetricRegistry, ServiceBroker } from "moleculer";
+import { Errors } from "moleculer";
 
 /**
  * Moleculer ServiceBroker configuration file
@@ -86,7 +86,8 @@ const brokerConfig: BrokerOptions = {
 		// Backoff factor for delay. 2 means exponential backoff.
 		factor: 2,
 		// A function to check failed requests.
-		check: (err: Errors.MoleculerError) => err && !!err.retryable,
+		check: (err: Error) =>
+			err && err instanceof Errors.MoleculerRetryableError && !!err.retryable,
 	},
 
 	// Limit of calling level. If it reaches the limit, broker will throw an MaxCallLevelError error. (Infinite loop protection)
@@ -133,7 +134,7 @@ const brokerConfig: BrokerOptions = {
 		// Number of milliseconds to switch from open to half-open state
 		halfOpenTime: 10 * 1000,
 		// A function to check failed requests.
-		check: (err: Errors.MoleculerError) => err && err.code >= 500,
+		check: (err: Error) => err && err instanceof Errors.MoleculerError && err.code >= 500,
 	},
 
 	// Settings of bulkhead feature. More info: https://moleculer.services/docs/0.14/fault-tolerance.html#Bulkhead
@@ -172,82 +173,82 @@ const brokerConfig: BrokerOptions = {
 			{{/if_eq}}
 			{{#if_eq reporter "CSV"}}
 			options: {
-					// Folder of CSV files.
-					folder: "./reports/metrics",
-						// CSV field delimiter
-						delimiter: ",",
-						// CSV row delimiter
-						rowDelimiter: "\n",
-						// Saving mode.
-						//   - "metric" - save metrics to individual files
-						//   - "label" - save metrics by labels to individual files
-						mode: "metric",
-						// Saved metrics types.
-						types: null,
-						// Saving interval in seconds
-						interval: 5,
-						// Custom filename formatter
-						filenameFormatter: null,
-						// Custom CSV row formatter.
-						rowFormatter: null,
-				},
+				// Folder of CSV files.
+				folder: "./reports/metrics",
+				// CSV field delimiter
+				delimiter: ",",
+				// CSV row delimiter
+				rowDelimiter: "\n",
+				// Saving mode.
+				//   - "metric" - save metrics to individual files
+				//   - "label" - save metrics by labels to individual files
+				mode: "metric",
+				// Saved metrics types.
+				types: null,
+				// Saving interval in seconds
+				interval: 5,
+				// Custom filename formatter
+				filenameFormatter: null,
+				// Custom CSV row formatter.
+				rowFormatter: null,
+			},
 			{{/if_eq}}
 			{{#if_eq reporter "Event"}}
 			options: {
-					// Event name
-					eventName: "$metrics.snapshot",
-						// Broadcast or emit
-						broadcast: false,
-						// Event groups
-						groups: null,
-						// Send only changed metrics
-						onlyChanges: false,
-						// Sending interval in seconds
-						interval: 5,
-				},
+				// Event name
+				eventName: "$metrics.snapshot",
+				// Broadcast or emit
+				broadcast: false,
+				// Event groups
+				groups: null,
+				// Send only changed metrics
+				onlyChanges: false,
+				// Sending interval in seconds
+				interval: 5,
+			},
 			{{/if_eq}}
 			{{#if_eq reporter "Datadog"}}
 			options: {
-					// Hostname
-					host: "my-host",
-						// Base URL
-						baseUrl: "https://api.datadoghq.eu/api/", // Default is https://api.datadoghq.com/api/
-						// API version
-						apiVersion: "v1",
-						// Server URL path
-						path: "/series",
-						// Datadog API Key
-						apiKey: process.env.DATADOG_API_KEY,
-						// Default labels which are appended to all metrics labels
-						defaultLabels: (registry: MetricRegistry) => ({
-						namespace: registry.broker.namespace,
-						nodeID: registry.broker.nodeID,
-					}),
-						// Sending interval in seconds
-						interval: 10
-				},
+				// Hostname
+				host: "my-host",
+				// Base URL
+				baseUrl: "https://api.datadoghq.eu/api/", // Default is https://api.datadoghq.com/api/
+				// API version
+				apiVersion: "v1",
+				// Server URL path
+				path: "/series",
+				// Datadog API Key
+				apiKey: process.env.DATADOG_API_KEY,
+				// Default labels which are appended to all metrics labels
+				defaultLabels: (registry: MetricRegistry) => ({
+					namespace: registry.broker.namespace,
+					nodeID: registry.broker.nodeID,
+				}),
+				// Sending interval in seconds
+				interval: 10
+			},
 			{{/if_eq}}
 			{{#if_eq reporter "Prometheus"}}
 			options: {
-					// HTTP port
-					port: 3030,
-						// HTTP URL path
-						path: "/metrics",
-						// Default labels which are appended to all metrics labels
-						defaultLabels: (registry: MetricRegistry) => ({
-						namespace: registry.broker.namespace,
-						nodeID: registry.broker.nodeID,
-					}),
-				},
+				// HTTP port
+				port: 3030,
+				// HTTP URL path
+				path: "/metrics",
+				// Default labels which are appended to all metrics labels
+				defaultLabels: (registry: MetricRegistry) => ({
+					namespace: registry.broker.namespace,
+					nodeID: registry.broker.nodeID,
+				}),
+			},
 			{{/if_eq}}
 			{{#if_eq reporter "StatsD"}}
 			options: {
 					// Server host
 					host: "localhost",
-						// Server port
-						port: 8125,
-						// Maximum payload size.
-						maxPayloadSize: 1300
+					// Server port
+					port: 8125,
+					// Maximum payload size.
+					maxPayloadSize: 1300
 				},
 			{{/if_eq}}
 		},
@@ -263,104 +264,104 @@ const brokerConfig: BrokerOptions = {
 			options: {
 				// Custom logger
 				logger: null,
-					// Using colors
-					colors: true,
-					// Width of row
-					width: 100,
-					// Gauge width in the row
-					gaugeWidth: 40,
+				// Using colors
+				colors: true,
+				// Width of row
+				width: 100,
+				// Gauge width in the row
+				gaugeWidth: 40,
 			},
 			{{/if_eq}}
 			{{#if_eq exporter "Datadog"}}
 			options: {
-					// Datadog Agent URL
-					agentUrl: process.env.DD_AGENT_URL || "http://localhost:8126",
-						// Environment variable
-						env: process.env.DD_ENVIRONMENT || null,
-						// Sampling priority. More info: https://docs.datadoghq.com/tracing/guide/trace_sampling_and_storage/?tab=java#sampling-rules
-						samplingPriority: "AUTO_KEEP",
-						// Default tags. They will be added into all span tags.
-						defaultTags: null,
-						// Custom Datadog Tracer options. More info: https://datadog.github.io/dd-trace-js/#tracer-settings
-						tracerOptions: null,
-				},
+				// Datadog Agent URL
+				agentUrl: process.env.DD_AGENT_URL || "http://localhost:8126",
+				// Environment variable
+				env: process.env.DD_ENVIRONMENT || null,
+				// Sampling priority. More info: https://docs.datadoghq.com/tracing/guide/trace_sampling_and_storage/?tab=java#sampling-rules
+				samplingPriority: "AUTO_KEEP",
+				// Default tags. They will be added into all span tags.
+				defaultTags: null,
+				// Custom Datadog Tracer options. More info: https://datadog.github.io/dd-trace-js/#tracer-settings
+				tracerOptions: null,
+			},
 			{{/if_eq}}
 			{{#if_eq exporter "Event"}}
 			options: {
 				// Name of event
 				eventName: "$tracing.spans",
-					// Send event when a span started
-					sendStartSpan: false,
-					// Send event when a span finished
-					sendFinishSpan: true,
-					// Broadcast or emit event
-					broadcast: false,
-					// Event groups
-					groups: null,
-					// Sending time interval in seconds
-					interval: 5,
-					// Custom span object converter before sending
-					spanConverter: null,
-					// Default tags. They will be added into all span tags.
-					defaultTags: null
-				},
+				// Send event when a span started
+				sendStartSpan: false,
+				// Send event when a span finished
+				sendFinishSpan: true,
+				// Broadcast or emit event
+				broadcast: false,
+				// Event groups
+				groups: null,
+				// Sending time interval in seconds
+				interval: 5,
+				// Custom span object converter before sending
+				spanConverter: null,
+				// Default tags. They will be added into all span tags.
+				defaultTags: null
+			},
 			{{/if_eq}}
 			{{#if_eq exporter "Jaeger"}}
 			options: {
-					// HTTP Reporter endpoint. If set, HTTP Reporter will be used.
-					endpoint: null,
-						// UDP Sender host option.
-						host: "127.0.0.1",
-						// UDP Sender port option.
-						port: 6832,
-						// Jaeger Sampler configuration.
-						sampler: {
-						// Sampler type. More info: https://www.jaegertracing.io/docs/1.14/sampling/#client-sampling-configuration
-						type: "Const",
-							// Sampler specific options.
-							options: {}
-					},
-					// Additional options for `Jaeger.Tracer`
-					tracerOptions: {},
-					// Default tags. They will be added into all span tags.
-					defaultTags: null
+				// HTTP Reporter endpoint. If set, HTTP Reporter will be used.
+				endpoint: null,
+				// UDP Sender host option.
+				host: "127.0.0.1",
+				// UDP Sender port option.
+				port: 6832,
+				// Jaeger Sampler configuration.
+				sampler: {
+					// Sampler type. More info: https://www.jaegertracing.io/docs/1.14/sampling/#client-sampling-configuration
+					type: "Const",
+					// Sampler specific options.
+					options: {}
 				},
+				// Additional options for `Jaeger.Tracer`
+				tracerOptions: {},
+				// Default tags. They will be added into all span tags.
+				defaultTags: null
+			},
 			{{/if_eq}}
 			{{#if_eq exporter "Zipkin"}}
 			options: {
-					// Base URL for Zipkin server.
-					baseURL: "http://localhost:9411",
-						// Sending time interval in seconds.
-						interval: 5,
-						// Additional payload options.
-						payloadOptions: {
-						// Set `debug` property in payload.
-						debug: false,
-							// Set `shared` property in payload.
-						 shared: false,
-					},
-					// Default tags. They will be added into all span tags.
-					defaultTags: null
+				// Base URL for Zipkin server.
+				baseURL: "http://localhost:9411",
+				// Sending time interval in seconds.
+				interval: 5,
+				// Additional payload options.
+				payloadOptions: {
+					// Set `debug` property in payload.
+					debug: false,
+						// Set `shared` property in payload.
+					shared: false,
 				},
+				// Default tags. They will be added into all span tags.
+				defaultTags: null
+			},
 			{{/if_eq}}
 			{{#if_eq exporter "NewRelic"}}
 			options: {
-					// Base URL for NewRelic server
-					baseURL: 'https://trace-api.newrelic.com',
-						// NewRelic Insert Key
-						insertKey: 'my-secret-key',
-						// Sending time interval in seconds.
-						interval: 5,
-						// Additional payload options.
-						payloadOptions: {
-						// Set `debug` property in payload.
-						debug: false,
-							// Set `shared` property in payload.
-							shared: false,
-					},
-					// Default tags. They will be added into all span tags.
-					defaultTags: null,
+				// Base URL for NewRelic server
+				baseURL: 'https://trace-api.newrelic.com',
+				// NewRelic Insert Key
+				insertKey: 'my-secret-key',
+				// Sending time interval in seconds.
+				interval: 5,
+				// Additional payload options.
+				payloadOptions: {
+					// Set `debug` property in payload.
+					debug: false,
+					// Set `shared` property in payload.
+					shared: false,
 				},
+				// Default tags. They will be added into all span tags.
+				defaultTags: null,
+			},
 			{{/if_eq}}
 		},
 	},
@@ -370,13 +371,15 @@ const brokerConfig: BrokerOptions = {
 
 	// Register custom REPL commands.
 	replCommands: null,
-	/*
+
 	// Called after broker created.
-	created : (broker: ServiceBroker): void => {},
+	// created(broker: ServiceBroker): void {},
+
 	// Called after broker started.
-	started: async (broker: ServiceBroker): Promise<void> => {},
-	stopped: async (broker: ServiceBroker): Promise<void> => {},
-	 */
+	// async started(broker: ServiceBroker): Promise<void> {},
+
+	// Called after broker stopped.
+	// async stopped(broker: ServiceBroker): Promise<void> {},
 
 };
 

@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "description": "My Moleculer-based microservices project",
   "scripts": {
-    "build": "tsc --build tsconfig.json",
-    "dev": "ts-node ./node_modules/moleculer/bin/moleculer-runner.js --hot --repl --config moleculer.config.ts services/**/*.service.ts",
+    "build": "tsc --project tsconfig.build.json",
+    "dev": "ts-node ./node_modules/moleculer/bin/moleculer-runner.js --config moleculer.config.ts --hot --repl services/**/*.service.ts",
     "start": "moleculer-runner --config dist/moleculer.config.js",
-    "cli": "moleculer connect {{transporter}}",
+    "test:types": "concurrently npm:prettier npm:lint npm:typecheck",
+    "typecheck": "tsc --noEmit && echo \"tsc: no typecheck errors\"",
     "ci": "jest --watch",
     "test": "jest --coverage"{{#lint}},
-    "lint": "eslint --ext .js,.ts ."{{/lint}}{{#docker}},
+    "lint": "cross-env TIMING=1 eslint . --ext cjs,mjs,js,jsx,ts,tsx",
+    "lint:fix": "cross-env TIMING=1 eslint . --ext cjs,mjs,js,jsx,ts,tsx --fix",
+    "prettier": "prettier . --ignore-unknown --check",
+    "prettier:fix": "prettier . --ignore-unknown --write"{{/lint}}{{#docker}},
     "dc:up": "docker-compose up --build -d",
     "dc:logs": "docker-compose logs -f",
     "dc:down": "docker-compose down"{{/docker}}
@@ -21,74 +25,58 @@
   "author": "",
   "devDependencies": {
     {{#lint}}
-    "eslint": "^6.8.0",
-    "eslint-plugin-import": "^2.20.2",
-    "@typescript-eslint/eslint-plugin": "^2.26.0",
-    "@typescript-eslint/parser": "^2.26.0",
-    "eslint-plugin-prefer-arrow": "^1.2.2",
+    "@typescript-eslint/eslint-plugin": "^5.44.0",
+    "@typescript-eslint/parser": "^5.44.0",
+    "eslint": "^8.28.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^27.1.6",
+    "prettier": "^2.8.0",
     {{/lint}}
-    "jest": "^25.1.0",
-    "jest-cli": "^25.1.0",
-    "moleculer-repl": "^0.6.2",
-    "ts-jest": "^25.3.0",
-    "ts-node": "^8.8.1"
+    "@jest/globals": "^29.3.1",
+    "@types/jest": "^29.2.3",
+    "@types/node": "^18.11.9",
+    "concurrently": "^7.6.0",
+    "cross-env": "^7.0.3",
+    "jest": "^29.3.1",
+    "ts-jest": "^29.0.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.3"
   },
   "dependencies": {
     {{#apiGW}}
-    "moleculer-web": "^0.9.0",
+    "moleculer-web": "^0.10.4",
     {{/apiGW}}
     {{#dbService}}
-    "moleculer-db": "^0.8.4",
-    "moleculer-db-adapter-mongo": "^0.4.7",
+    "moleculer-db": "^0.8.20",
+    "moleculer-db-adapter-mongo": "^0.4.15",
     {{/dbService}}
     {{#if_eq transporter "NATS"}}
-    "nats": "^1.3.2",
+    "nats": "^2.7.1",
     {{/if_eq}}
     {{#if_eq transporter "MQTT"}}
-    "mqtt": "^3.0.0",
+    "mqtt": "^4.3.7",
     {{/if_eq}}
     {{#if_eq transporter "AMQP"}}
-    "amqplib": "^0.5.5",
+    "amqplib": "^0.10.0",
     {{/if_eq}}
     {{#if_eq transporter "AMQP10"}}
-    "rhea-promise": "^1.0.0",
+    "rhea-promise": "^2.1.0",
     {{/if_eq}}
     {{#if_eq transporter "STAN"}}
-    "node-nats-streaming": "^0.2.6",
+    "node-nats-streaming": "^0.3.2",
     {{/if_eq}}
     {{#if_eq transporter "Kafka"}}
     "kafka-node": "^5.0.0",
     {{/if_eq}}
     {{#redis}}
-    "ioredis": "^4.14.1",
+    "ioredis": "^5.0.0",
     {{/redis}}
-    "moleculer": "^0.14.0",
-    "typescript": "^3.8.3",
-    "@types/jest": "^25.1.4",
-    "@types/mkdirp": "^1.0.0",
-    "@types/node": "^13.9.8"
+    "moleculer": "^0.14.26"
 },
   "engines": {
-    "node": ">= 10.x.x"
-  },
-  "jest": {
-    "coverageDirectory": "<rootDir>/coverage",
-    "testEnvironment": "node",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
-    "transform": {
-      "^.+\\.(ts|tsx)$": "ts-jest"
-    },
-    "testMatch": [
-      "**/*.spec.(ts|js)"
-    ],
-    "globals": {
-      "ts-jest": {
-        "tsConfig": "tsconfig.json"
-      }
-    }
+    "node": ">= 16.x.x"
   }
 }
