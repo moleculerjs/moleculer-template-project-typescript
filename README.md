@@ -38,6 +38,8 @@ Template repo: moleculerjs/moleculer-template-project-typescript
 ? Select a exporter solution Console
 ? Add Docker & Kubernetes sample files? Yes
 ? Use ESLint to lint your code? Yes
+Create 'moleculer-demo' folder...
+? Would you like to run 'npm install'? Yes
 ```
 
 ## NPM scripts
@@ -55,6 +57,6 @@ Template repo: moleculerjs/moleculer-template-project-typescript
 moleculer-template-project-typescript is available under the [MIT license](https://tldrlegal.com/license/mit-license).
 
 ## Contact
-Copyright (c) 2020 MoleculerJS
+Copyright (c) 2023 MoleculerJS
 
 [![@moleculerjs](https://img.shields.io/badge/github-moleculerjs-green.svg)](https://github.com/moleculerjs) [![@MoleculerJS](https://img.shields.io/badge/twitter-MoleculerJS-blue.svg)](https://twitter.com/MoleculerJS)
