@@ -27,49 +27,49 @@
     "@typescript-eslint/parser": "^2.26.0",
     "eslint-plugin-prefer-arrow": "^1.2.2",
     {{/lint}}
-    "jest": "^25.1.0",
-    "jest-cli": "^25.1.0",
-    "moleculer-repl": "^0.6.2",
-    "ts-jest": "^25.3.0",
+    "jest": "^27.5.1",
+    "jest-cli": "^27.5.1",
+    "moleculer-repl": "^0.7.3",
+    "ts-jest": "^27.5.1",
     "ts-node": "^8.8.1"
   },
   "dependencies": {
     {{#apiGW}}
-    "moleculer-web": "^0.9.0",
+    "moleculer-web": "^0.10.4",
     {{/apiGW}}
     {{#dbService}}
-    "moleculer-db": "^0.8.4",
-    "moleculer-db-adapter-mongo": "^0.4.7",
+    "moleculer-db": "^0.8.20",
+    "moleculer-db-adapter-mongo": "^0.4.15",
     {{/dbService}}
     {{#if_eq transporter "NATS"}}
-    "nats": "^1.3.2",
+    "nats": "^2.7.1",
     {{/if_eq}}
     {{#if_eq transporter "MQTT"}}
-    "mqtt": "^3.0.0",
+    "mqtt": "^4.3.7",
     {{/if_eq}}
     {{#if_eq transporter "AMQP"}}
-    "amqplib": "^0.5.5",
+    "amqplib": "^0.10.0",
     {{/if_eq}}
     {{#if_eq transporter "AMQP10"}}
-    "rhea-promise": "^1.0.0",
+    "rhea-promise": "^2.1.0",
     {{/if_eq}}
     {{#if_eq transporter "STAN"}}
-    "node-nats-streaming": "^0.2.6",
+    "node-nats-streaming": "^0.3.2",
     {{/if_eq}}
     {{#if_eq transporter "Kafka"}}
     "kafka-node": "^5.0.0",
     {{/if_eq}}
     {{#redis}}
-    "ioredis": "^4.14.1",
+    "ioredis": "^5.0.0",
     {{/redis}}
-    "moleculer": "^0.14.0",
+    "moleculer": "^0.14.26",
     "typescript": "^3.8.3",
     "@types/jest": "^25.1.4",
     "@types/mkdirp": "^1.0.0",
     "@types/node": "^13.9.8"
 },
   "engines": {
-    "node": ">= 10.x.x"
+    "node": ">= 16.x.x"
   },
   "jest": {
     "coverageDirectory": "<rootDir>/coverage",

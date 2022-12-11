@@ -1,6 +1,6 @@
 FROM node:16-alpine
 
-# Working directory
+RUN mkdir /app
 WORKDIR /app
 
 # Install dependencies

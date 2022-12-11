@@ -1,6 +1,6 @@
 {
   "name": "moleculer-template-project-typescript",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Project template for Moleculer-based projects with typescript",
   "main": "meta.js",
   "scripts": {

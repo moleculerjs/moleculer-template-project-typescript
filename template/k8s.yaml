@@ -8,7 +8,7 @@ metadata:
 data:
   NAMESPACE: ""
   LOGLEVEL: info
-  SERVICEDIR: dist/services
+  SERVICEDIR: services
   {{#if_eq transporter "NATS"}}TRANSPORTER: nats://nats:4222{{/if_eq}}
   {{#if_eq transporter "Redis"}}TRANSPORTER: redis://redis:6379{{/if_eq}}
   {{#if_eq transporter "MQTT"}}TRANSPORTER: mqtt://mqtt:1883{{/if_eq}}
@@ -40,19 +40,24 @@ spec:
 #########################################################
 # Ingress for Moleculer API Gateway
 #########################################################
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress
+  #annotations:
+  #  kubernetes.io/ingress.class: nginx
 spec:
   rules:
   - host: {{projectName}}.127.0.0.1.nip.io
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: api
-          servicePort: 3000
+          service:
+            name: api
+            port:
+              number: 3000
 
 ---
 #########################################################
@@ -75,16 +80,13 @@ spec:
       containers:
       - name: api
         image: {{projectName}}
+        imagePullPolicy: IfNotPresent
         envFrom:
         - configMapRef:
             name: common-env
         env:
           - name: SERVICES
             value: api
-          - name: PORT
-            value: "3000"
-        ports:
-          - containerPort: 3000
 {{/apiGW}}
 
 ---
@@ -108,6 +110,7 @@ spec:
       containers:
       - name: greeter
         image: {{projectName}}
+        imagePullPolicy: IfNotPresent
         envFrom:
         - configMapRef:
             name: common-env
@@ -137,6 +140,7 @@ spec:
       containers:
       - name: products
         image: {{projectName}}
+        imagePullPolicy: IfNotPresent
         envFrom:
         - configMapRef:
             name: common-env
