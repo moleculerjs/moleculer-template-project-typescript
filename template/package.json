@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "description": "My Moleculer-based microservices project",
   "scripts": {
-    "build": "tsc --build tsconfig.json",
-    "dev": "ts-node ./node_modules/moleculer/bin/moleculer-runner.js --hot --repl --config moleculer.config.ts services/**/*.service.ts",
+    "build": "tsc --project tsconfig.build.json",
+    "dev": "ts-node ./node_modules/moleculer/bin/moleculer-runner.js --config moleculer.config.ts --hot --repl services/**/*.service.ts",
     "start": "moleculer-runner --config dist/moleculer.config.js",
-    "cli": "moleculer connect {{transporter}}",
+    "test:types": "concurrently npm:prettier npm:lint npm:typecheck",
+    "typecheck": "tsc --noEmit && echo \"tsc: no typecheck errors\"",
     "ci": "jest --watch",
     "test": "jest --coverage"{{#lint}},
-    "lint": "eslint --ext .js,.ts ."{{/lint}}{{#docker}},
+    "lint": "cross-env TIMING=1 eslint . --ext cjs,mjs,js,jsx,ts,tsx",
+    "lint:fix": "cross-env TIMING=1 eslint . --ext cjs,mjs,js,jsx,ts,tsx --fix",
+    "prettier": "prettier . --ignore-unknown --check",
+    "prettier:fix": "prettier . --ignore-unknown --write"{{/lint}}{{#docker}},
     "dc:up": "docker-compose up --build -d",
     "dc:logs": "docker-compose logs -f",
     "dc:down": "docker-compose down"{{/docker}}
@@ -21,17 +25,24 @@
   "author": "",
   "devDependencies": {
     {{#lint}}
-    "eslint": "^6.8.0",
-    "eslint-plugin-import": "^2.20.2",
-    "@typescript-eslint/eslint-plugin": "^2.26.0",
-    "@typescript-eslint/parser": "^2.26.0",
-    "eslint-plugin-prefer-arrow": "^1.2.2",
+    "@typescript-eslint/eslint-plugin": "^5.44.0",
+    "@typescript-eslint/parser": "^5.44.0",
+    "eslint": "^8.28.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^27.1.6",
+    "prettier": "^2.8.0",
     {{/lint}}
-    "jest": "^27.5.1",
-    "jest-cli": "^27.5.1",
-    "moleculer-repl": "^0.7.3",
-    "ts-jest": "^27.5.1",
-    "ts-node": "^8.8.1"
+    "@jest/globals": "^29.3.1",
+    "@types/jest": "^29.2.3",
+    "@types/node": "^18.11.9",
+    "concurrently": "^7.6.0",
+    "cross-env": "^7.0.3",
+    "jest": "^29.3.1",
+    "ts-jest": "^29.0.3",
+    "typescript": "^4.9.3"
   },
   "dependencies": {
     {{#apiGW}}
@@ -62,33 +73,9 @@
     {{#redis}}
     "ioredis": "^5.0.0",
     {{/redis}}
-    "moleculer": "^0.14.26",
-    "typescript": "^3.8.3",
-    "@types/jest": "^25.1.4",
-    "@types/mkdirp": "^1.0.0",
-    "@types/node": "^13.9.8"
+    "moleculer": "^0.14.26"
 },
   "engines": {
     "node": ">= 16.x.x"
-  },
-  "jest": {
-    "coverageDirectory": "<rootDir>/coverage",
-    "testEnvironment": "node",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
-    "transform": {
-      "^.+\\.(ts|tsx)$": "ts-jest"
-    },
-    "testMatch": [
-      "**/*.spec.(ts|js)"
-    ],
-    "globals": {
-      "ts-jest": {
-        "tsConfig": "tsconfig.json"
-      }
-    }
   }
 }

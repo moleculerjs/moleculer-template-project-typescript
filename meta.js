@@ -135,6 +135,9 @@ module.exports = function(values) {
       "test/unit/services/products.spec.ts": "dbService",
 
       ".eslintrc.js": "lint",
+      "tsconfig.eslint.json": "lint",
+      ".prettierignore": "lint",
+      ".prettierrc.json": "lint",
 
       ".dockerignore": "docker",
       "docker-compose.*": "docker",
