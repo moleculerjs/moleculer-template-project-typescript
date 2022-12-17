@@ -48,11 +48,11 @@
   },
   "dependencies": {
     {{#apiGW}}
-    "moleculer-web": "^0.10.4",
+    "moleculer-web": "^0.10.5",
     {{/apiGW}}
     {{#dbService}}
-    "moleculer-db": "^0.8.20",
-    "moleculer-db-adapter-mongo": "^0.4.15",
+    "moleculer-db": "^0.8.21",
+    "moleculer-db-adapter-mongo": "^0.4.16",
     {{/dbService}}
     {{#if_eq transporter "NATS"}}
     "nats": "^2.7.1",
@@ -75,7 +75,7 @@
     {{#redis}}
     "ioredis": "^5.0.0",
     {{/redis}}
-    "moleculer": "^0.14.26"
+    "moleculer": "^0.14.27"
 },
   "engines": {
     "node": ">= 16.x.x"
