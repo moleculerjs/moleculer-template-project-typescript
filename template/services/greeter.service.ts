@@ -1,10 +1,10 @@
-import type { Context, Service, ServiceSchema } from "moleculer";
+import type { Context, Service, ServiceSchema, ServiceSettingSchema } from "moleculer";
 
 export interface ActionHelloParams {
 	name: string;
 }
 
-interface GreeterSettings {
+interface GreeterSettings extends ServiceSettingSchema {
 	defaultName: string;
 }
 

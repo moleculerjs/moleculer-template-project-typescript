@@ -1,12 +1,13 @@
 import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
 import { ServiceBroker } from "moleculer";
+import type { ServiceSchema } from "moleculer";
 import type { ProductEntity } from "../../services/products.service";
 import TestService from "../../services/products.service";
 
 describe("Test 'products' service", () => {
 	describe("Test actions", () => {
 		const broker = new ServiceBroker({ logger: false });
-		const service = broker.createService(TestService);
+		const service = broker.createService(TestService as unknown as ServiceSchema);
 		service.seedDB = null; // Disable seeding
 
 		beforeAll(() => broker.start());

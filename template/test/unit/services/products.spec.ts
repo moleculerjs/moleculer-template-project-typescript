@@ -1,10 +1,11 @@
 import { Context, Errors, ServiceBroker } from "moleculer";
+import type { ServiceSchema } from "moleculer";
 import TestService from "../../../services/products.service";
 
 describe("Test 'products' service", () => {
 	describe("Test actions", () => {
 		const broker = new ServiceBroker({ logger: false });
-		const service = broker.createService(TestService);
+		const service = broker.createService(TestService as unknown as ServiceSchema);
 
 		jest.spyOn(service.adapter, "updateById");
 		jest.spyOn(service, "transformDocuments");
@@ -126,7 +127,7 @@ describe("Test 'products' service", () => {
 
 	describe("Test methods", () => {
 		const broker = new ServiceBroker({ logger: false });
-		const service = broker.createService(TestService);
+		const service = broker.createService(TestService as unknown as ServiceSchema);
 
 		jest.spyOn(service.adapter, "insertMany");
 		jest.spyOn(service, "seedDB");
@@ -156,7 +157,7 @@ describe("Test 'products' service", () => {
 		const createActionFn = jest.fn();
 		broker.createService({
 			name: "products",
-			mixins: [TestService],
+			mixins: [TestService as unknown as ServiceSchema],
 			actions: {
 				create: {
 					handler: createActionFn,

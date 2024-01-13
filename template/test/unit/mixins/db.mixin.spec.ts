@@ -1,5 +1,5 @@
 import { Context, ServiceBroker } from "moleculer";
-import type { ServiceEventHandler, StartedStoppedHandler } from "moleculer";
+import type { Service, ServiceAsyncLifecycleHandler, ServiceEventHandler } from "moleculer";
 import DbService from "moleculer-db";
 import DbMixin from "../../../mixins/db.mixin";
 
@@ -43,12 +43,12 @@ describe("Test DB mixin", () => {
 				schema.adapter!.count = jest.fn(() => Promise.resolve(10));
 				const seedDBFn = jest.fn();
 
-				await (schema.started as StartedStoppedHandler).call({
+				await (schema.started as ServiceAsyncLifecycleHandler).call({
 					broker,
 					logger: broker.logger,
 					adapter: schema.adapter,
 					seedDB: seedDBFn,
-				});
+				} as unknown as Service);
 
 				expect(schema.adapter!.count).toHaveBeenCalledTimes(1);
 				expect(schema.adapter!.count).toHaveBeenCalledWith();
@@ -62,12 +62,12 @@ describe("Test DB mixin", () => {
 				schema.adapter!.count = jest.fn(() => Promise.resolve(0));
 				const seedDBFn = jest.fn();
 
-				await (schema.started as StartedStoppedHandler).call({
+				await (schema.started as ServiceAsyncLifecycleHandler).call({
 					broker,
 					logger: broker.logger,
 					adapter: schema.adapter,
 					seedDB: seedDBFn,
-				});
+				} as unknown as Service);
 
 				expect(schema.adapter!.count).toHaveBeenCalledTimes(2);
 				expect(schema.adapter!.count).toHaveBeenCalledWith();

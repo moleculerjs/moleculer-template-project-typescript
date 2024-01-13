@@ -1,9 +1,10 @@
 import { Errors, ServiceBroker } from "moleculer";
+import type { ServiceSchema } from "moleculer";
 import TestService from "../../../services/greeter.service";
 
 describe("Test 'greeter' service", () => {
 	const broker = new ServiceBroker({ logger: false });
-	broker.createService(TestService);
+	broker.createService(TestService as unknown as ServiceSchema);
 
 	beforeAll(() => broker.start());
 	afterAll(() => broker.stop());
