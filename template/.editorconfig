@@ -5,8 +5,13 @@
 root = true
 
 [*]
-indent_style = space
+
+# Change these settings to your own preference
+indent_style = tab
 indent_size = 4
+space_after_anon_function = true
+
+# We recommend you to keep these unchanged
 end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
@@ -14,14 +19,17 @@ insert_final_newline = true
 
 [*.md]
 trim_trailing_whitespace = false
+indent_style = space
+indent_size = 4
 
-[*.json]
+[{package,bower}.json]
+indent_style = space
 indent_size = 2
 
 [*.{yml,yaml}]
 trim_trailing_whitespace = false
+indent_style = space
 indent_size = 2
 
-[*.{cjs,mjs,js,ts,tsx,css,html}]
-indent_style = tab
-indent_size = unset # reset to ide view preferences
+[*.js]
+quote_type = "double"

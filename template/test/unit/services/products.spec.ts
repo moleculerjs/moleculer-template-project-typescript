@@ -1,115 +1,110 @@
-import { Context, Errors, ServiceBroker } from "moleculer";
-import type { ServiceSchema } from "moleculer";
-import TestService from "../../../services/products.service";
+import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
+
+const { ServiceBroker, Context } = require("moleculer");
+const { ValidationError } = require("moleculer").Errors;
+const TestService = require("../../../services/products.service");
 
 describe("Test 'products' service", () => {
 	describe("Test actions", () => {
 		const broker = new ServiceBroker({ logger: false });
-		const service = broker.createService(TestService as unknown as ServiceSchema);
+		const service = broker.createService(TestService);
 
-		jest.spyOn(service.adapter, "updateById");
-		jest.spyOn(service, "transformDocuments");
+		service.seedDB = jest.fn();
+		jest.spyOn(service, "updateEntity");
 		jest.spyOn(service, "entityChanged");
-
-		beforeAll(() => broker.start());
-		afterAll(() => broker.stop());
 
 		const record = {
 			_id: "123",
 			name: "Awesome thing",
 			price: 999,
 			quantity: 25,
-			createdAt: Date.now(),
+			createdAt: Date.now()
 		};
 
-		describe("Test 'products.increaseQuantity'", () => {
-			test("should call the adapter updateById method & transform result", async () => {
-				service.adapter.updateById.mockImplementation(() => Promise.resolve(record));
-				service.transformDocuments.mockClear();
-				service.entityChanged.mockClear();
+		let adapter;
+		beforeAll(async () => {
+			await broker.start();
 
+			adapter = await service.getAdapter();
+
+			await adapter.insert(record);
+		});
+		afterAll(() => broker.stop());
+
+		describe("Test 'products.increaseQuantity'", () => {
+			it("should call the adapter updateById method & transform result", async () => {
 				const res = await broker.call("products.increaseQuantity", {
 					id: "123",
-					value: 10,
+					value: 10
 				});
 				expect(res).toEqual({
-					_id: "123",
+					id: "123",
 					name: "Awesome thing",
 					price: 999,
-					quantity: 25,
+					quantity: 35
 				});
 
-				expect(service.adapter.updateById).toHaveBeenCalledTimes(1);
-				expect(service.adapter.updateById).toHaveBeenCalledWith("123", {
-					$inc: { quantity: 10 },
+				expect(service.updateEntity).toBeCalledTimes(1);
+				expect(service.updateEntity).toBeCalledWith(expect.any(Context), {
+					id: "123",
+					quantity: 35
 				});
 
-				expect(service.transformDocuments).toHaveBeenCalledTimes(1);
-				expect(service.transformDocuments).toHaveBeenCalledWith(
+				expect(service.entityChanged).toBeCalledTimes(1);
+				expect(service.entityChanged).toBeCalledWith(
+					"update",
+					{ id: "123", name: "Awesome thing", price: 999, quantity: 35 },
+					{ id: "123", name: "Awesome thing", price: 999, quantity: 25 },
 					expect.any(Context),
-					{ id: "123", value: 10 },
-					record,
-				);
-
-				expect(service.entityChanged).toHaveBeenCalledTimes(1);
-				expect(service.entityChanged).toHaveBeenCalledWith(
-					"updated",
-					{ _id: "123", name: "Awesome thing", price: 999, quantity: 25 },
-					expect.any(Context),
+					{}
 				);
 			});
 		});
 
 		describe("Test 'products.decreaseQuantity'", () => {
-			test("should call the adapter updateById method & transform result", async () => {
-				service.adapter.updateById.mockClear();
-				service.transformDocuments.mockClear();
+			it("should call the adapter updateById method & transform result", async () => {
+				service.updateEntity.mockClear();
 				service.entityChanged.mockClear();
 
 				const res = await broker.call("products.decreaseQuantity", {
 					id: "123",
-					value: 10,
+					value: 10
 				});
 				expect(res).toEqual({
-					_id: "123",
+					id: "123",
 					name: "Awesome thing",
 					price: 999,
-					quantity: 25,
+					quantity: 25
 				});
 
-				expect(service.adapter.updateById).toHaveBeenCalledTimes(1);
-				expect(service.adapter.updateById).toHaveBeenCalledWith("123", {
-					$inc: { quantity: -10 },
+				expect(service.updateEntity).toBeCalledTimes(1);
+				expect(service.updateEntity).toBeCalledWith(expect.any(Context), {
+					id: "123",
+					quantity: 25
 				});
 
-				expect(service.transformDocuments).toHaveBeenCalledTimes(1);
-				expect(service.transformDocuments).toHaveBeenCalledWith(
+				expect(service.entityChanged).toBeCalledTimes(1);
+				expect(service.entityChanged).toBeCalledWith(
+					"update",
+					{ id: "123", name: "Awesome thing", price: 999, quantity: 25 },
+					{ id: "123", name: "Awesome thing", price: 999, quantity: 35 },
 					expect.any(Context),
-					{ id: "123", value: 10 },
-					record,
-				);
-
-				expect(service.entityChanged).toHaveBeenCalledTimes(1);
-				expect(service.entityChanged).toHaveBeenCalledWith(
-					"updated",
-					{ _id: "123", name: "Awesome thing", price: 999, quantity: 25 },
-					expect.any(Context),
+					{}
 				);
 			});
 
-			test("should throw error if params is not valid", async () => {
-				service.adapter.updateById.mockClear();
-				service.transformDocuments.mockClear();
+			it("should throw error if params is not valid", async () => {
+				service.updateEntity.mockClear();
 				service.entityChanged.mockClear();
 
 				expect.assertions(2);
 				try {
 					await broker.call("products.decreaseQuantity", {
 						id: "123",
-						value: -5,
+						value: -5
 					});
 				} catch (err) {
-					expect(err).toBeInstanceOf(Errors.ValidationError);
+					expect(err).toBeInstanceOf(ValidationError);
 					expect(err.data).toEqual([
 						{
 							action: "products.decreaseQuantity",
@@ -117,8 +112,8 @@ describe("Test 'products' service", () => {
 							field: "value",
 							message: "The 'value' field must be a positive number.",
 							nodeID: broker.nodeID,
-							type: "numberPositive",
-						},
+							type: "numberPositive"
+						}
 					]);
 				}
 			});
@@ -127,26 +122,32 @@ describe("Test 'products' service", () => {
 
 	describe("Test methods", () => {
 		const broker = new ServiceBroker({ logger: false });
-		const service = broker.createService(TestService as unknown as ServiceSchema);
+		const service = broker.createService(TestService);
 
-		jest.spyOn(service.adapter, "insertMany");
 		jest.spyOn(service, "seedDB");
+
+		// Mock the adapter
+		let adapter = {
+			count: jest.fn(async () => 0),
+			insertMany: jest.fn()
+		};
+		service.getAdapter = async () => adapter;
 
 		beforeAll(() => broker.start());
 		afterAll(() => broker.stop());
 
 		describe("Test 'seedDB'", () => {
-			test("should be called after service started & DB connected", () => {
-				expect(service.seedDB).toHaveBeenCalledTimes(1);
-				expect(service.seedDB).toHaveBeenCalledWith();
+			it("should be called after service started & DB connected", async () => {
+				expect(service.seedDB).toBeCalledTimes(1);
+				expect(service.seedDB).toBeCalledWith();
 			});
 
-			test("should insert 3 documents", () => {
-				expect(service.adapter.insertMany).toHaveBeenCalledTimes(1);
-				expect(service.adapter.insertMany).toHaveBeenCalledWith([
+			it("should insert 3 documents", async () => {
+				expect(adapter.insertMany).toBeCalledTimes(1);
+				expect(adapter.insertMany).toBeCalledWith([
 					{ name: "Samsung Galaxy S10 Plus", quantity: 10, price: 704 },
 					{ name: "iPhone 11 Pro", quantity: 25, price: 999 },
-					{ name: "Huawei P30 Pro", quantity: 15, price: 679 },
+					{ name: "Huawei P30 Pro", quantity: 15, price: 679 }
 				]);
 			});
 		});
@@ -156,32 +157,31 @@ describe("Test 'products' service", () => {
 		const broker = new ServiceBroker({ logger: false });
 		const createActionFn = jest.fn();
 		broker.createService({
-			name: "products",
-			mixins: [TestService as unknown as ServiceSchema],
+			mixins: [TestService],
 			actions: {
 				create: {
-					handler: createActionFn,
-				},
-			},
+					handler: createActionFn
+				}
+			}
 		});
 
 		beforeAll(() => broker.start());
 		afterAll(() => broker.stop());
 
 		describe("Test before 'create' hook", () => {
-			test("should add quantity with zero", async () => {
+			it("should add quantity with zero", async () => {
 				await broker.call("products.create", {
 					id: "111",
 					name: "Test product",
-					price: 100,
+					price: 100
 				});
 
-				expect(createActionFn).toHaveBeenCalledTimes(1);
+				expect(createActionFn).toBeCalledTimes(1);
 				expect(createActionFn.mock.calls[0][0].params).toEqual({
 					id: "111",
 					name: "Test product",
 					price: 100,
-					quantity: 0,
+					quantity: 0
 				});
 			});
 		});

@@ -1,83 +1,105 @@
-import fs from "fs";
 import type { Context, Service, ServiceSchema } from "moleculer";
-import type { DbAdapter, MoleculerDB } from "moleculer-db";
-import DbService from "moleculer-db";
-import MongoDbAdapter from "moleculer-db-adapter-mongo";
+
+import { Service as DbService } from "@moleculer/database";
 
 export type DbServiceMethods = {
 	seedDb?(): Promise<void>;
 };
 
-type DbServiceSchema = Partial<ServiceSchema> &
-	Partial<MoleculerDB<DbAdapter>> & {
-		collection?: string;
-	};
+type DbServiceSchema = Partial<ServiceSchema>;
 
 export type DbServiceThis = Service & DbServiceMethods;
 
-export default function createDbServiceMixin(collection: string): DbServiceSchema {
+export default function (collection: string): DbServiceSchema {
 	const cacheCleanEventName = `cache.clean.${collection}`;
 
+	/** @type {MoleculerDB & ServiceSchema} */
 	const schema: DbServiceSchema = {
-		mixins: [DbService],
+		/**
+		 * Mixins. More info: https://moleculer.services/docs/0.15/services.html#Mixins
+		 */
+		mixins: [
+			// @moleculer/database config: More info: https://github.com/moleculerjs/database
+			DbService({
+				adapter:
+					// In production use MongoDB
+					process.env.DB_URI?.startsWith("mongodb://")
+						? {
+								type: "MongoDB",
+								options: {
+									uri: process.env.DB_URI
+								}
+							}
+						: {
+								type: "NeDB",
+								options:
+									// In unit/integration tests use in-memory DB. Jest sets the NODE_ENV automatically
+									// During dev use file storage
+									process.env.NODE_ENV === "test"
+										? {
+												neDB: {
+													inMemoryOnly: true
+												}
+											}
+										: `./data/${collection}.db`
+							},
+				strict: false
+			})
+		],
 
+		/**
+		 * Events. More info: https://moleculer.services/docs/0.15/events.html
+		 */
 		events: {
 			/**
 			 * Subscribe to the cache clean event. If it's triggered
 			 * clean the cache entries for this service.
 			 */
-			async [cacheCleanEventName](this: DbServiceThis) {
+			async [cacheCleanEventName]() {
 				if (this.broker.cacher) {
 					await this.broker.cacher.clean(`${this.fullName}.*`);
 				}
-			},
+			}
 		},
 
+		/**
+		 * Methods. More info: https://moleculer.services/docs/0.15/services.html#Methods
+		 */
 		methods: {
 			/**
 			 * Send a cache clearing event when an entity changed.
+			 *
+			 * @param {String} type
+			 * @param {object} data
+			 * @param {object} oldData
+			 * @param {Context} ctx
+			 * @param {object} opts
 			 */
-			async entityChanged(type: string, json: unknown, ctx: Context): Promise<void> {
-				await ctx.broadcast(cacheCleanEventName);
-			},
+			async entityChanged(type: string, data: object, oldData: object, ctx: Context, opts: object) {
+				ctx.broadcast(cacheCleanEventName);
+			}
 		},
 
+		/**
+		 * Service started lifecycle event handler
+		 * More info: https://moleculer.services/docs/0.15/lifecycle.html#started-event-handler
+		 */
 		async started(this: DbServiceThis) {
 			// Check the count of items in the DB. If it's empty,
 			// call the `seedDB` method of the service.
 			if (this.seedDB) {
-				const count = await this.adapter.count();
-				if (count === 0) {
+				const adapter = await this.getAdapter();
+				const count = await adapter.count();
+				if (count == 0) {
 					this.logger.info(
-						`The '${collection}' collection is empty. Seeding the collection...`,
+						`The '${collection}' collection is empty. Seeding the collection...`
 					);
 					await this.seedDB();
-					this.logger.info(
-						"Seeding is done. Number of records:",
-						await this.adapter.count(),
-					);
+					this.logger.info("Seeding is done. Number of records:", await adapter.count());
 				}
 			}
-		},
+		}
 	};
 
-	if (process.env.MONGO_URI) {
-		// Mongo adapter
-		schema.adapter = new MongoDbAdapter(process.env.MONGO_URI);
-		schema.collection = collection;
-	} else if (process.env.NODE_ENV === "test") {
-		// NeDB memory adapter for testing
-		schema.adapter = new DbService.MemoryAdapter();
-	} else {
-		// NeDB file DB adapter
-
-		// Create data folder
-		if (!fs.existsSync("./data")) {
-			fs.mkdirSync("./data");
-		}
-
-		schema.adapter = new DbService.MemoryAdapter({ filename: `./data/${collection}.db` });
-	}
-
 	return schema;
-}
+};

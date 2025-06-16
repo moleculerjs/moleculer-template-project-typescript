@@ -13,12 +13,84 @@ data:
   {{#if_eq transporter "Redis"}}TRANSPORTER: redis://redis:6379{{/if_eq}}
   {{#if_eq transporter "MQTT"}}TRANSPORTER: mqtt://mqtt:1883{{/if_eq}}
   {{#if_eq transporter "AMQP"}}TRANSPORTER: amqp://rabbitmq:5672{{/if_eq}}
-  {{#if_eq transporter "STAN"}}TRANSPORTER: stan://stan:4222{{/if_eq}}
   {{#if_eq transporter "Kafka"}}TRANSPORTER: kafka://kafka:9092{{/if_eq}}
   {{#if_eq transporter "AMQP10"}}TRANSPORTER: amqp10://guest:guest@activemq:5672{{/if_eq}}
   {{#if_eq cacher "Memory"}}CACHER: Memory{{/if_eq}}
   {{#if_eq cacher "Redis"}}CACHER: redis://redis:6379{{/if_eq}}
-  {{#dbService}}MONGO_URI: mongodb://mongo/{{projectName}}{{/dbService}}
+  {{#dbService}}DB_URI: mongodb://mongo/{{projectName}}{{/dbService}}
+  {{#if_eq channels "NATS"}}CHANNEL_URL: nats://nats:4222{{/if_eq}}
+  {{#if_eq channels "Redis"}}CHANNEL_URL: redis://redis:6379{{/if_eq}}
+  {{#if_eq channels "AMQP"}}CHANNEL_URL: amqp://rabbitmq:5672{{/if_eq}}
+  {{#if_eq channels "Kafka"}}CHANNEL_URL: kafka://kafka:9092{{/if_eq}}
+  {{#needWorkflows}}WORKFLOWS_URL: redis://redis:6379{{/needWorkflows}}
+
+{{#monolith}}
+{{#apiGW}}
+---
+#########################################################
+# Service for Moleculer API Gateway service
+#########################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: services
+spec:
+  selector:
+    app: services
+  ports:
+  - port: 3000
+    targetPort: 3000
+
+---
+#########################################################
+# Ingress for Moleculer API Gateway
+#########################################################
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+spec:
+  rules:
+  - host: {{projectName}}.127.0.0.1.nip.io
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: services
+            port: 
+              number: 3000
+{{/apiGW}}
+
+---
+#########################################################
+# Moleculer services
+#########################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: services
+spec:
+  selector:
+    matchLabels:
+      app: services
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: services
+    spec:
+      containers:
+      - name: services
+        image: {{projectName}}
+        imagePullPolicy: IfNotPresent
+        envFrom:
+        - configMapRef:
+            name: common-env
+{{/monolith}}
+
+{{#unless monolith}}
 
 {{#apiGW}}
 ---
@@ -51,12 +123,12 @@ spec:
   - host: {{projectName}}.127.0.0.1.nip.io
     http:
       paths:
-      - path: /
-        pathType: Prefix
+      - pathType: Prefix
+        path: /
         backend:
           service:
             name: api
-            port:
+            port: 
               number: 3000
 
 ---
@@ -121,7 +193,7 @@ spec:
 {{#dbService}}
 ---
 #########################################################
-# Products service
+# Products DB service
 #########################################################
 apiVersion: apps/v1
 kind: Deployment
@@ -218,8 +290,73 @@ spec:
     app: mongo          
 
 {{/dbService}}
+{{#needChannels}}
+---
+#########################################################
+# Inventory channel service
+#########################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory
+spec:
+  selector:
+    matchLabels:
+      app: inventory
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: inventory
+    spec:
+      containers:
+      - name: inventory
+        image: {{projectName}}
+        imagePullPolicy: IfNotPresent
+        envFrom:
+        - configMapRef:
+            name: common-env
+        env:
+          - name: SERVICES
+            value: inventory
 
-{{#if_eq transporter "NATS"}}
+{{/needChannels}}
+
+{{#needWorkflows}}
+---
+#########################################################
+# Orders workflow service
+#########################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders
+spec:
+  selector:
+    matchLabels:
+      app: orders
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: orders
+    spec:
+      containers:
+      - name: orders
+        image: {{projectName}}
+        imagePullPolicy: IfNotPresent
+        envFrom:
+        - configMapRef:
+            name: common-env
+        env:
+          - name: SERVICES
+            value: orders
+
+{{/needWorkflows}}
+
+{{/unless}}
+
+{{#nats}}
 ---
 #########################################################
 # NATS transporter service
@@ -262,7 +399,7 @@ spec:
         ports:
         - containerPort: 4222
           name: nats
-{{/if_eq}}
+{{/nats}}
 
 {{#redis}}
 ---
@@ -354,7 +491,7 @@ spec:
           name: mqtt
 {{/if_eq}}
 
-{{#if_eq transporter "AMQP"}}
+{{#rabbitmq}}
 ---
 #########################################################
 # AMQP (RabbitMQ) transporter service
@@ -397,54 +534,9 @@ spec:
         ports:
         - containerPort: 5672
           name: rabbitmq
-{{/if_eq}}
+{{/rabbitmq}}
 
-{{#if_eq transporter "STAN"}}
----
-#########################################################
-# NATS Streaming transporter service
-#########################################################
-apiVersion: v1
-kind: Service
-metadata:
-  name: stan
-spec:
-  selector:
-    app: stan
-  ports:
-  - port: 4222
-    name: stan
-    targetPort: 4222
-
----
-#########################################################
-# NATS Streaming transporter
-#########################################################
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: stan
-spec:
-  selector:
-    matchLabels:
-      app: stan
-  replicas: 1
-  strategy:
-    type: Recreate  
-  template:
-    metadata:
-      labels:
-        app: stan
-    spec:
-      containers:
-      - name: stan
-        image: nats-streaming
-        ports:
-        - containerPort: 4222
-          name: stan
-{{/if_eq}}
-
-{{#if_eq transporter "Kafka"}}
+{{#kafka}}
 ---
 #########################################################
 # Zookeeper service
@@ -483,7 +575,7 @@ spec:
     spec:
       containers:
       - name: zookeeper
-        image: bitnami/zookeeper
+        image: bitnami/zookeeper:3.9
         ports:
         - containerPort: 2181
           name: zookeeper
@@ -529,7 +621,7 @@ spec:
     spec:
       containers:
       - name: kafka
-        image: bitnami/kafka
+        image: bitnami/kafka:3.9
         ports:
         - containerPort: 9092
           name: kafka
@@ -540,7 +632,7 @@ spec:
           value: PLAINTEXT://kafka:9092
         - name: ALLOW_PLAINTEXT_LISTENER
           value: "yes"
-{{/if_eq}}
+{{/kafka}}
 
 {{#if_eq transporter "AMQP10"}}
 ---
