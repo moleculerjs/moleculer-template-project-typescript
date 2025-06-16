@@ -7,8 +7,8 @@
     "dev": "tsx ./node_modules/moleculer/bin/moleculer-runner.js --config moleculer.config.ts --hot --repl services/**/*.service.ts",
     "start": "moleculer-runner --config dist/moleculer.config.js",
     "cli": "moleculer connect {{transporter}}",
-    "ci": "jest --watch",
-    "test": "jest --coverage"{{#lint}},
+    "ci": "vitest --watch",
+    "test": "vitest --run --coverage"{{#lint}},
     "lint": "eslint",
     "lint:fix": "eslint --fix"{{/lint}}{{#docker}},
     "dc:up": "docker compose up --build -d",
@@ -21,10 +21,13 @@
   ],
   "author": "",
   "devDependencies": {
+    "@types/node": "^22.15.29",
     {{#lint}}
+		"@eslint/js": "^9.28.0",
     "eslint": "^9.28.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.1",
+		"typescript-eslint": "^8.33.0",
     "prettier": "^3.5.3",
     {{/lint}}
     "jest": "^29.7.0",
@@ -38,7 +41,10 @@
     {{#apiGQL}}
     "graphql-request": "^6.1.0",
     {{/apiGQL}}
-    "moleculer-repl": "^0.7.4"
+    "moleculer-repl": "^0.7.4",
+		"tsx": "^4.19.4",
+		"typescript": "^5.8.3",
+		"vitest": "^3.1.4"
   },
   "dependencies": {
     {{#apiGW}}

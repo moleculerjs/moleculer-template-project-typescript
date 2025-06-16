@@ -1,17 +1,17 @@
-import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
+import { afterAll, beforeAll, describe, it, expect, vi } from "vitest";
 
-const { ServiceBroker, Context } = require("moleculer");
-const { ValidationError } = require("moleculer").Errors;
-const TestService = require("../../../services/products.service");
+import { Context, Errors, ServiceBroker } from "moleculer";
+import type { ServiceSchema } from "moleculer";
+import TestService from "../../../services/products.service";
 
 describe("Test 'products' service", () => {
 	describe("Test actions", () => {
 		const broker = new ServiceBroker({ logger: false });
 		const service = broker.createService(TestService);
 
-		service.seedDB = jest.fn();
-		jest.spyOn(service, "updateEntity");
-		jest.spyOn(service, "entityChanged");
+		service.seedDB = vi.fn();
+		vi.spyOn(service, "updateEntity");
+		vi.spyOn(service, "entityChanged");
 
 		const record = {
 			_id: "123",
@@ -124,12 +124,12 @@ describe("Test 'products' service", () => {
 		const broker = new ServiceBroker({ logger: false });
 		const service = broker.createService(TestService);
 
-		jest.spyOn(service, "seedDB");
+		vi.spyOn(service, "seedDB");
 
 		// Mock the adapter
 		let adapter = {
-			count: jest.fn(async () => 0),
-			insertMany: jest.fn()
+			count: vi.fn(async () => 0),
+			insertMany: vi.fn()
 		};
 		service.getAdapter = async () => adapter;
 
@@ -155,7 +155,7 @@ describe("Test 'products' service", () => {
 
 	describe("Test hooks", () => {
 		const broker = new ServiceBroker({ logger: false });
-		const createActionFn = jest.fn();
+		const createActionFn = vi.fn();
 		broker.createService({
 			mixins: [TestService],
 			actions: {

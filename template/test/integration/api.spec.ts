@@ -1,27 +1,27 @@
-import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
+import { afterAll, beforeAll, describe, it, expect, vi } from "vitest";
 
 
 process.env.PORT = 0; // Use random ports during tests
 
-const HTTPrequest = require("supertest");
+import HTTPrequest from "supertest";
 {{#apiIO}}
-const io = require("socket.io-client");
+import io from "socket.io-client";
 {{/apiIO}}
 {{#apiGQL}}
-const { request, gql } = require("graphql-request");
+import { request, gql } from "graphql-request";
 {{/apiGQL}}
 
-const { ServiceBroker } = require("moleculer");
+import { Context, ServiceBroker } from "moleculer";
 // Load service schemas
-const APISchema = require("../../services/api.service");
-const GreeterSchema = require("../../services/greeter.service");
+import APISchema from "../../../services/api.service";
+import GreeterSchema from "../../../services/greeter.service";
 {{#dbService}}
-const ProductsSchema = require("../../services/products.service");
+import ProductsSchema from "../../../services/products.service";
 {{/dbService}}
 
 describe("Test HTTP API gateway", () => {
 	let broker = new ServiceBroker({ logger: false });
-	broker.sendToChannel = jest.fn();
+	broker.sendToChannel = vi.fn();
 
 	let greeterService = broker.createService(GreeterSchema);
 	let apiService = broker.createService(APISchema);
@@ -215,7 +215,7 @@ describe("Test HTTP API gateway", () => {
 {{#apiIO}}
 describe("Test Socket.IO API gateway", () => {
 	let broker = new ServiceBroker({ logger: false });
-	broker.sendToChannel = jest.fn();
+	broker.sendToChannel = vi.fn();
 
 	let greeterService = broker.createService(GreeterSchema);
 	let apiService = broker.createService(APISchema);
@@ -406,7 +406,7 @@ describe("Test Socket.IO API gateway", () => {
 {{#apiGQL}}
 describe("Test GraphQL API gateway", () => {
 	let broker = new ServiceBroker({ logger: false });
-	broker.sendToChannel = jest.fn();
+	broker.sendToChannel = vi.fn();
 
 	let greeterService = broker.createService(GreeterSchema);
 	let apiService = broker.createService(APISchema);

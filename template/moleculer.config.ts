@@ -2,7 +2,7 @@ import type { BrokerOptions, MetricRegistry, ServiceBroker } from "moleculer";
 import { Errors } from "moleculer";
 
 {{#needChannels}}
-import { Middleware as ChannelMiddleware } from "@moleculer/channels");
+import { Middleware as ChannelMiddleware } from "@moleculer/channels";
 {{#tracing}}import { Tracing as ChannelTracing } from "@moleculer/channels";{{/tracing}}
 {{/needChannels}}
 

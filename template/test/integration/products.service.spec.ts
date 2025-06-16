@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
+import { afterAll, beforeAll, describe, it, expect, vi } from "vitest";
 import { ServiceBroker } from "moleculer";
 import type { ServiceSchema } from "moleculer";
 import type { ProductEntity } from "../../services/products.service";
@@ -10,7 +10,7 @@ describe("Test 'products' service", () => {
 		const service = broker.createService(TestService);
 		service.seedDB = null; // Disable seeding
 
-		broker.sendToChannel = jest.fn();
+		broker.sendToChannel = vi.fn();
 
 		beforeAll(() => broker.start());
 		afterAll(() => broker.stop());

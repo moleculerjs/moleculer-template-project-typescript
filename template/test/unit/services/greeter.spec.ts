@@ -1,8 +1,8 @@
-import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
+import { afterAll, beforeAll, describe, it, expect, vi } from "vitest";
 
-const { ServiceBroker } = require("moleculer");
-const { ValidationError } = require("moleculer").Errors;
-const TestService = require("../../../services/greeter.service");
+import { Errors, ServiceBroker } from "moleculer";
+import type { ServiceSchema } from "moleculer";
+import TestService from "../../../services/greeter.service";
 
 describe("Test 'greeter' service", () => {
 	let broker = new ServiceBroker({ logger: false });
@@ -29,7 +29,7 @@ describe("Test 'greeter' service", () => {
 			try {
 				await broker.call("greeter.welcome");
 			} catch (err) {
-				expect(err).toBeInstanceOf(ValidationError);
+				expect(err).toBeInstanceOf(Errors.ValidationError);
 			}
 		});
 	});

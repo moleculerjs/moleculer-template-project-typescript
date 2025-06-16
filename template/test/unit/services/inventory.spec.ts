@@ -1,8 +1,9 @@
-import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
+import { afterAll, beforeAll, describe, it, expect, vi } from "vitest";
 
-const { ServiceBroker, Context } = require("moleculer");
-const ChannelMiddleware = require("@moleculer/channels").Middleware;
-const TestService = require("../../../services/inventory.service");
+import { Context, Errors, ServiceBroker } from "moleculer";
+import type { ServiceSchema } from "moleculer";
+import TestService from "../../../services/inventory.service";
+import { Middleware as ChannelMiddleware } from "@moleculer/channels";
 
 describe("Test 'inventory' service", () => {
 	const broker = new ServiceBroker({
@@ -16,20 +17,20 @@ describe("Test 'inventory' service", () => {
 		]
 	});
 	// Mock adapter methods
-	broker.channelAdapter.init = jest.fn();
-	broker.channelAdapter.connect = jest.fn();
-	broker.channelAdapter.disconnect = jest.fn();
-	broker.channelAdapter.subscribe = jest.fn();
-	broker.channelAdapter.unsubscribe = jest.fn();
-	broker.channelAdapter.publish = jest.fn();
+	broker.channelAdapter.init = vi.fn();
+	broker.channelAdapter.connect = vi.fn();
+	broker.channelAdapter.disconnect = vi.fn();
+	broker.channelAdapter.subscribe = vi.fn();
+	broker.channelAdapter.unsubscribe = vi.fn();
+	broker.channelAdapter.publish = vi.fn();
 
-	broker.emit = jest.fn();
+	broker.emit = vi.fn();
 
 	const service = broker.createService(TestService);
 
 	// Store the reference to the original orderProduct method
 	const ORIGINAL_ORDER_PRODUCT = service.orderProduct;
-	service.orderProduct = jest.fn();
+	service.orderProduct = vi.fn();
 
 	beforeAll(() => broker.start());
 	afterAll(() => broker.stop());
@@ -50,7 +51,7 @@ describe("Test 'inventory' service", () => {
 	});
 
 	it("should send msg to 'inventory.reserve' channel", async () => {
-		broker.sendToChannel = jest.fn();
+		broker.sendToChannel = vi.fn();
 
 		await broker.call("inventory.reserve", {
 			productId: "123",

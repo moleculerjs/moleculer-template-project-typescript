@@ -1,7 +1,8 @@
-import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
+import { afterAll, beforeAll, describe, it, expect, vi } from "vitest";
 
-const { ServiceBroker } = require("moleculer");
-const DbMixin = require("../../../mixins/db.mixin");
+import { Context, ServiceBroker } from "moleculer";
+import type { Service, ServiceAsyncLifecycleHandler, ServiceEventHandler } from "moleculer";
+import DbMixin from "../../../mixins/db.mixin";
 
 describe("Test DB mixin", () => {
 	describe("Test schema generator", () => {
@@ -19,7 +20,7 @@ describe("Test DB mixin", () => {
 		});
 
 		it("check cache event handler", async () => {
-			jest.spyOn(broker.cacher, "clean");
+			vi.spyOn(broker.cacher, "clean");
 
 			const schema = DbMixin("my-collection");
 
@@ -37,12 +38,12 @@ describe("Test DB mixin", () => {
 				const schema = DbMixin("my-collection");
 
 				const adapterMock = {
-					count: jest.fn(async () => 10)
+					count: vi.fn(async () => 10)
 				};
-				let getAdapterMock = jest.fn(() => {
+				let getAdapterMock = vi.fn(() => {
 					return Promise.resolve(adapterMock);
 				});
-				const seedDBFn = jest.fn();
+				const seedDBFn = vi.fn();
 
 				await schema.started.call({
 					broker,
@@ -61,12 +62,12 @@ describe("Test DB mixin", () => {
 				const schema = DbMixin("my-collection");
 
 				const adapterMock = {
-					count: jest.fn(async () => 0)
+					count: vi.fn(async () => 0)
 				};
-				let getAdapterMock = jest.fn(() => {
+				let getAdapterMock = vi.fn(() => {
 					return Promise.resolve(adapterMock);
 				});
-				const seedDBFn = jest.fn();
+				const seedDBFn = vi.fn();
 
 				await schema.started.call({
 					broker,
@@ -87,7 +88,7 @@ describe("Test DB mixin", () => {
 			const schema = DbMixin("my-collection");
 
 			const ctx = {
-				broadcast: jest.fn()
+				broadcast: vi.fn()
 			};
 
 			await schema.methods.entityChanged(null, null, null, ctx);
