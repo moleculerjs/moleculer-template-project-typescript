@@ -2,9 +2,11 @@
 :mortar_board: Moleculer-based microservices project template for Typescript project.
 
 ## Features
-- Moleculer v0.14 with full-detailed `moleculer.config.ts` file.
-- Common mono-repo project with a demo `greeter` service.
+- Moleculer v0.15 with full-detailed `moleculer.config.js` file.
+- Common mono-repo project with a `greeter` demo service.
 - Sample database `products` service (with file-based NeDB in development & MongoDB in production).
+- Sample service with Moleculer Channels middleware.
+- Sample service with Moleculer Workflows middleware.
 - Optional API Gateway service with detailed service settings.
 - Beautiful static welcome page to test generated services & watch nodes and services.
 - Optional Transporter & Cacher.
@@ -27,15 +29,17 @@ $ moleculer init project-typescript my-project
 $ moleculer init project-typescript moleculer-demo
 
 Template repo: moleculerjs/moleculer-template-project-typescript
-? Add API Gateway (moleculer-web) service? Yes
+? Add HTTP API Gateway (moleculer-web) service? Yes
+? Add GraphQL Gateway? Yes
+? Add Socket.Io Gateway? Yes
 ? Would you like to communicate with other nodes? Yes
 ? Select a transporter NATS (recommended)
-? Would you like to use cache? Yes
-? Select a cacher solution Memory
+? Would you like to use cache? No
+? Add DB sample service? Yes
+? Add Moleculer-Channels middleware? Yes
+? Select a Channels Redis
 ? Would you like to enable metrics? Yes
-? Select a reporter solution Prometheus
 ? Would you like to enable tracing? Yes
-? Select a exporter solution Console
 ? Add Docker & Kubernetes sample files? Yes
 ? Use ESLint to lint your code? Yes
 Create 'moleculer-demo' folder...
@@ -57,6 +61,6 @@ Create 'moleculer-demo' folder...
 moleculer-template-project-typescript is available under the [MIT license](https://tldrlegal.com/license/mit-license).
 
 ## Contact
-Copyright (c) 2023 MoleculerJS
+Copyright (c) 2025 MoleculerJS
 
 [![@moleculerjs](https://img.shields.io/badge/github-moleculerjs-green.svg)](https://github.com/moleculerjs) [![@MoleculerJS](https://img.shields.io/badge/twitter-MoleculerJS-blue.svg)](https://twitter.com/MoleculerJS)

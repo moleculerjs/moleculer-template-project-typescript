@@ -1,9 +1,12 @@
 name: Generate a demo project
 
-on:
+on: 
   push:
     branches:
       - master
+      - next
+  schedule:
+    - cron: '0 10 * * 3'
 
 jobs:
   generate:
@@ -11,23 +14,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js 18.x
-      uses: actions/setup-node@v3
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js 22.x
+      uses: actions/setup-node@v4
       with:
-        node-version: 18.x
-    
+        node-version: 22.x
+
     - name: Install dependencies
       run: npm i
+
     - name: Generate project
-      run: node_modules/.bin/moleculer init --answers test/demo/answers.json --no-install . project-demo
+      run: node_modules/.bin/moleculer init --answers test/ci/answers.full.json --no-install . project-demo
 
     - name: Initialize Git repo
       run: git init
       working-directory: ./project-demo
 
     - name: Set remote
-      run: git remote add origin https://${{ secrets.GH_TOKEN }}@github.com/moleculerjs/project-typescript-demo.git
+      run: git remote add origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/moleculerjs/project-typescript-demo.git
       working-directory: ./project-demo
 
     - name: Add files
@@ -39,7 +44,7 @@ jobs:
       working-directory: ./project-demo
 
     - name: Commit
-      run: git commit -m "Generated files"
+      run: git commit -m "Generated files (${{ github.sha }})"
       working-directory: ./project-demo
     
     - name: Git push
