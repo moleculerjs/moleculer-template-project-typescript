@@ -13,7 +13,6 @@ export type DbServiceThis = Service & DbServiceMethods;
 export default function (collection: string): DbServiceSchema {
 	const cacheCleanEventName = `cache.clean.${collection}`;
 
-	/** @type {MoleculerDB & ServiceSchema} */
 	const schema: DbServiceSchema = {
 		/**
 		 * Mixins. More info: https://moleculer.services/docs/0.15/services.html#Mixins
@@ -75,7 +74,13 @@ export default function (collection: string): DbServiceSchema {
 			 * @param {Context} ctx
 			 * @param {object} opts
 			 */
-			async entityChanged(type: string, data: object, oldData: object, ctx: Context, opts: object) {
+			async entityChanged(
+				type: string,
+				data: object,
+				oldData: object,
+				ctx: Context,
+				opts: object
+			) {
 				ctx.broadcast(cacheCleanEventName);
 			}
 		},

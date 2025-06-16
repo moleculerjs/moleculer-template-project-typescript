@@ -1,8 +1,7 @@
 import { afterAll, beforeAll, describe, it, expect, vi } from "vitest";
 
 import { Context, ServiceBroker } from "moleculer";
-import type { Service, ServiceAsyncLifecycleHandler, ServiceEventHandler } from "moleculer";
-import DbMixin from "../../../mixins/db.mixin";
+import DbMixin from "../../../mixins/db.mixin.js";
 
 describe("Test DB mixin", () => {
 	describe("Test schema generator", () => {

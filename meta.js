@@ -2,7 +2,6 @@
 
 module.exports = function(values) {
   return {
-        /** @type {Array<import('inquirer').Question>} */
         questions: [
             {
                 type: "confirm",
@@ -126,25 +125,6 @@ module.exports = function(values) {
 
         metalsmith: {
             before(metalsmith) {
-                /**
-                 * @typedef Metadata
-                 * @property {Boolean} apiGW
-                 * @property {Boolean} apiGQL
-                 * @property {Boolean} apiIO
-                 * @property {Boolean} needTransporter
-                 * @property {String} transporter
-                 * @property {Boolean} needCacher
-                 * @property {Boolean} dbService
-                 * @property {Boolean} needChannels
-                 * @property {Boolean} needWorkflows
-                 * @property {String} channels
-                 * @property {Boolean} metrics
-                 * @property {Boolean} tracing
-                 * @property {Boolean} docker
-                 * @property {Boolean} lint
-                 */
-
-                /** @type {Metadata} */
                 const data = metalsmith.metadata();
 
                 data.redis = data.cacher == "Redis" || data.transporter == "Redis" || data.channels == "Redis" || data.needWorkflows;

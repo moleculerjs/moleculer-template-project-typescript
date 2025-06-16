@@ -1,4 +1,4 @@
-import type { BrokerOptions, MetricRegistry, ServiceBroker } from "moleculer";
+import type { BrokerOptions } from "moleculer";
 import { Errors } from "moleculer";
 
 {{#needChannels}}
@@ -7,7 +7,7 @@ import { Middleware as ChannelMiddleware } from "@moleculer/channels";
 {{/needChannels}}
 
 {{#needWorkflows}}
-import { Middleware as WorkflowsMiddleware } = require("@moleculer/workflows");
+import { Middleware as WorkflowsMiddleware } from "@moleculer/workflows";
 {{/needWorkflows}}
 
 /**
@@ -34,8 +34,6 @@ import { Middleware as WorkflowsMiddleware } = require("@moleculer/workflows");
  *      }
  *    }
  *  }
- *
- * @type {import('moleculer').BrokerOptions}
  */
 const brokerConfig: BrokerOptions = {
 	// Namespace of nodes to segment your nodes on the same network.
@@ -248,4 +246,4 @@ const brokerConfig: BrokerOptions = {
 	}
 };
 
-export = brokerConfig;
+export default brokerConfig;

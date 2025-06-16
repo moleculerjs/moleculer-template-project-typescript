@@ -25,7 +25,7 @@ const GreeterService: ServiceSchema<GreeterSettings> = {
 	 * Settings. More info: https://moleculer.services/docs/0.15/services.html#Settings
 	 */
 	settings: {
-		defaultName: "Moleculer",
+		defaultName: "Moleculer"
 	},
 
 	/**
@@ -50,7 +50,7 @@ const GreeterService: ServiceSchema<GreeterSettings> = {
 			{{#apiGQL}}graphql: {
 				query: "hello: String"
 			},{{/apiGQL}}
-			async handler(this: GreeterThis/* , ctx: Context */): string {
+			async handler(this: GreeterThis /* , ctx: Context */): Promise<string> {
 				return "Hello Moleculer";
 			}
 		},
@@ -68,8 +68,7 @@ const GreeterService: ServiceSchema<GreeterSettings> = {
 			{{#apiGQL}}graphql: {
 				mutation: "welcome(name: String!): String"
 			},{{/apiGQL}}
-			/** @param {import('moleculer').Context<{name: String}>} ctx */
-			async handler(this: GreeterThis, ctx: Context<ActionHelloParams>): string {
+			async handler(this: GreeterThis, ctx: Context<ActionHelloParams>): Promise<string> {
 				return `Welcome, ${ctx.params.name}`;
 			}
 		}

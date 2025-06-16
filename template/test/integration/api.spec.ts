@@ -1,6 +1,5 @@
 import { afterAll, beforeAll, describe, it, expect, vi } from "vitest";
 
-
 process.env.PORT = 0; // Use random ports during tests
 
 import HTTPrequest from "supertest";
@@ -13,20 +12,20 @@ import { request, gql } from "graphql-request";
 
 import { Context, ServiceBroker } from "moleculer";
 // Load service schemas
-import APISchema from "../../../services/api.service";
-import GreeterSchema from "../../../services/greeter.service";
+import APISchema from "../../services/api.service.js";
+import GreeterSchema from "../../services/greeter.service.js";
 {{#dbService}}
-import ProductsSchema from "../../../services/products.service";
+import ProductsSchema from "../../services/products.service.js";
 {{/dbService}}
 
 describe("Test HTTP API gateway", () => {
-	let broker = new ServiceBroker({ logger: false });
+	const broker = new ServiceBroker({ logger: false });
 	broker.sendToChannel = vi.fn();
 
-	let greeterService = broker.createService(GreeterSchema);
-	let apiService = broker.createService(APISchema);
+	const greeterService = broker.createService(GreeterSchema);
+	const apiService = broker.createService(APISchema);
 	{{#dbService}}
-	let productsService = broker.createService(ProductsSchema);
+	const productsService = broker.createService(ProductsSchema);
 	productsService.seedDB = null; // Disable seeding
 	{{/dbService}}
 

@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, it, expect, vi } from "vitest";
 
 import { Errors, ServiceBroker } from "moleculer";
 import type { ServiceSchema } from "moleculer";
-import TestService from "../../../services/greeter.service";
+import TestService from "../../../services/greeter.service.js";
 
 describe("Test 'greeter' service", () => {
 	let broker = new ServiceBroker({ logger: false });

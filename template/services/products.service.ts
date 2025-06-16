@@ -196,7 +196,6 @@ const ProductsService: ServiceSchema<ProductSettings> & { methods: DbServiceMeth
 			{{#apiGQL}}graphql: {
 				mutation: "decreaseQuantity(id: String!, value: Int!): Product"
 			},{{/apiGQL}}
-			/** @param {Context<{id: String, value: Number}>} ctx */
 			async handler(this: ProductsThis, ctx: Context<ActionQuantityParams>): Promise<object> {
 				// Get current quantity
 				const adapter = await this.getAdapter(ctx);

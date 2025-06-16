@@ -1,5 +1,5 @@
 import type { Context, ServiceSchema } from "moleculer";
-import type { IncomingRequest, ServerResponse } from "http";
+import type { IncomingMessage, ServerResponse } from "http";
 
 import ApiGateway from "moleculer-web";
 import type { ApiSettingsSchema } from "moleculer-web";
@@ -47,7 +47,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 		{{/apiGQL}}
 	],
 
-	/** @type {ApiSettingsSchema} More info: https://moleculer.services/docs/0.15/moleculer-web.html */
+	/** More info: https://moleculer.services/docs/0.15/moleculer-web.html */
 	settings: {
 		// Exposed port
 		port: process.env.PORT || 3000,
@@ -88,7 +88,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 				onBeforeCall(
 					ctx: Context<unknown, Meta>,
 					route: Route,
-					req: IncomingRequest,
+					req: IncomingMessage,
 					res: GatewayResponse,
 				): void {
 					// Set request headers to context meta
@@ -101,7 +101,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 				onAfterCall(
 					ctx: Context,
 					route: Route,
-					req: IncomingRequest,
+					req: IncomingMessage,
 					res: GatewayResponse,
 					data: unknown,
 				): unknown {
@@ -146,7 +146,6 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 			options: {}
 		}
 
-		/** @type {import('moleculer-io').IOSetting} */
 		// io: {},
 	},
 
@@ -164,7 +163,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 		authenticate(
 			ctx: Context,
 			route: Route,
-			req: IncomingRequest,
+			req: IncomingMessage,
 		): Record<string, unknown> | null {
 			// Read the token from header
 			const auth = req.headers["authorization"];
@@ -194,7 +193,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 		 *
 		 * PLEASE NOTE, IT'S JUST AN EXAMPLE IMPLEMENTATION. DO NOT USE IN PRODUCTION!
 		 */
-		authorize(ctx: Context<null, Meta>, route: Route, req: IncomingRequest) {
+		authorize(ctx: Context<null, Meta>, route: Route, req: IncomingMessage) {
 			// Get the authenticated user.
 			const user = ctx.meta.user;
 

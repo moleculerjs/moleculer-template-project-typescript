@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, it, expect, vi } from "vitest";
 
 import { Context, Errors, ServiceBroker } from "moleculer";
 import type { ServiceSchema } from "moleculer";
-import TestService from "../../../services/products.service";
+import TestService from "../../../services/products.service.js";
 
 describe("Test 'products' service", () => {
 	describe("Test actions", () => {
