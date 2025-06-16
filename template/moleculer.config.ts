@@ -1,12 +1,13 @@
-"use strict";
+import type { BrokerOptions, MetricRegistry, ServiceBroker } from "moleculer";
+import { Errors } from "moleculer";
 
 {{#needChannels}}
-const ChannelMiddleware = require("@moleculer/channels").Middleware;
-{{#tracing}}const ChannelTracing = require("@moleculer/channels").Tracing;{{/tracing}}
+import { Middleware as ChannelMiddleware } from "@moleculer/channels");
+{{#tracing}}import { Tracing as ChannelTracing } from "@moleculer/channels";{{/tracing}}
 {{/needChannels}}
 
 {{#needWorkflows}}
-const WorkflowsMiddleware = require("@moleculer/workflows").Middleware;
+import { Middleware as WorkflowsMiddleware } = require("@moleculer/workflows");
 {{/needWorkflows}}
 
 /**
@@ -36,7 +37,7 @@ const WorkflowsMiddleware = require("@moleculer/workflows").Middleware;
  *
  * @type {import('moleculer').BrokerOptions}
  */
-module.exports = {
+const brokerConfig: BrokerOptions = {
 	// Namespace of nodes to segment your nodes on the same network.
 	namespace: "",
 	// Unique node identifier. Must be unique in a namespace.
@@ -96,7 +97,8 @@ module.exports = {
 		// Backoff factor for delay. 2 means exponential backoff.
 		factor: 2,
 		// A function to check failed requests.
-		check: err => err && !!err.retryable
+		check: (err: Error) =>
+			err && err instanceof Errors.MoleculerRetryableError && !!err.retryable,
 	},
 
 	// Limit of calling level. If it reaches the limit, broker will throw an MaxCallLevelError error. (Infinite loop protection)
@@ -143,7 +145,7 @@ module.exports = {
 		// Number of milliseconds to switch from open to half-open state
 		halfOpenTime: 10 * 1000,
 		// A function to check failed requests.
-		check: err => err && err.code >= 500
+		check: (err: Error) => err && err instanceof Errors.MoleculerError && err.code >= 500,
 	},
 
 	// Settings of bulkhead feature. More info: https://moleculer.services/docs/0.15/fault-tolerance.html#Bulkhead
@@ -245,3 +247,5 @@ module.exports = {
 
 	}
 };
+
+export = brokerConfig;
