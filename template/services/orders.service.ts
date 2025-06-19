@@ -1,5 +1,18 @@
 import type { Context, Service, ServiceSchema, ServiceSettingSchema } from "moleculer";
 
+interface WorkflowPayload {
+	card?: string;
+	amount?: number;
+	productId?: string;
+	quantity?: number;
+	address?: string;
+}
+
+interface PaymentResult {
+	status: "wait" | "success" | "failed";
+	transactionId: string;
+}
+
 const OrdersService: ServiceSchema = {
 	name: "orders",
 
@@ -8,10 +21,10 @@ const OrdersService: ServiceSchema = {
 	 */
 	workflows: {
 		process: {
-			async handler(ctx: Context) {
-				this.logger.info("Start processing order", ctx.params);
+			async handler(this: Service, ctx: Context<WorkflowPayload>) {
+				this.logger.info("Start processing order. Job ID:", ctx.wf.jobId, ctx.params);
 
-				const paymentResult = await ctx.call("orders.payment", {
+				const paymentResult = await ctx.call<PaymentResult, Partial<WorkflowPayload>>("orders.payment", {
 					card: ctx.params.card,
 					amount: ctx.params.amount
 				});
@@ -76,7 +89,7 @@ const OrdersService: ServiceSchema = {
 				card: { type: "string" },
 				amount: { type: "number" }
 			},
-			async handler(ctx: Context) {
+			async handler(ctx: Context<{ card: string; amount: number }>) {
 				this.logger.info("Waiting for payment finishing...", ctx.params);
 				// Simulate payment processing
 				return { status: "wait", transactionId: "12345" };
@@ -95,7 +108,7 @@ const OrdersService: ServiceSchema = {
 			params: {
 				transactionId: { type: "string", default: "12345" }
 			},
-			async handler(ctx: Context) {
+			async handler(ctx: Context<{ transactionId: string }>) {
 				this.logger.info("Payment finished for transaction", ctx.params.transactionId);
 
 				// Simulate payment completion
@@ -113,7 +126,7 @@ const OrdersService: ServiceSchema = {
 				productId: "string",
 				quantity: "number"
 			},
-			async handler(ctx: Context) {
+			async handler(ctx: Context<{ productId: string; quantity: number }>) {
 				this.logger.info("Reserving inventory for product", ctx.params.productId);
 				// Simulate inventory update
 				return {
@@ -131,7 +144,7 @@ const OrdersService: ServiceSchema = {
 			params: {
 				address: "string"
 			},
-			async handler(ctx: Context) {
+			async handler(ctx: Context<{ productId: string; address: string }>) {
 				this.logger.info("Scheduling delivery for product", ctx.params.productId);
 				// Simulate delivery scheduling
 				return {

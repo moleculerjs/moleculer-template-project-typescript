@@ -62,3 +62,9 @@ typings/
 
 # JetBrains IDE
 .idea
+
+# Built files
+dist
+
+# Data folder
+data

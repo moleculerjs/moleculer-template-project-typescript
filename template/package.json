@@ -2,7 +2,7 @@
   "name": "{{projectName}}",
   "version": "1.0.0",
   "description": "My Moleculer-based microservices project",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "dev": "tsx ./node_modules/moleculer/bin/moleculer-runner.js --config moleculer.config.ts --hot --repl services/**/*.service.ts",

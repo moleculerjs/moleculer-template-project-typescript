@@ -1,8 +1,7 @@
 import type { Context, ServiceSchema } from "moleculer";
-import type { IncomingMessage, ServerResponse } from "http";
 
 import ApiGateway from "moleculer-web";
-import type { ApiSettingsSchema } from "moleculer-web";
+import type { ApiSettingsSchema, Route, IncomingRequest, GatewayResponse } from "moleculer-web";
 {{#apiIO}}
 import SocketIOService from "moleculer-io";
 {{/apiIO}}
@@ -11,9 +10,14 @@ import { ApolloService } from "moleculer-apollo-server";
 import { GraphQLJSONObject } from "graphql-type-json";
 {{/apiGQL}}
 
+interface MetaUser {
+	id: number;
+	name: string;
+}
+
 interface Meta {
 	userAgent?: string | null | undefined;
-	user?: object | null | undefined;
+	user?: MetaUser | null | undefined;
 }
 
 const ApiService: ServiceSchema<ApiSettingsSchema> = {
@@ -50,7 +54,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 	/** More info: https://moleculer.services/docs/0.15/moleculer-web.html */
 	settings: {
 		// Exposed port
-		port: process.env.PORT || 3000,
+		port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
 
 		// Exposed IP
 		ip: "0.0.0.0",
@@ -88,7 +92,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 				onBeforeCall(
 					ctx: Context<unknown, Meta>,
 					route: Route,
-					req: IncomingMessage,
+					req: IncomingRequest,
 					res: GatewayResponse,
 				): void {
 					// Set request headers to context meta
@@ -101,7 +105,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 				onAfterCall(
 					ctx: Context,
 					route: Route,
-					req: IncomingMessage,
+					req: IncomingRequest,
 					res: GatewayResponse,
 					data: unknown,
 				): unknown {
@@ -163,8 +167,8 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 		authenticate(
 			ctx: Context,
 			route: Route,
-			req: IncomingMessage,
-		): Record<string, unknown> | null {
+			req: IncomingRequest,
+		): MetaUser | null {
 			// Read the token from header
 			const auth = req.headers["authorization"];
 
@@ -193,7 +197,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 		 *
 		 * PLEASE NOTE, IT'S JUST AN EXAMPLE IMPLEMENTATION. DO NOT USE IN PRODUCTION!
 		 */
-		authorize(ctx: Context<null, Meta>, route: Route, req: IncomingMessage) {
+		authorize(ctx: Context<null, Meta>, route: Route, req: IncomingRequest) {
 			// Get the authenticated user.
 			const user = ctx.meta.user;
 

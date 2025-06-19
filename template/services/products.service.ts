@@ -1,10 +1,9 @@
 import type { Context, Service, ServiceSchema } from "moleculer";
-import type { DbAdapter, DbServiceSettings, MoleculerDbMethods } from "@moleculer/database";
-import type { DbServiceMethods } from "../mixins/db.mixin";
-import DbMixin from "../mixins/db.mixin";
+import type { DatabaseMethods, DatabaseSettings, ApolloServiceSettings } from "../moleculer-types.js";
+import DbMixin from "../mixins/db.mixin.js";
 
 export interface ProductEntity {
-	_id: string;
+	id: string;
 	name: string;
 	price: number;
 	quantity: number;
@@ -17,15 +16,11 @@ export interface ActionQuantityParams {
 	value: number;
 }
 
-interface ProductSettings extends DbServiceSettings {
-	indexes?: Record<string, number>[];
-}
+interface ProductSettings extends DatabaseSettings, ApolloServiceSettings {}
 
-interface ProductsThis extends Service<ProductSettings>, MoleculerDbMethods {
-	adapter: DbAdapter;
-}
+interface ProductsThis extends Service<ProductSettings>, DatabaseMethods {};
 
-const ProductsService: ServiceSchema<ProductSettings> & { methods: DbServiceMethods } = {
+const ProductsService: ServiceSchema<ProductSettings> = {
 	name: "products",
 	// version: 1
 
@@ -166,16 +161,16 @@ const ProductsService: ServiceSchema<ProductSettings> & { methods: DbServiceMeth
 			{{#apiGQL}}graphql: {
 				mutation: "increaseQuantity(id: String!, value: Int!): Product"
 			},{{/apiGQL}}
-			async handler(this: ProductsThis, ctx: Context<ActionQuantityParams>): Promise<object> {
+			async handler(this: ProductsThis, ctx: Context<ActionQuantityParams>): Promise<ProductEntity> {
 				// Get current quantity
 				const adapter = await this.getAdapter(ctx);
-				const dbEntry = await adapter.findById(ctx.params.id);
+				const dbEntry = await adapter.findById<ProductEntity>(ctx.params.id);
 
 				// Compute new quantity
 				const newQuantity = dbEntry.quantity + ctx.params.value;
 
 				// Update DB entry. Will emit an event to clear the cache
-				const doc = await this.updateEntity(ctx, {
+				const doc = await this.updateEntity<ProductEntity>(ctx, {
 					id: ctx.params.id,
 					quantity: newQuantity
 				});
@@ -196,10 +191,10 @@ const ProductsService: ServiceSchema<ProductSettings> & { methods: DbServiceMeth
 			{{#apiGQL}}graphql: {
 				mutation: "decreaseQuantity(id: String!, value: Int!): Product"
 			},{{/apiGQL}}
-			async handler(this: ProductsThis, ctx: Context<ActionQuantityParams>): Promise<object> {
+			async handler(this: ProductsThis, ctx: Context<ActionQuantityParams>): Promise<ProductEntity> {
 				// Get current quantity
 				const adapter = await this.getAdapter(ctx);
-				const dbEntry = await adapter.findById(ctx.params.id);
+				const dbEntry = await adapter.findById<ProductEntity>(ctx.params.id);
 
 				// Compute new quantity
 				const newQuantity = dbEntry.quantity - ctx.params.value;
@@ -207,7 +202,7 @@ const ProductsService: ServiceSchema<ProductSettings> & { methods: DbServiceMeth
 				if (newQuantity < 0) throw new Error("Quantity cannot be negative");
 
 				// Update DB entry. Will emit an event to clear the cache
-				const doc = await this.updateEntity(ctx, {
+				const doc = await this.updateEntity<ProductEntity>(ctx, {
 					id: ctx.params.id,
 					quantity: newQuantity
 				});

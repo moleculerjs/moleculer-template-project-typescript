@@ -14,9 +14,9 @@ const InventoryService: ServiceSchema = {
 		 */
 		"inventory.reserve": {
 			context: true,
-			async handler(ctx: Context) {
+			async handler(this: Service, ctx: Context<{ productId: string; quantity: number }>) {
 				// Simulate external API call to reserve the quantity...
-				await this.Promise.delay(1000);
+				await new Promise(resolve => setTimeout(resolve, 1000));
 
 				this.logger.info(
 					`Reserve ${ctx.params.quantity} pieces of the ${ctx.params.productId} product in the inventory.`
@@ -46,7 +46,7 @@ const InventoryService: ServiceSchema = {
 				productId: { type: "string" },
 				quantity: { type: "number" }
 			},
-			async handler(ctx: Context) {
+			async handler(ctx: Context<{ productId: string; quantity: number }>) {
 				await this.broker.sendToChannel(
 					"inventory.reserve",
 					{
