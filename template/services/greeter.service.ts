@@ -1,4 +1,4 @@
-import type { Context, Service, ServiceSchema, ServiceSettingSchema } from "moleculer";
+import type { Context, ServiceSchema, ServiceSettingSchema } from "moleculer";
 
 export interface ActionHelloParams {
 	name: string;
@@ -16,9 +16,7 @@ interface GreeterLocalVars {
 	myVar: string;
 }
 
-type GreeterThis = Service<GreeterSettings> & GreeterMethods & GreeterLocalVars;
-
-const GreeterService: ServiceSchema<GreeterSettings> = {
+const GreeterService: ServiceSchema<GreeterSettings, GreeterMethods, GreeterLocalVars> = {
 	name: "greeter",
 
 	/**
@@ -50,7 +48,7 @@ const GreeterService: ServiceSchema<GreeterSettings> = {
 			{{#apiGQL}}graphql: {
 				query: "hello: String"
 			},{{/apiGQL}}
-			async handler(this: GreeterThis /* , ctx: Context */): Promise<string> {
+			async handler(/* , ctx: Context */): Promise<string> {
 				return "Hello Moleculer";
 			}
 		},
@@ -68,8 +66,8 @@ const GreeterService: ServiceSchema<GreeterSettings> = {
 			{{#apiGQL}}graphql: {
 				mutation: "welcome(name: String!): String"
 			},{{/apiGQL}}
-			async handler(this: GreeterThis, ctx: Context<ActionHelloParams>): Promise<string> {
-				return `Welcome, ${ctx.params.name}`;
+			async handler(ctx: Context<ActionHelloParams>): Promise<string> {
+				return `Welcome, ${this.uppercase(ctx.params.name)}`;
 			}
 		}
 	},
@@ -82,26 +80,27 @@ const GreeterService: ServiceSchema<GreeterSettings> = {
 	/**
 	 * Methods. More info: https://moleculer.services/docs/0.15/services.html#Methods
 	 */
-	methods: {},
+	methods: {
+		uppercase(str: string): string {
+			return str.toUpperCase();
+		}
+	},
 
 	/**
 	 * Service created lifecycle event handler
 	 * More info: https://moleculer.services/docs/0.15/lifecycle.html#created-event-handler
-	 * @this {import('moleculer').Service}
 	 */
 	created() {},
 
 	/**
 	 * Service started lifecycle event handler
 	 * More info: https://moleculer.services/docs/0.15/lifecycle.html#started-event-handler
-	 * @this {import('moleculer').Service}
 	 */
 	async started() {},
 
 	/**
 	 * Service stopped lifecycle event handler
 	 * More info: https://moleculer.services/docs/0.15/lifecycle.html#stopped-event-handler
-	 * @this {import('moleculer').Service}
 	 */
 	async stopped() {}
 };

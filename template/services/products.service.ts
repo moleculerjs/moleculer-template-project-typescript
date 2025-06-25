@@ -1,6 +1,7 @@
-import type { Context, Service, ServiceSchema } from "moleculer";
-import type { DatabaseMethods, DatabaseSettings, ApolloServiceSettings } from "../moleculer-types.js";
+import type { Context, ServiceSchema } from "moleculer";
+import type { DatabaseSettings, ApolloServiceSettings } from "../moleculer-types.js";
 import DbMixin from "../mixins/db.mixin.js";
+import type { DbServiceMethods } from "../mixins/db.mixin.js";
 
 export interface ProductEntity {
 	id: string;
@@ -18,16 +19,14 @@ export interface ActionQuantityParams {
 
 interface ProductSettings extends DatabaseSettings, ApolloServiceSettings {}
 
-interface ProductsThis extends Service<ProductSettings>, DatabaseMethods {};
-
-const ProductsService: ServiceSchema<ProductSettings> = {
+const ProductsService: ServiceSchema<ProductSettings, DbServiceMethods> = {
 	name: "products",
 	// version: 1
 
 	/**
 	 * Mixins. More info: https://moleculer.services/docs/0.15/services.html#Mixins
 	 */
-	mixins: [DbMixin("products")],
+	mixins: [DbMixin("products") as ServiceSchema],
 
 	/**
 	 * Settings. More info: https://moleculer.services/docs/0.15/services.html#Settings
@@ -161,7 +160,7 @@ const ProductsService: ServiceSchema<ProductSettings> = {
 			{{#apiGQL}}graphql: {
 				mutation: "increaseQuantity(id: String!, value: Int!): Product"
 			},{{/apiGQL}}
-			async handler(this: ProductsThis, ctx: Context<ActionQuantityParams>): Promise<ProductEntity> {
+			async handler(ctx: Context<ActionQuantityParams>): Promise<ProductEntity> {
 				// Get current quantity
 				const adapter = await this.getAdapter(ctx);
 				const dbEntry = await adapter.findById<ProductEntity>(ctx.params.id);
@@ -191,7 +190,7 @@ const ProductsService: ServiceSchema<ProductSettings> = {
 			{{#apiGQL}}graphql: {
 				mutation: "decreaseQuantity(id: String!, value: Int!): Product"
 			},{{/apiGQL}}
-			async handler(this: ProductsThis, ctx: Context<ActionQuantityParams>): Promise<ProductEntity> {
+			async handler(ctx: Context<ActionQuantityParams>): Promise<ProductEntity> {
 				// Get current quantity
 				const adapter = await this.getAdapter(ctx);
 				const dbEntry = await adapter.findById<ProductEntity>(ctx.params.id);
@@ -207,12 +206,13 @@ const ProductsService: ServiceSchema<ProductSettings> = {
 					quantity: newQuantity
 				});
 
+				{{#needChannels}}
 				if (doc.quantity === 0) {
 					this.logger.info(`Stock of ${doc.name} depleted... Ordering more`);
 					// Emit a persistent event to order more products
 					// inventory.service will handle this event
 					this.broker.sendToChannel("order.more", doc);
-				}
+				}{{/needChannels}}
 
 				return doc;
 			}
@@ -228,7 +228,7 @@ const ProductsService: ServiceSchema<ProductSettings> = {
 		 * It is called in the DB.mixin after the database
 		 * connection establishing & the collection is empty.
 		 */
-		async seedDB(this: ProductsThis) {
+		async seedDB() {
 			const adapter = await this.getAdapter();
 			await adapter.insertMany([
 				{ name: "Samsung Galaxy S10 Plus", quantity: 10, price: 704 },

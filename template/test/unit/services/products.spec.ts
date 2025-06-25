@@ -104,7 +104,7 @@ describe("Test 'products' service", () => {
 						value: -5
 					});
 				} catch (err) {
-					expect(err).toBeInstanceOf(ValidationError);
+					expect(err).toBeInstanceOf(Errors.ValidationError);
 					expect(err.data).toEqual([
 						{
 							action: "products.decreaseQuantity",

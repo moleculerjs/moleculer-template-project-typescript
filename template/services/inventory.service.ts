@@ -1,5 +1,10 @@
 import type { Context, Service, ServiceSchema, ServiceSettingSchema } from "moleculer";
 
+interface ReserveParams {
+	productId: string;
+	quantity: number;
+}
+
 const InventoryService: ServiceSchema = {
 	name: "inventory",
 
@@ -9,12 +14,10 @@ const InventoryService: ServiceSchema = {
 	channels: {
 		/**
 		 * Reserve a product in the inventory.
-		 *
-		 * @this {import('moleculer').Service}
 		 */
 		"inventory.reserve": {
 			context: true,
-			async handler(this: Service, ctx: Context<{ productId: string; quantity: number }>) {
+			async handler(ctx: Context<ReserveParams>) {
 				// Simulate external API call to reserve the quantity...
 				await new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -46,7 +49,7 @@ const InventoryService: ServiceSchema = {
 				productId: { type: "string" },
 				quantity: { type: "number" }
 			},
-			async handler(ctx: Context<{ productId: string; quantity: number }>) {
+			async handler(ctx: Context<ReserveParams>) {
 				await this.broker.sendToChannel(
 					"inventory.reserve",
 					{

@@ -1,14 +1,12 @@
-import type { Context, Service, ServiceSchema } from "moleculer";
+import type { Context, ServiceSettingSchema, ServiceSchema } from "moleculer";
 import type { DatabaseMethods } from "../moleculer-types.js";
 import { Service as DbService } from "@moleculer/database";
 
-export type DbServiceMethods = {
+export type DbServiceMethods = DatabaseMethods & {
 	seedDB?(): Promise<void>;
 };
 
-type DbServiceSchema = Partial<ServiceSchema>;
-
-export type DbServiceThis = Service & DbServiceMethods & DatabaseMethods;
+type DbServiceSchema = Partial<ServiceSchema<ServiceSettingSchema, DbServiceMethods>>;
 
 export default function (collection: string): DbServiceSchema {
 	const cacheCleanEventName = `cache.clean.${collection}`;
