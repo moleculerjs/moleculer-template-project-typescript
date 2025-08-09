@@ -6,6 +6,7 @@ import type { ApiSettingsSchema, Route, IncomingRequest, GatewayResponse } from 
 import SocketIOService from "moleculer-io";
 {{/apiIO}}
 {{#apiGQL}}
+import { ApolloService } from "moleculer-apollo-server";
 import type { ApolloServiceMethods, ApolloServiceLocalVars, ApolloServiceSettings } from "moleculer-apollo-server";
 import { GraphQLJSONObject } from "graphql-type-json";
 {{/apiGQL}}
