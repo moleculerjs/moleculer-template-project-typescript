@@ -9,6 +9,7 @@
     "dev": "tsx ./node_modules/moleculer/bin/moleculer-runner.js --config moleculer.config.ts --hot --repl services/**/*.service.ts",
     "start": "moleculer-runner --config dist/moleculer.config.js",
     "cli": "moleculer connect {{transporter}}",
+    "typecheck": "tsc --noEmit true",
     "ci": "vitest --watch",
     "test": "vitest --run --coverage"{{#lint}},
     "lint": "eslint",
