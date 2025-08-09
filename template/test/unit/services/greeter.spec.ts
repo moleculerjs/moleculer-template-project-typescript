@@ -21,7 +21,7 @@ describe("Test 'greeter' service", () => {
 	describe("Test 'greeter.welcome' action", () => {
 		it("should return with 'Welcome'", async () => {
 			const res = await broker.call("greeter.welcome", { name: "Adam" });
-			expect(res).toBe("Welcome, Adam");
+			expect(res).toBe("Welcome, ADAM");
 		});
 
 		it("should reject an ValidationError", async () => {

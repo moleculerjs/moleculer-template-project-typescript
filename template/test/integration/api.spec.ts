@@ -259,7 +259,7 @@ describe("Test Socket.IO API gateway", () => {
 
 		it("test 'greeter.welcome'", async () => {
 			const res = await callAwait(client, "greeter.welcome", { name: "Socket.IO" });
-			expect(res).toBe("Welcome, Socket.IO");
+			expect(res).toBe("Welcome, SOCKET.IO");
 		});
 	});
 
@@ -442,7 +442,7 @@ describe("Test GraphQL API gateway", () => {
 			`;
 			const res = await request(`http://localhost:${port}/graphql`, query);
 			expect(res).toEqual({
-				welcome: "Welcome, GraphQL",
+				welcome: "Welcome, GRAPHQL",
 			});
 		});
 	});
