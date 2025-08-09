@@ -157,13 +157,14 @@ describe("Test 'products' service", () => {
 		const broker = new ServiceBroker({ logger: false });
 		const createActionFn = vi.fn();
 		broker.createService({
-			mixins: [TestService],
+			name: "products",
+			mixins: [TestService as any],
 			actions: {
 				create: {
 					handler: createActionFn
 				}
 			}
-		});
+		} as unknown as ServiceSchema);
 
 		beforeAll(() => broker.start());
 		afterAll(() => broker.stop());
