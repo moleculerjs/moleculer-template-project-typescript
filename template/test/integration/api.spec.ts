@@ -1,16 +1,17 @@
 import { afterAll, beforeAll, describe, it, expect, vi } from "vitest";
 
-process.env.PORT = 0; // Use random ports during tests
+process.env.PORT = "0"; // Use random ports during tests
 
 import HTTPrequest from "supertest";
 {{#apiIO}}
 import io from "socket.io-client";
+import type { Socket } from "socket.io-client";
 {{/apiIO}}
 {{#apiGQL}}
 import { request, gql } from "graphql-request";
 {{/apiGQL}}
 
-import { Context, ServiceBroker } from "moleculer";
+import { ServiceBroker } from "moleculer";
 // Load service schemas
 import APISchema from "../../services/api.service.js";
 import GreeterSchema from "../../services/greeter.service.js";
@@ -22,28 +23,28 @@ describe("Test HTTP API gateway", () => {
 	const broker = new ServiceBroker({ logger: false });
 	broker.sendToChannel = vi.fn();
 
-	const greeterService = broker.createService(GreeterSchema);
-	const apiService = broker.createService(APISchema);
+	const greeterService = broker.createService(GreeterSchema) as any;
+	const apiService = broker.createService(APISchema) as any;
 	{{#dbService}}
-	const productsService = broker.createService(ProductsSchema);
-	productsService.seedDB = null; // Disable seeding
+	const productsService = broker.createService(ProductsSchema) as any;
+	(productsService as any).seedDB = null; // Disable seeding
 	{{/dbService}}
 
 	beforeAll(async () => {
 		await broker.start();
 
 		// Add small delay for API service to register product's custom endpoints
-		await broker.Promise.delay(500);
+		await (broker.Promise as any).delay(500);
 	});
 	afterAll(() => broker.stop());
 
-	let PHONE_ID;
+	let PHONE_ID: string;
 
 	describe('Test "greeter" endpoints', () => {
 		it("test '/api/greeter/hello'", () => {
 			return HTTPrequest(apiService.server)
 				.get("/api/greeter/hello")
-				.then(res => {
+				.then((res: any) => {
 					expect(res.body).toEqual("Hello Moleculer");
 				});
 		});
@@ -51,7 +52,7 @@ describe("Test HTTP API gateway", () => {
 		it("test '/api/unknown-route'", () => {
 			return HTTPrequest(apiService.server)
 				.get("/api/unknown-route")
-				.then(res => {
+				.then((res: any) => {
 					expect(res.statusCode).toBe(404);
 				});
 		});
@@ -62,7 +63,7 @@ describe("Test HTTP API gateway", () => {
 		it("test 'GET /api/products' - 'products.list' action", () => {
 			return HTTPrequest(apiService.server)
 				.get("/api/products/")
-				.then(res => {
+				.then((res: any) => {
 					expect(res.body).toEqual({
 						page: 1,
 						pageSize: 10,
@@ -76,7 +77,7 @@ describe("Test HTTP API gateway", () => {
 		it("test 'GET /api/products/all' - 'products.find' action - before insertion", () => {
 			return HTTPrequest(apiService.server)
 				.get("/api/products/all")
-				.then(res => {
+				.then((res: any) => {
 					expect(res.body).toEqual([]);
 				});
 		});
@@ -84,7 +85,7 @@ describe("Test HTTP API gateway", () => {
 		it("test 'GET /api/products/count' - 'products.count' action  - before insertion", () => {
 			return HTTPrequest(apiService.server)
 				.get("/api/products/count")
-				.then(res => {
+				.then((res: any) => {
 					expect(res.body).toEqual(0);
 				});
 		});
@@ -93,7 +94,7 @@ describe("Test HTTP API gateway", () => {
 			return HTTPrequest(apiService.server)
 				.post("/api/products")
 				.send({ name: "Super Phone", price: 123 })
-				.then(res => {
+				.then((res: any) => {
 					PHONE_ID = res.body.id;
 					expect(res.body).toEqual({
 						id: expect.any(String),
@@ -107,7 +108,7 @@ describe("Test HTTP API gateway", () => {
 		it("test 'GET /api/products/all' - 'products.find' action - after insertion", () => {
 			return HTTPrequest(apiService.server)
 				.get("/api/products/all")
-				.then(res => {
+				.then((res: any) => {
 					expect(res.body).toEqual([
 						{
 							id: expect.any(String),
@@ -122,7 +123,7 @@ describe("Test HTTP API gateway", () => {
 		it("test 'GET /api/products/count' - 'products.count' action - after insertion", () => {
 			return HTTPrequest(apiService.server)
 				.get("/api/products/count")
-				.then(res => {
+				.then((res: any) => {
 					expect(res.body).toEqual(1);
 				});
 		});
@@ -131,7 +132,7 @@ describe("Test HTTP API gateway", () => {
 			return HTTPrequest(apiService.server)
 				.patch(`/api/products/${PHONE_ID}`)
 				.send({ price: 999 })
-				.then(res => {
+				.then((res: any) => {
 					expect(res.body).toEqual({
 						id: expect.any(String),
 						name: "Super Phone",
@@ -145,7 +146,7 @@ describe("Test HTTP API gateway", () => {
 			return HTTPrequest(apiService.server)
 				.put(`/api/products/${PHONE_ID}`)
 				.send({ name: "Mega Phone", price: 999, quantity: 10 })
-				.then(res => {
+				.then((res: any) => {
 					expect(res.body).toEqual({
 						id: expect.any(String),
 						name: "Mega Phone",
@@ -159,7 +160,7 @@ describe("Test HTTP API gateway", () => {
 			return HTTPrequest(apiService.server)
 				.post("/api/products/increaseQuantity")
 				.send({ id: PHONE_ID, value: 10 })
-				.then(res => {
+				.then((res: any) => {
 					expect(res.body).toEqual({
 						id: expect.any(String),
 						name: "Mega Phone",
@@ -173,7 +174,7 @@ describe("Test HTTP API gateway", () => {
 			return HTTPrequest(apiService.server)
 				.post("/api/products/decreaseQuantity")
 				.send({ id: PHONE_ID, value: 5 })
-				.then(res => {
+				.then((res: any) => {
 					expect(res.body).toEqual({
 						id: expect.any(String),
 						name: "Mega Phone",
@@ -187,7 +188,7 @@ describe("Test HTTP API gateway", () => {
 			return HTTPrequest(apiService.server)
 				.post("/api/products/remove")
 				.send({ id: PHONE_ID })
-				.then(res => {
+				.then((res: any) => {
 					expect(res.body).toEqual(PHONE_ID);
 				});
 		});
@@ -195,7 +196,7 @@ describe("Test HTTP API gateway", () => {
 		it("test 'GET /api/products/all' - 'products.find' action - after removal", () => {
 			return HTTPrequest(apiService.server)
 				.get("/api/products/all")
-				.then(res => {
+				.then((res: any) => {
 					expect(res.body).toEqual([]);
 				});
 		});
@@ -203,7 +204,7 @@ describe("Test HTTP API gateway", () => {
 		it("test 'GET /api/products/count' - 'products.count' action  - after removal", () => {
 			return HTTPrequest(apiService.server)
 				.get("/api/products/count")
-				.then(res => {
+				.then((res: any) => {
 					expect(res.body).toEqual(0);
 				});
 		});
@@ -216,11 +217,11 @@ describe("Test Socket.IO API gateway", () => {
 	let broker = new ServiceBroker({ logger: false });
 	broker.sendToChannel = vi.fn();
 
-	let greeterService = broker.createService(GreeterSchema);
-	let apiService = broker.createService(APISchema);
+	let greeterService = broker.createService(GreeterSchema) as any;
+	let apiService = broker.createService(APISchema) as any;
 	{{#dbService}}
-	let productsService = broker.createService(ProductsSchema);
-	productsService.seedDB = null; // Disable seeding
+	let productsService = broker.createService(ProductsSchema) as any;
+	(productsService as any).seedDB = null; // Disable seeding
 	{{/dbService}}
 
 	beforeAll(() => broker.start());
@@ -233,9 +234,9 @@ describe("Test Socket.IO API gateway", () => {
 	 * @param {Object} params
 	 * @returns
 	 */
-	function callAwait(client, action, params) {
+	function callAwait(client: Socket, action: string, params?: any) {
 		return new Promise(function (resolve, reject) {
-			client.emit("call", action, params, function (err, res) {
+			client.emit("call", action, params, function (err: any, res: any) {
 				if (err) return reject(err);
 				resolve(res);
 			});
@@ -243,12 +244,12 @@ describe("Test Socket.IO API gateway", () => {
 	}
 
 	describe('Test "greeter" actions', () => {
-		let client;
-		let port;
+		let client: Socket;
+		let port: number;
 
 		beforeAll(() => {
 			port = apiService.io.httpServer.address().port;
-			client = io.connect(`ws://localhost:${port}`, { forceNew: true });
+			client = io(`ws://localhost:${port}`, { forceNew: true });
 		});
 		afterAll(() => client.disconnect());
 
@@ -265,13 +266,13 @@ describe("Test Socket.IO API gateway", () => {
 
 	{{#dbService}}
 	describe('Test "products" actions', () => {
-		let client;
-		let port;
-		let PHONE_ID;
+		let client: Socket;
+		let port: number;
+		let PHONE_ID: string;
 
 		beforeAll(() => {
 			port = apiService.io.httpServer.address().port;
-			client = io.connect(`ws://localhost:${port}`, { forceNew: true });
+			client = io(`ws://localhost:${port}`, { forceNew: true });
 		});
 		afterAll(() => client.disconnect());
 
@@ -295,7 +296,7 @@ describe("Test Socket.IO API gateway", () => {
 				name: "Super Phone",
 				price: 123
 			});
-			PHONE_ID = res.id;
+			PHONE_ID = (res as any).id;
 
 			expect(res).toEqual({
 				id: expect.any(String),
@@ -411,17 +412,17 @@ describe("Test GraphQL API gateway", () => {
 	let apiService = broker.createService(APISchema);
 	{{#dbService}}
 	let productsService = broker.createService(ProductsSchema);
-	productsService.seedDB = null; // Disable seeding
+	(productsService as any).seedDB = null; // Disable seeding
 	{{/dbService}}
 
 	beforeAll(() => broker.start());
 	afterAll(() => broker.stop());
 
 	describe('Test "greeter" actions', () => {
-		let port;
+		let port: number;
 
 		beforeAll(() => {
-			port = apiService.server.address().port;
+			port = (apiService as any).server.address().port;
 		});
 
 		it("test 'greeter.hello'", async () => {
@@ -449,11 +450,11 @@ describe("Test GraphQL API gateway", () => {
 
 	{{#dbService}}
 	describe('Test "product" actions', () => {
-		let port;
-		let PHONE_ID;
+		let port: number;
+		let PHONE_ID: string;
 
 		beforeAll(() => {
-			port = apiService.server.address().port;
+			port = (apiService as any).server.address().port;
 		});
 
 		it("test 'product.list'", async () => {
@@ -527,7 +528,7 @@ describe("Test GraphQL API gateway", () => {
 			`;
 			const res = await request(`http://localhost:${port}/graphql`, query);
 
-			PHONE_ID = res.createProduct.id;
+			PHONE_ID = (res as any).createProduct.id;
 
 			expect(res).toEqual({
 				createProduct: {

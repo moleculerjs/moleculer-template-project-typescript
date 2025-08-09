@@ -1,5 +1,5 @@
 import type { Context, ServiceSchema, ServiceSettingSchema } from "moleculer";
-import type { DatabaseSettings } from "../moleculer-types.js";
+import type { DatabaseSettings } from "@moleculer/database";
 import DbMixin from "../mixins/db.mixin.js";
 import type { DbServiceMethods } from "../mixins/db.mixin.js";
 {{#apiGQL}}import type { ApolloServiceSettings } from "moleculer-apollo-server";{{/apiGQL}}

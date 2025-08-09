@@ -1,6 +1,6 @@
 import type { Context, ServiceSettingSchema, ServiceSchema } from "moleculer";
-import type { DatabaseMethods } from "../moleculer-types.js";
 import { Service as DbService } from "@moleculer/database";
+import type { DatabaseMethods } from "@moleculer/database";
 
 export type DbServiceMethods = DatabaseMethods & {
 	seedDB?(): Promise<void>;

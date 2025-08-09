@@ -103,6 +103,6 @@
 
   "include": [
     "./**/*.ts",
-    "moleculer-types.d.ts"
+    "types/**/*.d.ts"
   ],
 }
