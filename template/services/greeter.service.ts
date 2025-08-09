@@ -90,7 +90,9 @@ const GreeterService: ServiceSchema<GreeterSettings, GreeterMethods, GreeterLoca
 	 * Service created lifecycle event handler
 	 * More info: https://moleculer.services/docs/0.15/lifecycle.html#created-event-handler
 	 */
-	created() {},
+	created() {
+		this.myVar = "myValue";
+	},
 
 	/**
 	 * Service started lifecycle event handler

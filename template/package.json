@@ -23,20 +23,17 @@
   ],
   "author": "",
   "devDependencies": {
-    "@types/node": "^22.15.29",
+    "@types/node": "^22.17.1",
     {{#lint}}
-		"@eslint/js": "^9.28.0",
-    "@vitest/coverage-v8": "^3.2.4",
-    "eslint": "^9.28.0",
-    "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-prettier": "^5.4.1",
-		"typescript-eslint": "^8.33.0",
-    "prettier": "^3.5.3",
+		"@eslint/js": "^9.33.0",
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+		"typescript-eslint": "^8.39.0",
+    "prettier": "^3.6.2",
     {{/lint}}
-    "jest": "^29.7.0",
-    "jest-cli": "^29.7.0",
     {{#apiGW}}
-    "supertest": "^7.1.1",
+    "supertest": "^7.1.4",
     {{/apiGW}}
     {{#apiIO}}
     "socket.io-client": "^4.8.1",
@@ -45,9 +42,10 @@
     "graphql-request": "^6.1.0",
     {{/apiGQL}}
     "moleculer-repl": "^0.7.4",
-		"tsx": "^4.19.4",
-		"typescript": "^5.8.3",
-		"vitest": "^3.1.4"
+		"tsx": "^4.20.3",
+		"typescript": "^5.9.2",
+		"vitest": "^3.2.4",
+    "@vitest/coverage-v8": "^3.2.4"
   },
   "dependencies": {
     {{#apiGW}}
@@ -55,8 +53,8 @@
     {{/apiGW}}
     {{#dbService}}
     "@moleculer/database": "^0.3.0",
-    "mongodb": "^6.17.0",
-    "@seald-io/nedb": "^4.1.1",
+    "mongodb": "^6.18.0",
+    "@seald-io/nedb": "^4.1.2",
     {{/dbService}}
     {{#nats}}
     "nats": "^2.29.3",
@@ -74,11 +72,11 @@
     "kafkajs": "^2.2.4",
     {{/kafka}}
     {{#redis}}
-    "ioredis": "^5.6.1",
+    "ioredis": "^5.7.0",
     {{/redis}}
     {{#apiGQL}}
-    "graphql": "^15.10.0",
-    "moleculer-apollo-server": "^0.3.8",
+    "graphql": "^16.11.0",
+    "moleculer-apollo-server": "github:moleculerjs/moleculer-apollo-server#next",
     "graphql-type-json": "^0.3.2",
     {{/apiGQL}}
     {{#needChannels}}
@@ -90,23 +88,8 @@
     {{#apiIO}}
     "moleculer-io": "^2.2.0",
     {{/apiIO}}
-    "moleculer": "^0.15.0-beta1"
+    "moleculer": "github:moleculerjs/moleculer#next"
   },
-  {{#apiGQL}}
-  "overrides": {
-    "@graphql-tools/links@7": {
-      "apollo-upload-client": "15.0.0"
-    },
-    "@graphql-tools/url-loader@6": {
-      "extract-files": "10.0.0"
-    },
-    "graphql-request": {
-      "extract-files": "10.0.0"
-    },
-    "apollo-upload-client": {
-      "extract-files": "10.0.0"
-    }
-  },{{/apiGQL}}
   "engines": {
     "node": ">= 20.x.x"
   }
