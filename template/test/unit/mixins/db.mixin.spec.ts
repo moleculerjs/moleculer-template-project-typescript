@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, it, expect, vi } from "vitest";
 
-import { Context, ServiceBroker } from "moleculer";
+import { ServiceBroker } from "moleculer";
 import DbMixin from "../../../mixins/db.mixin.js";
 
 describe("Test DB mixin", () => {
@@ -19,7 +19,7 @@ describe("Test DB mixin", () => {
 		});
 
 		it("check cache event handler", async () => {
-			vi.spyOn(broker.cacher, "clean");
+			vi.spyOn(broker.cacher!, "clean");
 
 			const schema = DbMixin("my-collection") as any;
 
@@ -58,7 +58,7 @@ describe("Test DB mixin", () => {
 			});
 
 			it("should call seedDB method", async () => {
-				const schema = DbMixin("my-collection");
+				const schema = DbMixin("my-collection") as any;
 
 				const adapterMock = {
 					count: vi.fn(async () => 0)
@@ -68,7 +68,7 @@ describe("Test DB mixin", () => {
 				});
 				const seedDBFn = vi.fn();
 
-				await schema.started.call({
+				await schema.started!.call({
 					broker,
 					logger: broker.logger,
 					getAdapter: getAdapterMock,
