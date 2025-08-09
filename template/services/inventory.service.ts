@@ -1,4 +1,4 @@
-import type { Context, Service, ServiceSchema, ServiceSettingSchema } from "moleculer";
+import type { Context, ServiceSchema } from "moleculer";
 
 interface ReserveParams {
 	productId: string;

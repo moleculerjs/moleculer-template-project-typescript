@@ -87,7 +87,7 @@ export default function (collection: string): DbServiceSchema {
 		 * Service started lifecycle event handler
 		 * More info: https://moleculer.services/docs/0.15/lifecycle.html#started-event-handler
 		 */
-		async started(this: DbServiceThis) {
+		async started() {
 			// Check the count of items in the DB. If it's empty,
 			// call the `seedDB` method of the service.
 			if (this.seedDB) {

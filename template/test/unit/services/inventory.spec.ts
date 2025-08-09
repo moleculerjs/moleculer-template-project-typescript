@@ -15,7 +15,8 @@ describe("Test 'inventory' service", () => {
 				}
 			})
 		]
-	});
+	}) as any;
+
 	// Mock adapter methods
 	broker.channelAdapter.init = vi.fn();
 	broker.channelAdapter.connect = vi.fn();
@@ -42,7 +43,7 @@ describe("Test 'inventory' service", () => {
 		};
 
 		// Use helper method to trigger the handler
-		const ctx = Context.create(broker, null, payload);
+		const ctx = Context.create(broker, null as any, payload);
 		await service.emitLocalChannelHandler("inventory.reserve", ctx);
 
 		// Check if inventory's method was called

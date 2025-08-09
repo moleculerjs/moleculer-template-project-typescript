@@ -2,11 +2,6 @@ import "moleculer";
 
 declare module "moleculer" {
 	interface ActionSchema {
-		graphql?: {
-			query?: string;
-			mutation?: string;
-		};
-
 		auth?: "required" | null | undefined;
 	}
 
@@ -22,12 +17,6 @@ declare module "moleculer" {
 			};
 		};
 	}
-}
-
-interface ApolloServiceSettings {
-	graphql?: {
-		type?: string;
-	};
 }
 
 interface DatabaseSettings {

@@ -1,13 +1,13 @@
 import { afterAll, beforeAll, describe, it, expect, vi } from "vitest";
 import { ServiceBroker } from "moleculer";
 import type { ServiceSchema } from "moleculer";
-import type { ProductEntity } from "../../services/products.service";
+import type { ProductEntity } from "../../services/products.service.js";
 import TestService from "../../services/products.service.js";
 
 describe("Test 'products' service", () => {
 	describe("Test actions", () => {
 		const broker = new ServiceBroker({ logger: false });
-		const service = broker.createService(TestService);
+		const service = broker.createService(TestService) as any;
 		service.seedDB = null; // Disable seeding
 
 		broker.sendToChannel = vi.fn();
@@ -19,7 +19,7 @@ describe("Test 'products' service", () => {
 			name: "Awesome item",
 			price: 999
 		};
-		let newID;
+		let newID: string;
 
 		it("should contains the seeded items", async () => {
 			const res = await broker.call("products.list");
@@ -27,7 +27,7 @@ describe("Test 'products' service", () => {
 		});
 
 		it("should add the new item", async () => {
-			const res = await broker.call("products.create", record);
+			const res = await broker.call<ProductEntity, Partial<ProductEntity>>("products.create", record);
 			expect(res).toEqual({
 				id: expect.any(String),
 				name: "Awesome item",

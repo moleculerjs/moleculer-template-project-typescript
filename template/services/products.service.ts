@@ -1,7 +1,8 @@
 import type { Context, ServiceSchema, ServiceSettingSchema } from "moleculer";
-import type { DatabaseSettings, ApolloServiceSettings } from "../moleculer-types.js";
+import type { DatabaseSettings } from "../moleculer-types.js";
 import DbMixin from "../mixins/db.mixin.js";
 import type { DbServiceMethods } from "../mixins/db.mixin.js";
+{{#apiGQL}}import type { ApolloServiceSettings } from "moleculer-apollo-server";{{/apiGQL}}
 
 export interface ProductEntity {
 	id: string;
@@ -17,9 +18,9 @@ export interface ActionQuantityParams {
 	value: number;
 }
 
-interface ProductSettings extends DatabaseSettings, ApolloServiceSettings {}
+interface ProductSettings extends DatabaseSettings, {{#apiGQL}}ApolloServiceSettings, {{/apiGQL}}ServiceSettingSchema {}
 
-const ProductsService: ServiceSchema<ProductSettings, DbServiceMethods, ServiceSettingSchema> = {
+const ProductsService: ServiceSchema<ProductSettings, DbServiceMethods> = {
 	name: "products",
 	// version: 1
 

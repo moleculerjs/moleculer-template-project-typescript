@@ -6,7 +6,7 @@ import type { ApiSettingsSchema, Route, IncomingRequest, GatewayResponse } from 
 import SocketIOService from "moleculer-io";
 {{/apiIO}}
 {{#apiGQL}}
-import { ApolloService } from "moleculer-apollo-server";
+import type { ApolloServiceMethods, ApolloServiceLocalVars, ApolloServiceSettings } from "moleculer-apollo-server";
 import { GraphQLJSONObject } from "graphql-type-json";
 {{/apiGQL}}
 
@@ -20,7 +20,7 @@ interface Meta {
 	user?: MetaUser | null | undefined;
 }
 
-const ApiService: ServiceSchema<ApiSettingsSchema> = {
+const ApiService: ServiceSchema<ApiSettingsSchema {{#apiGQL}}& ApolloServiceSettings, ApolloServiceMethods, ApolloServiceLocalVars{{/apiGQL}}> = {
 	name: "api",
 
 	/**
@@ -29,7 +29,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema> = {
 	mixins: [
 		ApiGateway,
 		{{#apiIO}}
-		SocketIOService,
+		SocketIOService as ServiceSchema,
 		{{/apiIO}}
 		{{#apiGQL}}
 		ApolloService({

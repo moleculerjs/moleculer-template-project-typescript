@@ -7,7 +7,7 @@ import TestService from "../../../services/products.service.js";
 describe("Test 'products' service", () => {
 	describe("Test actions", () => {
 		const broker = new ServiceBroker({ logger: false });
-		const service = broker.createService(TestService);
+		const service = broker.createService(TestService) as any;
 
 		service.seedDB = vi.fn();
 		vi.spyOn(service, "updateEntity");
@@ -122,7 +122,7 @@ describe("Test 'products' service", () => {
 
 	describe("Test methods", () => {
 		const broker = new ServiceBroker({ logger: false });
-		const service = broker.createService(TestService);
+		const service = broker.createService(TestService) as any;
 
 		vi.spyOn(service, "seedDB");
 
