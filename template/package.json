@@ -53,7 +53,7 @@
     "moleculer-web": "github:moleculerjs/moleculer-web#next",
     {{/apiGW}}
     {{#dbService}}
-    "@moleculer/database": "^0.3.0",
+    "@moleculer/database": "github:moleculerjs/database#next",
     "mongodb": "^6.18.0",
     "@seald-io/nedb": "^4.1.2",
     {{/dbService}}
