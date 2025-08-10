@@ -1,11 +1,14 @@
-import type { Context, ServiceSchema } from "moleculer";
+import type { Context, ServiceSchema, ServiceSettingSchema } from "moleculer";
 
 interface ReserveParams {
 	productId: string;
 	quantity: number;
 }
+interface LocalMethods {
+	uppercase(text: string): string;
+}
 
-const InventoryService: ServiceSchema = {
+const InventoryService: ServiceSchema<ServiceSettingSchema, LocalMethods> = {
 	name: "inventory",
 
 	/**
@@ -24,6 +27,8 @@ const InventoryService: ServiceSchema = {
 				this.logger.info(
 					`Reserve ${ctx.params.quantity} pieces of the ${ctx.params.productId} product in the inventory.`
 				);
+
+				this.uppercase("Hello");
 
 				await ctx.emit("inventory.reserved", {
 					productId: ctx.params.productId,
@@ -61,6 +66,12 @@ const InventoryService: ServiceSchema = {
 
 				return true;
 			}
+		}
+	},
+
+	methods: {
+		uppercase(text: string): string {
+			return text.toUpperCase();
 		}
 	}
 };

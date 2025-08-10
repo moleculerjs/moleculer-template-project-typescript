@@ -81,7 +81,7 @@
     "graphql-type-json": "^0.3.2",
     {{/apiGQL}}
     {{#needChannels}}
-    "@moleculer/channels": "^0.2.0",
+    "@moleculer/channels": "github:moleculerjs/moleculer-channels#next",
     {{/needChannels}}
     {{#needWorkflows}}
     "@moleculer/workflows": "^0.1.2",
