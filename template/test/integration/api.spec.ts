@@ -23,11 +23,11 @@ describe("Test HTTP API gateway", () => {
 	const broker = new ServiceBroker({ logger: false });
 	broker.sendToChannel = vi.fn();
 
-	const greeterService = broker.createService(GreeterSchema) as any;
-	const apiService = broker.createService(APISchema) as any;
+	const greeterService = broker.createService(GreeterSchema);
+	const apiService = broker.createService(APISchema);
 	{{#dbService}}
-	const productsService = broker.createService(ProductsSchema) as any;
-	(productsService as any).seedDB = null; // Disable seeding
+	const productsService = broker.createService(ProductsSchema);
+	productsService.seedDB = undefined; // Disable seeding
 	{{/dbService}}
 
 	beforeAll(async () => {
@@ -217,11 +217,11 @@ describe("Test Socket.IO API gateway", () => {
 	let broker = new ServiceBroker({ logger: false });
 	broker.sendToChannel = vi.fn();
 
-	let greeterService = broker.createService(GreeterSchema) as any;
-	let apiService = broker.createService(APISchema) as any;
+	let greeterService = broker.createService(GreeterSchema);
+	let apiService = broker.createService(APISchema);
 	{{#dbService}}
-	let productsService = broker.createService(ProductsSchema) as any;
-	(productsService as any).seedDB = null; // Disable seeding
+	let productsService = broker.createService(ProductsSchema);
+	productsService.seedDB = undefined; // Disable seeding
 	{{/dbService}}
 
 	beforeAll(() => broker.start());
@@ -412,7 +412,7 @@ describe("Test GraphQL API gateway", () => {
 	let apiService = broker.createService(APISchema);
 	{{#dbService}}
 	let productsService = broker.createService(ProductsSchema);
-	(productsService as any).seedDB = null; // Disable seeding
+	productsService.seedDB = undefined; // Disable seeding
 	{{/dbService}}
 
 	beforeAll(() => broker.start());

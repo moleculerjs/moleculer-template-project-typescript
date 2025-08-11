@@ -2,16 +2,17 @@ import { afterAll, beforeAll, describe, it, expect, vi } from "vitest";
 
 import { Context, Errors, ServiceBroker } from "moleculer";
 import type { ServiceSchema } from "moleculer";
+import type { BaseAdapter } from "@moleculer/database";
 import TestService from "../../../services/products.service.js";
 
 describe("Test 'products' service", () => {
 	describe("Test actions", () => {
 		const broker = new ServiceBroker({ logger: false });
-		const service = broker.createService(TestService) as any;
+		const service = broker.createService(TestService);
 
 		service.seedDB = vi.fn();
-		vi.spyOn(service, "updateEntity");
-		vi.spyOn(service, "entityChanged");
+		const mockedUpdateEntity = vi.spyOn(service, "updateEntity");
+		const mockedEntityChanged = vi.spyOn(service, "entityChanged");
 
 		const record = {
 			_id: "123",
@@ -63,8 +64,8 @@ describe("Test 'products' service", () => {
 
 		describe("Test 'products.decreaseQuantity'", () => {
 			it("should call the adapter updateById method & transform result", async () => {
-				service.updateEntity.mockClear();
-				service.entityChanged.mockClear();
+				mockedUpdateEntity.mockClear();
+				mockedEntityChanged.mockClear();
 
 				const res = await broker.call("products.decreaseQuantity", {
 					id: "123",
@@ -94,8 +95,8 @@ describe("Test 'products' service", () => {
 			});
 
 			it("should throw error if params is not valid", async () => {
-				service.updateEntity.mockClear();
-				service.entityChanged.mockClear();
+				mockedUpdateEntity.mockClear();
+				mockedEntityChanged.mockClear();
 
 				expect.assertions(2);
 				try {
@@ -122,7 +123,7 @@ describe("Test 'products' service", () => {
 
 	describe("Test methods", () => {
 		const broker = new ServiceBroker({ logger: false });
-		const service = broker.createService(TestService) as any;
+		const service = broker.createService(TestService);
 
 		vi.spyOn(service, "seedDB");
 
@@ -131,7 +132,7 @@ describe("Test 'products' service", () => {
 			count: vi.fn(async () => 0),
 			insertMany: vi.fn()
 		};
-		service.getAdapter = async () => adapter;
+		service.getAdapter = async () => adapter as any as BaseAdapter;
 
 		beforeAll(() => broker.start());
 		afterAll(() => broker.stop());

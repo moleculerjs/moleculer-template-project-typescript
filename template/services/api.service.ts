@@ -1,5 +1,5 @@
 import type { Context, ServiceSchema } from "moleculer";
-
+import type { Server as HttpServer } from 'http';
 import ApiGateway from "moleculer-web";
 import type { ApiSettingsSchema, Route, IncomingRequest, GatewayResponse } from "moleculer-web";
 {{#apiIO}}
@@ -21,7 +21,12 @@ interface Meta {
 	user?: MetaUser | null | undefined;
 }
 
-const ApiService: ServiceSchema<ApiSettingsSchema {{#apiGQL}}& ApolloServiceSettings, ApolloServiceMethods, ApolloServiceLocalVars{{/apiGQL}}> = {
+interface LocalVars {
+	server: HttpServer;
+	io: any;
+}
+
+const ApiService: ServiceSchema<ApiSettingsSchema {{#apiGQL}}& ApolloServiceSettings, ApolloServiceMethods, LocalVars & ApolloServiceLocalVars{{/apiGQL}}> = {
 	name: "api",
 
 	/**

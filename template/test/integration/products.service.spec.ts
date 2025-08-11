@@ -7,8 +7,8 @@ import TestService from "../../services/products.service.js";
 describe("Test 'products' service", () => {
 	describe("Test actions", () => {
 		const broker = new ServiceBroker({ logger: false });
-		const service = broker.createService(TestService) as any;
-		service.seedDB = null; // Disable seeding
+		const service = broker.createService(TestService);
+		service.seedDB = undefined; // Disable seeding
 
 		broker.sendToChannel = vi.fn();
 
