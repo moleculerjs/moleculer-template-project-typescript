@@ -159,7 +159,7 @@ describe("Test 'products' service", () => {
 		const createActionFn = vi.fn();
 		broker.createService({
 			name: "products",
-			mixins: [TestService as any],
+			mixins: [TestService],
 			actions: {
 				create: {
 					handler: createActionFn

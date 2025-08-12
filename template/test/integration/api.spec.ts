@@ -16,7 +16,7 @@ import { ServiceBroker } from "moleculer";
 import APISchema from "../../services/api.service.js";
 import GreeterSchema from "../../services/greeter.service.js";
 {{#dbService}}
-import ProductsSchema from "../../services/products.service.js";
+import ProductsSchema, { ProductEntity } from "../../services/products.service.js";
 {{/dbService}}
 
 describe("Test HTTP API gateway", () => {
@@ -34,7 +34,7 @@ describe("Test HTTP API gateway", () => {
 		await broker.start();
 
 		// Add small delay for API service to register product's custom endpoints
-		await (broker.Promise as any).delay(500);
+		await new Promise(resolve => setTimeout(resolve, 500));
 	});
 	afterAll(() => broker.stop());
 
@@ -234,9 +234,9 @@ describe("Test Socket.IO API gateway", () => {
 	 * @param {Object} params
 	 * @returns
 	 */
-	function callAwait(client: Socket, action: string, params?: any) {
+	function callAwait<TResult = unknown>(client: Socket, action: string, params?: any): Promise<TResult> {
 		return new Promise(function (resolve, reject) {
-			client.emit("call", action, params, function (err: any, res: any) {
+			client.emit("call", action, params, function (err: any, res: TResult) {
 				if (err) return reject(err);
 				resolve(res);
 			});
@@ -292,11 +292,11 @@ describe("Test Socket.IO API gateway", () => {
 		});
 
 		it("test 'products.create'", async () => {
-			const res = await callAwait(client, "products.create", {
+			const res = await callAwait<ProductEntity>(client, "products.create", {
 				name: "Super Phone",
 				price: 123
 			});
-			PHONE_ID = (res as any).id;
+			PHONE_ID = res.id;
 
 			expect(res).toEqual({
 				id: expect.any(String),
@@ -526,9 +526,9 @@ describe("Test GraphQL API gateway", () => {
 					}
 				}
 			`;
-			const res = await request(`http://localhost:${port}/graphql`, query);
+			const res = await request<{ createProduct: ProductEntity }>(`http://localhost:${port}/graphql`, query);
 
-			PHONE_ID = (res as any).createProduct.id;
+			PHONE_ID = res.createProduct.id;
 
 			expect(res).toEqual({
 				createProduct: {

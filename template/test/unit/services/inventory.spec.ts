@@ -14,15 +14,15 @@ describe("Test 'inventory' service", () => {
 				}
 			})
 		]
-	}) as any;
+	});
 
 	// Mock adapter methods
-	broker.channelAdapter.init = vi.fn();
-	broker.channelAdapter.connect = vi.fn();
-	broker.channelAdapter.disconnect = vi.fn();
-	broker.channelAdapter.subscribe = vi.fn();
-	broker.channelAdapter.unsubscribe = vi.fn();
-	broker.channelAdapter.publish = vi.fn();
+	(broker as any).channelAdapter.init = vi.fn();
+	(broker as any).channelAdapter.connect = vi.fn();
+	(broker as any).channelAdapter.disconnect = vi.fn();
+	(broker as any).channelAdapter.subscribe = vi.fn();
+	(broker as any).channelAdapter.unsubscribe = vi.fn();
+	(broker as any).channelAdapter.publish = vi.fn();
 
 	broker.emit = vi.fn();
 
