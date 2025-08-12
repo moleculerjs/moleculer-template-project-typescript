@@ -1,7 +1,6 @@
-import { afterAll, beforeAll, describe, it, expect, vi } from "vitest";
+import { afterAll, beforeAll, describe, it, expect } from "vitest";
 
 import { Errors, ServiceBroker } from "moleculer";
-import type { ServiceSchema } from "moleculer";
 import TestService from "../../../services/greeter.service.js";
 
 describe("Test 'greeter' service", () => {

@@ -1,7 +1,6 @@
 import { afterAll, beforeAll, describe, it, expect, vi } from "vitest";
 
-import { Context, Errors, ServiceBroker } from "moleculer";
-import type { ServiceSchema } from "moleculer";
+import { Context, ServiceBroker } from "moleculer";
 import TestService from "../../../services/inventory.service.js";
 import { Middleware as ChannelMiddleware } from "@moleculer/channels";
 
@@ -28,10 +27,6 @@ describe("Test 'inventory' service", () => {
 	broker.emit = vi.fn();
 
 	const service = broker.createService(TestService);
-
-	// Store the reference to the original orderProduct method
-	const ORIGINAL_ORDER_PRODUCT = service.orderProduct;
-	service.orderProduct = vi.fn();
 
 	beforeAll(() => broker.start());
 	afterAll(() => broker.stop());
