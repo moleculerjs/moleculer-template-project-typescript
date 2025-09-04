@@ -34,6 +34,7 @@
     "prettier": "^3.6.2",
     {{/lint}}
     {{#apiGW}}
+    "@types/supertest": "^6.0.3",
     "supertest": "^7.1.4",
     {{/apiGW}}
     {{#apiIO}}
