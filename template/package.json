@@ -90,6 +90,7 @@
     {{#apiIO}}
     "moleculer-io": "^2.2.0",
     {{/apiIO}}
+    "lodash": "^4.17.21",
     "moleculer": "github:moleculerjs/moleculer#next"
   },
   "engines": {
