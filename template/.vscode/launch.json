@@ -10,39 +10,19 @@
 			"name": "Debug",
 			"program": "${workspaceRoot}/node_modules/moleculer/bin/moleculer-runner.js",
 			"sourceMaps": true,
-			"runtimeArgs": [
-				"-r",
-				"ts-node/register"
-			],
+			"runtimeExecutable": "tsx",
 			"cwd": "${workspaceRoot}",
 			"args": [
 				"services/**/*.service.ts"
-			]
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "Jest",
-			"program": "${workspaceRoot}/node_modules/jest-cli/bin/jest.js",
-			"args": [
-				"--runInBand"
 			],
-			"cwd": "${workspaceRoot}",
-			"runtimeArgs": [
-				"--nolazy"
+			// Files to exclude from debugger (e.g. call stack)
+			"skipFiles": [
+				// Node.js internal core modules
+				"<node_internals>/**",
+
+				// Ignore all dependencies (optional)
+				"${workspaceFolder}/node_modules/**"
 			]
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "Jest single",
-			"program": "${workspaceRoot}/node_modules/jest-cli/bin/jest.js",
-			"args": ["--runInBand", "${fileBasenameNoExtension}"],
-			"console": "internalConsole",
-			"cwd": "${workspaceRoot}",
-			"runtimeArgs": [
-                "--nolazy"
-            ]
 		}		
 	]
 }
