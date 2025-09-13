@@ -27,7 +27,7 @@ const ProductsService: ServiceSchema<ProductSettings, DbServiceMethods> = {
 	/**
 	 * Mixins. More info: https://moleculer.services/docs/0.15/services.html#Mixins
 	 */
-	mixins: [DbMixin("products") as ServiceSchema],
+	mixins: [DbMixin({ collection: "products" }) as ServiceSchema],
 
 	/**
 	 * Settings. More info: https://moleculer.services/docs/0.15/services.html#Settings

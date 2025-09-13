@@ -1,14 +1,48 @@
 import type { Context, ServiceSettingSchema, ServiceSchema } from "moleculer";
 import { Service as DbService } from "@moleculer/database";
-import type { DatabaseMethods } from "@moleculer/database";
+import type { DatabaseMethods, DatabaseMixinOptions } from "@moleculer/database";
+import _ from "lodash";
+import process from "node:process";
 
 export type DbServiceMethods = DatabaseMethods & {
 	seedDB?(): Promise<void>;
 };
 
+export interface DbMixinOpts extends DatabaseMixinOptions{
+	collection: string;
+}
+
 type DbServiceSchema = Partial<ServiceSchema<ServiceSettingSchema, DbServiceMethods>>;
 
-export default function (collection: string): DbServiceSchema {
+export default function (opts: DbMixinOpts): DbServiceSchema {
+	const collection = opts?.collection;
+
+	opts = _.defaultsDeep(opts, {
+		adapter:
+			// In production use MongoDB
+			process.env.DB_URI?.startsWith("mongodb://")
+				? {
+						type: "MongoDB",
+						options: {
+							uri: process.env.DB_URI
+						}
+					}
+				: {
+						type: "NeDB",
+						options:
+							// In unit/integration tests use in-memory DB. Jest sets the NODE_ENV automatically
+							// During dev use file storage
+							process.env.NODE_ENV === "test"
+								? {
+										neDB: {
+											inMemoryOnly: true
+										}
+									}
+								: `./data/${collection}.db`
+					},
+		strict: false
+	});
+
 	const cacheCleanEventName = `cache.clean.${collection}`;
 
 	const schema: DbServiceSchema = {
@@ -17,31 +51,7 @@ export default function (collection: string): DbServiceSchema {
 		 */
 		mixins: [
 			// @moleculer/database config: More info: https://github.com/moleculerjs/database
-			DbService({
-				adapter:
-					// In production use MongoDB
-					process.env.DB_URI?.startsWith("mongodb://")
-						? {
-								type: "MongoDB",
-								options: {
-									uri: process.env.DB_URI
-								}
-							}
-						: {
-								type: "NeDB",
-								options:
-									// In unit/integration tests use in-memory DB. Jest sets the NODE_ENV automatically
-									// During dev use file storage
-									process.env.NODE_ENV === "test"
-										? {
-												neDB: {
-													inMemoryOnly: true
-												}
-											}
-										: `./data/${collection}.db`
-							},
-				strict: false
-			})
+			DbService(opts)
 		],
 
 		/**
@@ -53,33 +63,7 @@ export default function (collection: string): DbServiceSchema {
 			 * clean the cache entries for this service.
 			 */
 			async [cacheCleanEventName]() {
-				if (this.broker.cacher) {
-					await this.broker.cacher.clean(`${this.fullName}.*`);
-				}
-			}
-		},
-
-		/**
-		 * Methods. More info: https://moleculer.services/docs/0.15/services.html#Methods
-		 */
-		methods: {
-			/**
-			 * Send a cache clearing event when an entity changed.
-			 *
-			 * @param {String} type
-			 * @param {object} data
-			 * @param {object} oldData
-			 * @param {Context} ctx
-			 * @param {object} opts
-			 */
-			async entityChanged(
-				type: string,
-				data: object,
-				oldData: object,
-				ctx: Context,
-				opts: object
-			) {
-				ctx.broadcast(cacheCleanEventName);
+				await this.broker.cacher?.clean(`${this.fullName}.*`);
 			}
 		},
 

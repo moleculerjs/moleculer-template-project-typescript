@@ -11,7 +11,7 @@ describe("Test DB mixin", () => {
 		afterAll(() => broker.stop());
 
 		it("check schema properties", async () => {
-			const schema = DbMixin("my-collection") as any;
+			const schema = DbMixin({ collection: "my-collection" }) as any;
 
 			expect(schema.started).toBeDefined();
 			expect(schema.events["cache.clean.my-collection"]).toBeInstanceOf(Function);
@@ -21,7 +21,7 @@ describe("Test DB mixin", () => {
 		it("check cache event handler", async () => {
 			vi.spyOn(broker.cacher!, "clean");
 
-			const schema = DbMixin("my-collection") as any;
+			const schema = DbMixin({ collection: "my-collection" }) as any;
 
 			await schema.events["cache.clean.my-collection"].call({
 				broker,
@@ -34,7 +34,7 @@ describe("Test DB mixin", () => {
 
 		describe("Check service started handler", () => {
 			it("should not call seedDB method", async () => {
-				const schema = DbMixin("my-collection") as any;
+				const schema = DbMixin({ collection: "my-collection" }) as any;
 
 				const adapterMock = {
 					count: vi.fn(async () => 10)
@@ -58,7 +58,7 @@ describe("Test DB mixin", () => {
 			});
 
 			it("should call seedDB method", async () => {
-				const schema = DbMixin("my-collection") as any;
+				const schema = DbMixin({ collection: "my-collection" }) as any;
 
 				const adapterMock = {
 					count: vi.fn(async () => 0)
@@ -84,7 +84,7 @@ describe("Test DB mixin", () => {
 		});
 
 		it("should broadcast a cache clear event", async () => {
-			const schema = DbMixin("my-collection");
+			const schema = DbMixin({ collection: "my-collection" });
 
 			const ctx = {
 				broadcast: vi.fn()
