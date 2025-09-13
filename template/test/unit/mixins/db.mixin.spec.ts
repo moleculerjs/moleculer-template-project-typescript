@@ -15,7 +15,6 @@ describe("Test DB mixin", () => {
 
 			expect(schema.started).toBeDefined();
 			expect(schema.events["cache.clean.my-collection"]).toBeInstanceOf(Function);
-			expect(schema.methods.entityChanged).toBeInstanceOf(Function);
 		});
 
 		it("check cache event handler", async () => {
@@ -81,19 +80,6 @@ describe("Test DB mixin", () => {
 				expect(seedDBFn).toBeCalledTimes(1);
 				expect(seedDBFn).toBeCalledWith();
 			});
-		});
-
-		it("should broadcast a cache clear event", async () => {
-			const schema = DbMixin({ collection: "my-collection" });
-
-			const ctx = {
-				broadcast: vi.fn()
-			};
-
-			await schema.methods!.entityChanged(null, null, null, ctx);
-
-			expect(ctx.broadcast).toBeCalledTimes(1);
-			expect(ctx.broadcast).toBeCalledWith("cache.clean.my-collection");
 		});
 	});
 });

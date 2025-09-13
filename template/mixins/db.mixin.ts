@@ -1,4 +1,4 @@
-import type { Context, ServiceSettingSchema, ServiceSchema } from "moleculer";
+import type { ServiceSettingSchema, ServiceSchema } from "moleculer";
 import { Service as DbService } from "@moleculer/database";
 import type { DatabaseMethods, DatabaseMixinOptions } from "@moleculer/database";
 import _ from "lodash";
@@ -8,7 +8,7 @@ export type DbServiceMethods = DatabaseMethods & {
 	seedDB?(): Promise<void>;
 };
 
-export interface DbMixinOpts extends DatabaseMixinOptions{
+export interface DbMixinOpts extends DatabaseMixinOptions {
 	collection: string;
 }
 
@@ -89,4 +89,4 @@ export default function (opts: DbMixinOpts): DbServiceSchema {
 	};
 
 	return schema;
-};
+}

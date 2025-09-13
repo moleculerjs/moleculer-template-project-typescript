@@ -1,5 +1,5 @@
 import type { Context, ServiceSchema } from "moleculer";
-import type { Server as HttpServer } from 'http';
+import type { Server as HttpServer } from "http";
 import ApiGateway from "moleculer-web";
 import type { ApiSettingsSchema, Route, IncomingRequest, GatewayResponse } from "moleculer-web";
 {{#apiIO}}
@@ -7,7 +7,11 @@ import SocketIOService from "moleculer-io";
 {{/apiIO}}
 {{#apiGQL}}
 import { ApolloService } from "moleculer-apollo-server";
-import type { ApolloServiceMethods, ApolloServiceLocalVars, ApolloServiceSettings } from "moleculer-apollo-server";
+import type {
+	ApolloServiceMethods,
+	ApolloServiceLocalVars,
+	ApolloServiceSettings
+} from "moleculer-apollo-server";
 import { GraphQLJSONObject } from "graphql-type-json";
 {{/apiGQL}}
 
@@ -24,6 +28,10 @@ interface Meta {
 interface LocalVars {
 	server: HttpServer;
 	io: any;
+}
+
+if (process.env.TEST === "true") {
+	process.env.PORT = "0"; // Use random ports during tests
 }
 
 const ApiService: ServiceSchema<ApiSettingsSchema {{#apiGQL}}& ApolloServiceSettings, ApolloServiceMethods, LocalVars & ApolloServiceLocalVars{{/apiGQL}}> = {
@@ -60,7 +68,7 @@ const ApiService: ServiceSchema<ApiSettingsSchema {{#apiGQL}}& ApolloServiceSett
 	/** More info: https://moleculer.services/docs/0.15/moleculer-web.html */
 	settings: {
 		// Exposed port
-		port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
+		port: process.env.PORT != null ? parseInt(process.env.PORT) : 3000,
 
 		// Exposed IP
 		ip: "0.0.0.0",

@@ -1,4 +1,4 @@
-import type { Context, Service, ServiceSchema, ServiceSettingSchema } from "moleculer";
+import type { Context, Service, ServiceSchema } from "moleculer";
 
 interface WorkflowPayload {
 	card?: string;
