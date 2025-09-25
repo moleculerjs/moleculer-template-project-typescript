@@ -79,7 +79,7 @@
     {{/redis}}
     {{#apiGQL}}
     "graphql": "^16.11.0",
-    "moleculer-apollo-server": "github:moleculerjs/moleculer-apollo-server#next",
+    "moleculer-apollo-server": "^0.4.0",
     "graphql-type-json": "^0.3.2",
     {{/apiGQL}}
     {{#needChannels}}
