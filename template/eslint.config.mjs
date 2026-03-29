@@ -24,7 +24,8 @@ export default tseslint.config(
 	{
 		files: ["test/**/*.ts"],
 		rules: {
-			"no-unused-vars": ["off"]
+			"no-unused-vars": ["off"],
+			"@typescript-eslint/no-explicit-any": ["off"]
 		}
 	}
 );
