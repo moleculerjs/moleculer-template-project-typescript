@@ -1,31 +1,28 @@
-FROM node:16 as build
+FROM node:22 AS build
 
-WORKDIR /tmp/app
+WORKDIR /app
 
-# Install dependencies
-COPY package.json package-lock.json ./
-RUN npm ci --silent
+COPY package*.json ./
 
-# Copy source
+RUN npm ci --legacy-peer-deps
+
 COPY . .
 
 # Build
 RUN npm run build
 
 # -------------------
-FROM node:16-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 
-# Copy source
-COPY . .
+ENV NODE_ENV=production
+
+COPY package*.json ./
+RUN npm ci --omit=dev --legacy-peer-deps
 
 # Copy built files
-COPY --from=build /tmp/app/dist .
-
-# Build and cleanup
-ENV NODE_ENV=production
-RUN npm ci --omit=dev
+COPY --from=build /app/dist .
 
 # Start server
-CMD ["node", "./node_modules/moleculer/bin/moleculer-runner.js"]
+CMD ["node", "node_modules/moleculer/bin/moleculer-runner.js"]

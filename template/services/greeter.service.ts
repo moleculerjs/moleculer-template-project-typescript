@@ -1,4 +1,4 @@
-import type { Context, Service, ServiceSchema, ServiceSettingSchema } from "moleculer";
+import type { Context, ServiceSchema, ServiceSettingSchema } from "moleculer";
 
 export interface ActionHelloParams {
 	name: string;
@@ -16,72 +16,95 @@ interface GreeterLocalVars {
 	myVar: string;
 }
 
-type GreeterThis = Service<GreeterSettings> & GreeterMethods & GreeterLocalVars;
-
-const GreeterService: ServiceSchema<GreeterSettings> = {
+const GreeterService: ServiceSchema<GreeterSettings, GreeterMethods, GreeterLocalVars> = {
 	name: "greeter",
 
 	/**
-	 * Settings
+	 * Settings. More info: https://moleculer.services/docs/0.15/services.html#Settings
 	 */
 	settings: {
-		defaultName: "Moleculer",
+		defaultName: "Moleculer"
 	},
 
 	/**
-	 * Dependencies
+	 * Dependencies. More info: https://moleculer.services/docs/0.15/services.html#Dependencies
 	 */
 	dependencies: [],
 
 	/**
-	 * Actions
+	 * Actions. More info: https://moleculer.services/docs/0.15/actions.html
 	 */
 	actions: {
+		/**
+		 * Say a 'Hello' action.
+		 *
+		 * @returns
+		 */
 		hello: {
 			rest: {
 				method: "GET",
-				path: "/hello",
+				path: "/hello"
 			},
-			handler(this: GreeterThis/* , ctx: Context */): string {
-				return `Hello ${this.settings.defaultName}`;
-			},
+			{{#apiGQL}}graphql: {
+				query: "hello: String"
+			},{{/apiGQL}}
+			async handler(/* , ctx: Context */): Promise<string> {
+				return "Hello Moleculer";
+			}
 		},
 
+		/**
+		 * Welcome, a username
+		 *
+		 * @param {String} name - User name
+		 */
 		welcome: {
-			rest: "GET /welcome/:name",
+			rest: "/welcome",
 			params: {
-				name: "string",
+				name: "string"
 			},
-			handler(this: GreeterThis, ctx: Context<ActionHelloParams>): string {
-				return `Welcome, ${ctx.params.name}`;
-			},
-		},
+			{{#apiGQL}}graphql: {
+				mutation: "welcome(name: String!): String"
+			},{{/apiGQL}}
+			async handler(ctx: Context<ActionHelloParams>): Promise<string> {
+				return `Welcome, ${this.uppercase(ctx.params.name)}`;
+			}
+		}
 	},
 
 	/**
-	 * Events
+	 * Events. More info: https://moleculer.services/docs/0.15/events.html
 	 */
 	events: {},
 
 	/**
-	 * Methods
+	 * Methods. More info: https://moleculer.services/docs/0.15/services.html#Methods
 	 */
-	methods: {},
+	methods: {
+		uppercase(str: string): string {
+			return str.toUpperCase();
+		}
+	},
 
 	/**
 	 * Service created lifecycle event handler
+	 * More info: https://moleculer.services/docs/0.15/lifecycle.html#created-event-handler
 	 */
-	created() {},
+	created() {
+		this.myVar = "myValue";
+	},
 
 	/**
 	 * Service started lifecycle event handler
+	 * More info: https://moleculer.services/docs/0.15/lifecycle.html#started-event-handler
 	 */
 	async started() {},
 
 	/**
 	 * Service stopped lifecycle event handler
+	 * More info: https://moleculer.services/docs/0.15/lifecycle.html#stopped-event-handler
 	 */
-	async stopped() {},
+	async stopped() {}
 };
 
 export default GreeterService;

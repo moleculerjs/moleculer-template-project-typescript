@@ -1,0 +1,14 @@
+{
+    "apiGW": true,
+    "apiGQL": false,
+    "apiIO": false,
+    "needTransporter": false,
+    "needCacher": false,
+    "dbService": false,
+    "needChannels": false,
+    "needWorkflows": false,
+    "metrics": false,
+    "tracing": false,
+    "docker": true,
+    "lint": true
+}

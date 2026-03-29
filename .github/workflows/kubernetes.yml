@@ -1,6 +1,10 @@
 name: Test with Kubernetes
 
-on: [push, pull_request]
+on: 
+  push:
+  pull_request:
+  schedule:
+    - cron: '10 10 * * 3'
 
 jobs:
   test:
@@ -8,16 +12,17 @@ jobs:
 
     strategy:
       matrix:
-        transporter: [NATS, Redis, MQTT, AMQP, AMQP10, STAN, Kafka]
+        # transporter: [NATS, Redis, MQTT, AMQP, AMQP10, Kafka]
+        transporter: [None, NATS, Redis, MQTT, AMQP, Kafka]
       fail-fast: false
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Use Node.js with ${{ matrix.transporter }} transporter
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: 18.x
+        node-version: 22.x
 
     - name: Install dependencies
       run: npm i
@@ -31,47 +36,62 @@ jobs:
     - name: Generate project with '${{ matrix.transporter }}' transporter
       run: npm test
 
-    - name: Run tests in the generated project
-      run: npm test
-      working-directory: ./ci-test
-
-    - name: Start a local Docker Registry
-      run: docker run -d --restart=always -p 5000:5000 --name registry registry:2
-
     - name: Build Docker image
-      run: docker build -t ci-test:demo .
+      run: docker build -t ci-test .
       working-directory: ./ci-test
 
     - uses: engineerd/setup-kind@v0.5.0
       with:
-        version: "v0.17.0"
+        version: "v0.29.0"
         config: ./test/ci/kind-config.yaml
 
     - run: kubectl cluster-info
     - run: kubectl get nodes
-    - run: kubectl get pods -n kube-system
+    - run: kubectl get pods --all-namespaces
 
-    - name: Load Docker image
-      run: kind load docker-image ci-test:demo ci-test:demo
+    - name: Load built image
+      run: kind load docker-image ci-test
 
     - name: Install NGINX Ingress
-      run: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+      run: |
+        kubectl apply -f https://kind.sigs.k8s.io/examples/ingress/deploy-ingress-nginx.yaml
+        kubectl wait --namespace ingress-nginx \
+          --for=condition=ready pod \
+          --selector=app.kubernetes.io/component=controller \
+          --timeout=90s
+
+    - run: cat ./ci-test/k8s.yaml
 
     - name: Kubectl apply
       working-directory: ./ci-test
-      run: |
-        # Fix nginx ingress issue: https://github.com/kubernetes/ingress-nginx/issues/5401#issuecomment-662424306
-        kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
-        sed 's/image: ci-test/image: ci-test:demo/g' k8s.yaml | kubectl apply -f -
+      run: kubectl apply -f k8s.yaml
 
-    - name: Sleeping 120 secs
-      run: sleep 120
+    - name: Wait for deployment
+      run: "kubectl rollout status deployment ${{ matrix.transporter != 'None' && 'greeter' || 'services' }} --timeout=180s"
+
+    - name: Sleeping 90 secs (for Redis, Mongo...etc)
+      run: sleep 90
 
     - name: Check pods
-      run: kubectl get all
+      run: |
+        kubectl get all
 
-    - run: curl --silent --show-error --fail http://ci-test.127.0.0.1.nip.io/api/greeter/hello
-    - run: curl --silent --show-error --fail http://ci-test.127.0.0.1.nip.io/api/products
+    - name: Check greeter.hello via API
+      run: curl --silent --show-error --fail http://ci-test.127.0.0.1.nip.io/api/greeter/hello
+
+    - name: Check products.list via API
+      run: curl --silent --show-error --fail http://ci-test.127.0.0.1.nip.io/api/products
+      if: ${{ matrix.transporter != 'None' }}
+
+    - name: Check greeter.hello via GraphQL
+      run: |
+        curl --silent --show-error --fail -H "Content-Type: application/json" --data '{"query": "query { hello } "}' http://ci-test.127.0.0.1.nip.io/graphql
+      if: ${{ matrix.transporter != 'None' }}
+
+    - name: Check Pod
+      run: kubectl describe pod ${{ matrix.transporter != 'None' && 'greeter' || 'services' }}
+      if: failure()
 
     - name: Check logs
-      run: kubectl logs deployment/products
+      run: kubectl logs deployment/${{ matrix.transporter != 'None' && 'greeter' || 'services' }}
+      if: failure()

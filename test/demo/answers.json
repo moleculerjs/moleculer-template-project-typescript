@@ -1,13 +1,17 @@
 {
     "apiGW": true,
+    "apiGQL": true,
+    "apiIO": true,
     "needTransporter": true,
     "transporter": "NATS",
-    "needCacher": false,
+    "needCacher": true,
+    "cacher": "Memory",
     "dbService": true,
+    "needChannels": true,
+    "channels": "Redis",
+    "needWorkflows": true,
     "metrics": true,
-    "reporter": "Prometheus",
     "tracing": true,
-    "exporter": "Console",
     "docker": true,
     "lint": true
 }

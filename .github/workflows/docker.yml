@@ -1,6 +1,11 @@
 name: Test with Docker
 
-on: [push, pull_request]
+on: 
+  push:
+  pull_request:
+  schedule:
+    - cron: '5 10 * * 3'
+
 
 jobs:
   test:
@@ -8,15 +13,15 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x, 18.x]
-        # transporter: [NATS, Redis, MQTT, AMQP, AMQP10, STAN, Kafka, TCP]
-        transporter: [NATS, Redis, MQTT, AMQP, STAN, Kafka, TCP]
+        node-version: [20.x, 22.x, 24.x]
+        # transporter: [NATS, Redis, MQTT, AMQP, AMQP10, Kafka, TCP]
+        transporter: [None, NATS, Redis, MQTT, AMQP, Kafka, TCP]
       fail-fast: false
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Use Node.js ${{ matrix.node-version }} with ${{ matrix.transporter }} transporter
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
 
@@ -47,14 +52,23 @@ jobs:
       run: sleep 30
 
     - name: Check containers
-      run: docker-compose ps
+      run: docker compose ps
       working-directory: ./ci-test
 
-    - run: curl --silent --show-error --fail http://localhost:3000/api/greeter/hello
-    - run: curl --silent --show-error --fail http://localhost:3000/api/products
+    - name: Check greeter.hello via API
+      run: curl --silent --show-error --fail http://localhost:3000/api/greeter/hello
+
+    - name: Check products.list via API
+      run: curl --silent --show-error --fail http://localhost:3000/api/products
+      if: ${{ matrix.transporter != 'None' }}
+
+    - name: Check greeter.hello via GraphQL
+      run: |
+        curl --silent --show-error --fail -H "Content-Type: application/json" --data '{"query": "query { hello } "}' http://localhost:3000/graphql
+      if: ${{ matrix.transporter != 'None' }}
 
     - name: Check logs
-      run: docker-compose logs
+      run: docker compose logs
       working-directory: ./ci-test
       if: failure()
 

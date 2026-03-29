@@ -9,13 +9,14 @@
 	<link href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="shortcut icon" type="image/png" href="https://moleculer.services/icon/favicon-16x16.png"/>
 	<script src="https://unpkg.com/vue@3.2.34/dist/vue.global.js"></script>
-	<link rel="stylesheet" href="./main.css" />
+	<link rel="stylesheet" href="./main.css">
+</style>
 </head>
 <body>
 	{{{{projectName}}}}
 	<div id="app">
 		<header>
-			<a href="https://moleculer.services/docs/0.14/" target="_blank">
+			<a href="https://moleculer.services/docs/0.15/" target="_blank">
 				<img class="logo" src="https://moleculer.services/images/logo/logo_with_text_horizontal_100h_shadow.png" /></a>
 			<nav>
 				<ul>
@@ -28,7 +29,7 @@
 			<section id="home" v-if="page == 'home'">
 				<div class="content">
 					<h1>Welcome to your Moleculer microservices project!</h1>
-					<p>Check out the <a href="https://moleculer.services/docs/0.14/" target="_blank">Moleculer documentation</a> to learn how to customize this project.</p>
+					<p>Check out the <a href="https://moleculer.services/docs/0.15/" target="_blank">Moleculer documentation</a> to learn how to customize this project.</p>
 
 					<template v-if="broker">
 						<h3>Configuration</h3>
@@ -125,8 +126,15 @@
 											<div v-if="item.fields" class="parameters">
 												<div :class="{field:true,required:field.optional===false}" v-for="field,ix in item.fields" :key="field.name">
 													<label :for="field.name+'--'+ix">{{ field.label }}: </label>
-													<input v-if="field.dataType==='number'"  :min="field.min" :max="field.max"  :type="field.type" :id="field.name+'--'+ix" :name="field.name" v-model.number="field.value" :required="field.required === true || field.optional===false" />
-													<input v-else :type="field.type"  :maxlength="field.maxLength" :minlength="field.minLength"  :id="field.name+'--'+ix" :name="field.name" v-model="field.value" :required="field.required === true || field.optional===false" />
+													<input v-if="field.dataType==='number'"  :min="field.min" :max="field.max"  :type="field.type" :id="field.name+'--'+ix" :name="field.name" v-model.number="field.value" :required="field.required === true || field.optional===false"></input>
+													<select v-else-if="field.dataType==='enum'"
+															:id="field.name+'--'+ix"
+															:name="field.name"
+															v-model="field.value"
+															:required="field.required === true || field.optional===false">
+														<option  v-for="fvalue in field.values" :value="fvalue">{{fvalue}}</option>
+													</select>
+													<input v-else :type="field.type"  :maxlength="field.maxLength" :minlength="field.minLength"  :id="field.name+'--'+ix" :name="field.name" v-model="field.value" :required="field.required === true || field.optional===false"></input>
 												</div>
 											</div>
 										</div>
@@ -238,7 +246,7 @@
 
 		<footer>
 			<div class="footer-copyright">
-				Copyright &copy; 2016-2022 - Moleculer
+				Copyright &copy; 2016-2025 - Moleculer
 			</div>
 			<div class="footer-links">
 				<a href="https://github.com/moleculerjs/moleculer" class="footer-link" target="_blank">Github</a>
@@ -480,11 +488,13 @@
 						if(item.params[key].hidden===true) continue;
 						const dataType =  item.params[key].type || item.params[key];
 						const hidden = item.params[key].hidden || false;
-						const required = item.params[key].required || false;
-						const optional = Array.isArray(item.params[key]) ? item.params[key].every(xx=>xx.optional===true) : item.params[key].optional || false;
+						const required = (item.params[key].required && item.params[key].default === undefined) || false;
+						const optional = Array.isArray(item.params[key]) ? item.params[key].every(xx=>xx.optional===true || xx.default !== undefined) : (item.params[key].optional===true || item.params[key].default !== undefined) || false;
 						const maxLength = item.params[key].max || undefined;
 						const minLength = item.params[key].min || undefined;
 						const pattern = item.params[key].pattern || undefined;
+						const values = item.params[key].values || undefined;
+
 						let type = "text";
 						let value =  item.params[key].default || undefined;
 						if (dataType.includes("number")) {type = "number";  };
@@ -500,15 +510,19 @@
 						if (dataType === "enum") type = "select";
 						if (dataType === "enum-multi") type = "select-multi";
 
-						r.push({ name: key,
-							  label: key,optional,
-							  hidden,required,
-							  [type==='number'?'min':'minLength'] :minLength,
-							  [type==='number'?'max':'maxLength'] :maxLength,
-							  pattern,
-							  paramType: method==='GET' ? 'param' : 'body',
-							  value,
-							  type,dataType, value:undefined });
+						r.push({
+							name: key,
+							label: key, optional,
+							hidden, required,
+							[type === 'number' ? 'min' : 'minLength']: minLength,
+							[type === 'number' ? 'max' : 'maxLength']: maxLength,
+							pattern,
+							paramType: method === 'GET' ? 'param' : 'body',
+							value,
+							type,
+							dataType,
+							values
+						});
 					}
 					return r;
 				},

@@ -1,29 +1,35 @@
+import { afterAll, beforeAll, describe, it, expect } from "vitest";
+
 import { Errors, ServiceBroker } from "moleculer";
-import type { ServiceSchema } from "moleculer";
-import TestService from "../../../services/greeter.service";
+import TestService from "../../../services/greeter.service.js";
 
 describe("Test 'greeter' service", () => {
-	const broker = new ServiceBroker({ logger: false });
-	broker.createService(TestService as unknown as ServiceSchema);
+	let broker = new ServiceBroker({ logger: false });
+	broker.createService(TestService);
 
 	beforeAll(() => broker.start());
 	afterAll(() => broker.stop());
 
 	describe("Test 'greeter.hello' action", () => {
-		test("should return with 'Hello Moleculer'", async () => {
+		it("should return with 'Hello Moleculer'", async () => {
 			const res = await broker.call("greeter.hello");
 			expect(res).toBe("Hello Moleculer");
 		});
 	});
 
 	describe("Test 'greeter.welcome' action", () => {
-		test("should return with 'Welcome'", async () => {
+		it("should return with 'Welcome'", async () => {
 			const res = await broker.call("greeter.welcome", { name: "Adam" });
-			expect(res).toBe("Welcome, Adam");
+			expect(res).toBe("Welcome, ADAM");
 		});
 
-		test("should reject an ValidationError", async () => {
-			await expect(broker.call("greeter.welcome")).rejects.toThrow(Errors.ValidationError);
+		it("should reject an ValidationError", async () => {
+			expect.assertions(1);
+			try {
+				await broker.call("greeter.welcome");
+			} catch (err) {
+				expect(err).toBeInstanceOf(Errors.ValidationError);
+			}
 		});
 	});
 });
