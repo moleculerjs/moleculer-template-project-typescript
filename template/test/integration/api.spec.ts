@@ -21,7 +21,7 @@ import ProductsSchema, { ProductEntity } from "../../services/products.service.j
 
 describe("Test HTTP API gateway", () => {
 	const broker = new ServiceBroker({ logger: false });
-	broker.sendToChannel = vi.fn();
+	{{#needChannels}}broker.sendToChannel = vi.fn();{{/needChannels}}
 
 	const greeterService = broker.createService(GreeterSchema);
 	const apiService = broker.createService(APISchema);
@@ -215,7 +215,7 @@ describe("Test HTTP API gateway", () => {
 {{#apiIO}}
 describe("Test Socket.IO API gateway", () => {
 	let broker = new ServiceBroker({ logger: false });
-	broker.sendToChannel = vi.fn();
+	{{#needChannels}}broker.sendToChannel = vi.fn();{{/needChannels}}
 
 	let greeterService = broker.createService(GreeterSchema);
 	let apiService = broker.createService(APISchema);
@@ -406,7 +406,7 @@ describe("Test Socket.IO API gateway", () => {
 {{#apiGQL}}
 describe("Test GraphQL API gateway", () => {
 	let broker = new ServiceBroker({ logger: false });
-	broker.sendToChannel = vi.fn();
+	{{#needChannels}}broker.sendToChannel = vi.fn();{{/needChannels}}
 
 	let greeterService = broker.createService(GreeterSchema);
 	let apiService = broker.createService(APISchema);
