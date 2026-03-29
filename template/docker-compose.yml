@@ -254,7 +254,7 @@ services:
 
 {{#apiGW}}
   traefik:
-    image: traefik:v2.4
+    image: traefik:v3.4
     command:
       - "--api.insecure=true" # Don't do that in production!
       - "--providers.docker=true"
