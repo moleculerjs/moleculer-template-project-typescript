@@ -234,14 +234,14 @@ services:
 {{#kafka}}
 
   zookeeper:
-    image: bitnami/zookeeper:3.9
+    image: bitnamilegacy/zookeeper:3.9
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
     networks:
       - internal
 
   kafka:
-    image: bitnami/kafka:3.9
+    image: bitnamilegacy/kafka:3.9
     environment:
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
