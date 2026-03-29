@@ -1,7 +1,7 @@
 import type { Context, ServiceSchema } from "moleculer";
 import type { Server as HttpServer } from "http";
 import ApiGateway from "moleculer-web";
-import type { ApiSettingsSchema, Route, IncomingRequest, GatewayResponse } from "moleculer-web";
+import type { ApiSettingsSchema, Route, IncomingRequest } from "moleculer-web";
 {{#apiIO}}
 import SocketIOService from "moleculer-io";
 {{/apiIO}}
@@ -27,6 +27,7 @@ interface Meta {
 
 interface LocalVars {
 	server: HttpServer;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	io: any;
 }
 
