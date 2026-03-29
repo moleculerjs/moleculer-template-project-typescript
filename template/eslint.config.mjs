@@ -16,18 +16,15 @@ export default tseslint.config(
 			}
 		},
 		rules: {
-			"@/no-var": ["error"],
-			"@/no-console": ["warn"],
+			"no-var": ["error"],
+			"no-console": ["warn"],
 			"@typescript-eslint/no-unused-vars": ["warn"],
-			"@/no-trailing-spaces": ["error"],
-			"@/no-process-exit": ["off"],
-			"@/object-curly-spacing": ["warn", "always"]
 		}
 	},
 	{
-		files: ["test/**/*.js"],
+		files: ["test/**/*.ts"],
 		rules: {
-			"@/no-unused-vars": ["off"]
+			"no-unused-vars": ["off"]
 		}
 	}
 );

@@ -25,48 +25,49 @@
   "author": "",
   "devDependencies": {
     "@types/node": "^22.17.1",
-    "@types/lodash": "^4.17.20",
+    "@types/lodash": "^4.17.24",
     {{#lint}}
 		"@eslint/js": "^9.33.0",
     "eslint": "^9.33.0",
+    "globals": "^17.0.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-prettier": "^5.5.5",
 		"typescript-eslint": "^8.39.0",
-    "prettier": "^3.6.2",
+    "prettier": "^3.8.1",
     {{/lint}}
     {{#apiGW}}
-    "@types/supertest": "^6.0.3",
-    "supertest": "^7.1.4",
+    "@types/supertest": "^7.2.0",
+    "supertest": "^7.2.2",
     {{/apiGW}}
     {{#apiIO}}
-    "socket.io-client": "^4.8.1",
+    "socket.io-client": "^4.8.3",
     {{/apiIO}}
     {{#apiGQL}}
-    "graphql-request": "^6.1.0",
+    "graphql-request": "^7.4.0",
     {{/apiGQL}}
-    "moleculer-repl": "^0.7.4",
-		"tsx": "^4.20.3",
+    "moleculer-repl": "^0.8.0",
+		"tsx": "^4.21.0",
 		"typescript": "^5.9.2",
-		"vitest": "^3.2.4",
-    "@vitest/coverage-v8": "^3.2.4"
+		"vitest": "^4.1.2",
+    "@vitest/coverage-v8": "^4.1.2"
   },
   "dependencies": {
     {{#apiGW}}
-    "moleculer-web": "github:moleculerjs/moleculer-web#next",
+    "moleculer-web": "^0.11.0",
     {{/apiGW}}
     {{#dbService}}
-    "@moleculer/database": "github:moleculerjs/database#next",
-    "mongodb": "^6.18.0",
+    "@moleculer/database": "^0.4.0",
+    "mongodb": "^7.1.1",
     "@seald-io/nedb": "^4.1.2",
     {{/dbService}}
     {{#nats}}
     "nats": "^2.29.3",
     {{/nats}}
     {{#if_eq transporter "MQTT"}}
-    "mqtt": "^5.13.0",
+    "mqtt": "^5.15.1",
     {{/if_eq}}
     {{#rabbitmq}}
-    "amqplib": "^0.10.8",
+    "amqplib": "^1.0.2",
     {{/rabbitmq}}
     {{#if_eq transporter "AMQP10"}}
     "rhea-promise": "^3.0.3",
@@ -75,24 +76,24 @@
     "kafkajs": "^2.2.4",
     {{/kafka}}
     {{#redis}}
-    "ioredis": "^5.7.0",
+    "ioredis": "^5.10.1",
     {{/redis}}
     {{#apiGQL}}
-    "graphql": "^16.11.0",
-    "moleculer-apollo-server": "^0.4.0",
+    "graphql": "^16.13.2",
+    "moleculer-apollo-server": "^0.4.1",
     "graphql-type-json": "^0.3.2",
     {{/apiGQL}}
     {{#needChannels}}
-    "@moleculer/channels": "github:moleculerjs/moleculer-channels#next",
+    "@moleculer/channels": "^0.3.0",
     {{/needChannels}}
     {{#needWorkflows}}
-    "@moleculer/workflows": "^0.1.2",
+    "@moleculer/workflows": "^0.2.0",
     {{/needWorkflows}}
     {{#apiIO}}
     "moleculer-io": "^2.2.0",
     {{/apiIO}}
-    "lodash": "^4.17.21",
-    "moleculer": "github:moleculerjs/moleculer#next"
+    "lodash": "^4.17.23",
+    "moleculer": "^0.15.0"
   },
   "engines": {
     "node": ">= 20.x.x"

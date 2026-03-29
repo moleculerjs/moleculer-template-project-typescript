@@ -167,7 +167,7 @@ module.exports = function(values) {
 
             "services/orders.service.ts": "needWorkflows",
 
-            "eslint.config.js": "lint",
+            "eslint.config.mjs": "lint",
             "tsconfig.eslint.json": "lint", // ???
             "prettier.config.js": "lint",
 
