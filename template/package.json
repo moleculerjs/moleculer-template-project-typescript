@@ -73,7 +73,7 @@
     "rhea-promise": "^3.0.3",
     {{/if_eq}}
     {{#kafka}}
-    "kafkajs": "^2.2.4",
+    "@platformatic/kafka": "^1.18.0",
     {{/kafka}}
     {{#redis}}
     "ioredis": "^5.10.1",
