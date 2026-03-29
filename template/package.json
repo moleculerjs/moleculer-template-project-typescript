@@ -96,6 +96,6 @@
     "moleculer": "^0.15.0"
   },
   "engines": {
-    "node": ">= 20.x.x"
+    "node": ">= 22.x.x"
   }
 }
