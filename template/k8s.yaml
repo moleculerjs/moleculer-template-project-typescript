@@ -575,7 +575,7 @@ spec:
     spec:
       containers:
       - name: zookeeper
-        image: bitnami/zookeeper:3.9
+        image: bitnamilegacy/zookeeper:3.9
         ports:
         - containerPort: 2181
           name: zookeeper
@@ -621,7 +621,7 @@ spec:
     spec:
       containers:
       - name: kafka
-        image: bitnami/kafka:3.9
+        image: bitnamilegacy/kafka:3.9
         ports:
         - containerPort: 9092
           name: kafka
